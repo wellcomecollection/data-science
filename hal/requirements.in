@@ -1,0 +1,6 @@
+pandas==0.23.4
+halo==0.0.26
+paramiko==2.6.0
+boto3==1.9.198
+click==7.0
+fire==0.2.1

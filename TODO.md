@@ -1,0 +1,4 @@
+- Make data bucket private
+- allow data bucket access from app
+- read `nginx_api-gw` from ecr, not docker
+- ^ delete docker version of this

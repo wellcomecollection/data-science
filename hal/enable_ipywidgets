@@ -1,0 +1,16 @@
+# letting tqdm_notebook run in jupyterlab 
+# https://github.com/tqdm/tqdm/issues/394#issuecomment-384743637
+
+# npm hangs on jupyterlab-manager install 
+# https://github.com/jupyter-widgets/ipywidgets/issues/2061#issuecomment-397117346
+
+pip install ipywidgets 
+jupyter nbextension enable --py widgetsnbextension
+
+yes | conda install -c conda-forge nodejs 
+npm install node@8
+npm install -g yarn
+
+echo 'yarn-path "/home/ec2-user/anaconda3/envs/pytorch_p36/lib/node_modules/yarn/bin/yarn.js"' > /home/ec2-user/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/jupyterlab/staging/.yarnrc
+
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
