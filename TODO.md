@@ -1,4 +1,4 @@
-- Make data bucket private
-- allow data bucket access from app
 - read `nginx_api-gw` from ecr, not docker
 - ^ delete docker version of this
+- fix optional {catalogue_id} parameter of palette api (it is currently required)
+- fix palette api tests

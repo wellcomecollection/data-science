@@ -13,75 +13,163 @@ distances are then calculated between all palette-permutations at query-time.
 ## Output example
 
 Hitting
-[`https://labs.wellcomecollection.org/palette_similarity/by_image_id`](https://labs.wellcomecollection.org/palette_similarity/by_image_id)
-will randomly select a query image and return `n=10` nearest neighbours in the
+[`https://labs.wellcomecollection.org/palette-api/works/{catalogue_id}`](https://labs.wellcomecollection.org/palette_similarity/by_image_id)
+will return the `n=10` nearest neighbours to the given image (`catalogue_id`) in the
 form:
 
 ```json
 {
-  "original_image_id": "L0037645",
-  "original_image_url": "https://iiif.wellcomecollection.org/image/L0037645.jpg/full/960,/0/default.jpg",
-  "neighbour_ids": [
-    "L0037595",
-    "L0034492",
-    "L0037581",
-    "L0063874",
-    "L0067338",
-    "L0039583",
-    "L0069802",
-    "L0041575",
-    "L0038188",
-    "L0082158"
-  ],
-  "neighbour_urls": [
-    "https://iiif.wellcomecollection.org/image/L0037595.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0034492.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0037581.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0063874.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0067338.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0039583.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0069802.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0041575.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0038188.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0082158.jpg/full/960,/0/default.jpg"
-  ]
+    "original": {
+        "miro_id": "L0030365",
+        "catalogue_id": "dgxthrkq",
+        "miro_uri": "https://iiif.wellcomecollection.org/image/L0030365.jpg/full/960,/0/default.jpg",
+        "catalogue_uri": "https://wellcomecollection.org/works/dgxthrkq"
+    },
+    "neighbours": [
+        {
+            "miro_id": "L0030814",
+            "catalogue_id": "mw8hxa8g",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0030814.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/mw8hxa8g"
+        },
+        {
+            "miro_id": "V0033889EL",
+            "catalogue_id": "b25hfd5k",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/V0033889EL.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/b25hfd5k"
+        },
+        {
+            "miro_id": "L0015306",
+            "catalogue_id": "b2ur2ebp",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0015306.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/b2ur2ebp"
+        },
+        {
+            "miro_id": "L0052696",
+            "catalogue_id": "vmvbxwp2",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0052696.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/vmvbxwp2"
+        },
+        {
+            "miro_id": "L0063538",
+            "catalogue_id": "dkuwfy63",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0063538.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/dkuwfy63"
+        },
+        {
+            "miro_id": "V0025632",
+            "catalogue_id": "pcyc5hbe",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/V0025632.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/pcyc5hbe"
+        },
+        {
+            "miro_id": "L0063535",
+            "catalogue_id": "vxdsp8ck",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0063535.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/vxdsp8ck"
+        },
+        {
+            "miro_id": "L0082412",
+            "catalogue_id": "nbnbxptp",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0082412.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/nbnbxptp"
+        },
+        {
+            "miro_id": "L0053992",
+            "catalogue_id": "qv2v376h",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0053992.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/qv2v376h"
+        },
+        {
+            "miro_id": "L0030803",
+            "catalogue_id": "ruaq3gnw",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0030803.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/ruaq3gnw"
+        }
+    ]
 }
 ```
 
 The API accepts query parameters `image_id`, and `n`.
 
 Alternatively, one can query by palette. Hitting
-[`https://labs.wellcomecollection.org/palette_similarity/by_palette`](https://labs.wellcomecollection.org/palette_similarity/by_palette)
+[`https://labs.wellcomecollection.org/palette-api/palette`](https://labs.wellcomecollection.org/palette_similarity/by_palette)
 will randomly select a hex query palette and return `n=10` nearest neighbours in
 the form:
 
 ```json
 {
-  "palette": ["d5a9b6", "7915f8", "31e4f6", "62a05d", "aeb092"],
-  "neighbour_ids": [
-    "B0007428",
-    "L0055060",
-    "L0054783",
-    "B0009861",
-    "L0054124",
-    "V0046073ER",
-    "W0049936",
-    "L0054184",
-    "L0031307",
-    "L0053208"
-  ],
-  "neighbour_urls": [
-    "https://iiif.wellcomecollection.org/image/B0007428.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0055060.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0054783.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/B0009861.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0054124.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/V0046073ER.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/W0049936.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0054184.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0031307.jpg/full/960,/0/default.jpg",
-    "https://iiif.wellcomecollection.org/image/L0053208.jpg/full/960,/0/default.jpg"
-  ]
+    "original": {
+        "palette": [
+            "f7c490",
+            "8b306a",
+            "9782a3",
+            "0924d1",
+            "b3c9a7"
+        ]
+    },
+    "neighbours": [
+        {
+            "miro_id": "B0009765",
+            "catalogue_id": "ycc9gkw3",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/B0009765.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/ycc9gkw3"
+        },
+        {
+            "miro_id": "L0037076",
+            "catalogue_id": "nkwg6t7f",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0037076.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/nkwg6t7f"
+        },
+        {
+            "miro_id": "L0058991",
+            "catalogue_id": "h8cn6zes",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0058991.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/h8cn6zes"
+        },
+        {
+            "miro_id": "L0030349",
+            "catalogue_id": "gcz9g9pk",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0030349.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/gcz9g9pk"
+        },
+        {
+            "miro_id": "L0065278",
+            "catalogue_id": "n9mrfmp4",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0065278.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/n9mrfmp4"
+        },
+        {
+            "miro_id": "A0000409",
+            "catalogue_id": "qqym8sb3",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/A0000409.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/qqym8sb3"
+        },
+        {
+            "miro_id": "L0059071",
+            "catalogue_id": "tzs35z37",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0059071.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/tzs35z37"
+        },
+        {
+            "miro_id": "L0058992",
+            "catalogue_id": "z95j5tb4",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0058992.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/z95j5tb4"
+        },
+        {
+            "miro_id": "B0004798",
+            "catalogue_id": "fqjs8eft",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/B0004798.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/fqjs8eft"
+        },
+        {
+            "miro_id": "L0059062",
+            "catalogue_id": "zrvr9ry8",
+            "miro_uri": "https://iiif.wellcomecollection.org/image/L0059062.jpg/full/960,/0/default.jpg",
+            "catalogue_uri": "https://wellcomecollection.org/works/zrvr9ry8"
+        }
+    ]
 }
 ```
 
