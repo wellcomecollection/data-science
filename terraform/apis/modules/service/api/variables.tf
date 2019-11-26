@@ -68,3 +68,8 @@ variable "launch_type" {
 variable "task_desired_count" {
   default = "3"
 }
+
+variable "assumable_roles" {
+  type    = "list"
+  default = []
+}
