@@ -3,6 +3,7 @@ import re
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
+from starlette.middleware.cors import CORSMiddleware
 
 from .colours import random_hex
 from .identifiers import (catalogue_id_to_miro_id, catalogue_ids,
@@ -16,6 +17,11 @@ app = FastAPI(
     description='Find similar images based on their colour, using approximate embeddings of euclidean distance in LAB space between 5-colour palettes',
     docs_url='/docs',
     redoc_url='/redoc'
+)
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*']
 )
 
 # create API endpoints
