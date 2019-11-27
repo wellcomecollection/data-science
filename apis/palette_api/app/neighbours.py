@@ -1,4 +1,3 @@
-import numpy as np
 import nmslib
 
 from .aws import download_object_from_s3

@@ -11,6 +11,7 @@ locals {
   palette_api_container_image = "wellcome/palette_api:latest"
   namespace_id                = "datascience"
   cluster_id                  = "apis"
+  miro_read_role              = "arn:aws:iam::760097843905:role/sourcedata-miro-assumable_read_role"
 }
 
 data "aws_vpc" "vpc" {

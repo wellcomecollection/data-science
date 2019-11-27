@@ -1,4 +1,3 @@
-import os
 import pickle
 
 import boto3
@@ -7,20 +6,19 @@ import numpy as np
 from .aws import get_object_from_s3
 
 # Assume role and get credentials to read from miro dynamo table
-dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
-# sts = boto3.client('sts')
-# credentials = sts.assume_role(
-#     # RoleArn='arn:aws:iam::760097843905:role/platform-developer',
-#     RoleSessionName='AssumeRoleSession1'
-# )['Credentials']
-# dynamodb = boto3.resource(
-#     'dynamodb',
-#     region_name='eu-west-1',
-#     aws_access_key_id=credentials['AccessKeyId'],
-#     aws_secret_access_key=credentials['SecretAccessKey'],
-#     aws_session_token=credentials['SessionToken']
-# )
+sts = boto3.client('sts')
+credentials = sts.assume_role(
+    RoleArn='arn:aws:iam::760097843905:role/sourcedata-miro-assumable_read_role',
+    RoleSessionName='AssumeRoleSession1'
+)['Credentials']
 
+dynamodb = boto3.resource(
+    'dynamodb',
+    region_name='eu-west-1',
+    aws_access_key_id=credentials['AccessKeyId'],
+    aws_secret_access_key=credentials['SecretAccessKey'],
+    aws_session_token=credentials['SessionToken']
+)
 
 # Find miro_ids which are cleared for the catalogue api, and only use these
 # as valid results in the palette api

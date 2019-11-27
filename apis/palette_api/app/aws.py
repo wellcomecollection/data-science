@@ -1,24 +1,9 @@
-import json
 import os
 from io import BytesIO
 
 import boto3
-import numpy as np
-
 
 s3 = boto3.client('s3')
-# sts = boto3.client('sts')
-# credentials = sts.assume_role(
-#     RoleArn='arn:aws:iam::964279923020:role/data-developer',
-#     RoleSessionName='AssumeRoleSession1'
-# )['Credentials']
-
-# s3 = boto3.client(
-#     's3',
-#     aws_access_key_id=credentials['AccessKeyId'],
-#     aws_secret_access_key=credentials['SecretAccessKey'],
-#     aws_session_token=credentials['SessionToken']
-# )
 
 
 def get_object_from_s3(object_key):

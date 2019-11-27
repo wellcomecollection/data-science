@@ -1,21 +1,12 @@
-import itertools
 import json
-import os
-import pathlib
-import pickle
 import re
-from io import BytesIO
 
-import nmslib
 import numpy as np
-import torch
 from fastapi import FastAPI, HTTPException
 
-from .aws import get_object_from_s3
-from .colours import hex_to_rgb, random_hex, rgb_to_lab
+from .colours import random_hex
 from .identifiers import (catalogue_id_to_miro_id, catalogue_ids,
-                          miro_id_to_identifiers, miro_ids,
-                          miro_ids_cleared_for_catalogue_api)
+                          miro_id_to_identifiers, miro_ids)
 from .neighbours import get_neighbour_ids, palette_index
 from .palette_embedder import embed_hex_palette
 
