@@ -4,6 +4,7 @@ import boto3
 import numpy as np
 
 from .aws import get_object_from_s3
+from boto3.dynamodb.conditions import Key
 
 # Assume role and get credentials to read from miro dynamo table
 sts = boto3.client('sts')
@@ -23,35 +24,35 @@ dynamodb = boto3.resource(
 # Find miro_ids which are cleared for the catalogue api, and only use these
 # as valid results in the palette api
 table = dynamodb.Table('vhs-sourcedata-miro')
+filter_expression = Key('isClearedForCatalogueAPI').eq(True)
 response = table.scan(
-    ProjectionExpression='id,isClearedForCatalogueAPI'
+    ProjectionExpression='id',
+    FilterExpression=filter_expression
 )
 miro_ids_cleared_for_catalogue_api = set(
     item['id'] for item in response['Items']
-    if item['isClearedForCatalogueAPI']
 )
 while 'LastEvaluatedKey' in response:
     response = table.scan(
-        ProjectionExpression='id,isClearedForCatalogueAPI',
+        ProjectionExpression='id',
+        FilterExpression=filter_expression,
         ExclusiveStartKey=response['LastEvaluatedKey']
     )
     miro_ids_cleared_for_catalogue_api.update(set(
         item['id'] for item in response['Items']
-        if item['isClearedForCatalogueAPI']
     ))
 
 miro_ids = np.load(get_object_from_s3('palette/image_ids.npy'))
 
-all_miro_id_to_catalogue_id = pickle.load(
-    get_object_from_s3('palette/miro_id_to_catalogue_id.pkl')
+catalogue_id_to_miro_id = pickle.load(
+    get_object_from_s3('palette/catalogue_id_to_miro_id.pkl')
 )
 
-catalogue_id_to_miro_id = {
-    all_miro_id_to_catalogue_id[miro_id]: miro_id
-    for miro_id in miro_ids_cleared_for_catalogue_api
-}
-
-catalogue_ids = list(catalogue_id_to_miro_id.keys())
+valid_catalogue_ids = set(
+    catalogue_id
+    for catalogue_id, miro_id in catalogue_id_to_miro_id.items()
+    if miro_id in miro_ids_cleared_for_catalogue_api
+)
 
 
 def miro_id_to_miro_uri(miro_id):

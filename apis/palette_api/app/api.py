@@ -3,10 +3,9 @@ import re
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
-from starlette.middleware.cors import CORSMiddleware
 
 from .colours import random_hex
-from .identifiers import (catalogue_id_to_miro_id, catalogue_ids,
+from .identifiers import (catalogue_id_to_miro_id, valid_catalogue_ids,
                           miro_id_to_identifiers, miro_ids)
 from .neighbours import get_neighbour_ids, palette_index
 from .palette_embedder import embed_hex_palette
@@ -18,19 +17,14 @@ app = FastAPI(
     docs_url='/docs',
     redoc_url='/redoc'
 )
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*']
-)
 
 # create API endpoints
 
 
 @app.get('/works/{catalogue_id}')
 def palette_similarity_by_catalogue_id(catalogue_id: str, n: int = 10):
-    catalogue_id = catalogue_id or np.random.choice(catalogue_ids)
-    if catalogue_id not in catalogue_ids:
+    catalogue_id = catalogue_id or np.random.choice(valid_catalogue_ids)
+    if catalogue_id not in valid_catalogue_ids:
         raise HTTPException(status_code=404, detail="Invalid catalogue id")
 
     miro_id = catalogue_id_to_miro_id[catalogue_id]
