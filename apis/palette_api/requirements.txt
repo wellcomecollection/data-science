@@ -20,11 +20,13 @@ matplotlib==3.1.1         # via scikit-image
 networkx==2.3             # via scikit-image
 nmslib==1.8.1
 numpy==1.17.0
+pandas==0.23.4
 pillow==6.1.0             # via imageio, scikit-image
 pybind11==2.4.2           # via nmslib
 pydantic==0.30            # via fastapi
 pyparsing==2.4.2          # via matplotlib
-python-dateutil==2.8.0    # via botocore, matplotlib
+python-dateutil==2.8.0    # via botocore, matplotlib, pandas
+pytz==2019.3              # via pandas
 pywavelets==1.0.3         # via scikit-image
 s3transfer==0.2.1         # via boto3
 scikit-image==0.15.0
@@ -38,4 +40,4 @@ uvloop==0.12.2            # via uvicorn
 websockets==7.0           # via uvicorn
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.4.0        # via kiwisolver
+# setuptools==42.0.2        # via kiwisolver
