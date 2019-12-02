@@ -1,57 +1,29 @@
 import pickle
 
-import boto3
-import numpy as np
+import pandas as pd
 
 from .aws import get_object_from_s3
 
-# Assume role and get credentials to read from miro dynamo table
-sts = boto3.client('sts')
-credentials = sts.assume_role(
-    RoleArn='arn:aws:iam::760097843905:role/sourcedata-miro-assumable_read_role',
-    RoleSessionName='AssumeRoleSession1'
-)['Credentials']
+df = pd.DataFrame(pickle.load(get_object_from_s3('palette/identifiers.pkl'))).T
 
-dynamodb = boto3.resource(
-    'dynamodb',
-    region_name='eu-west-1',
-    aws_access_key_id=credentials['AccessKeyId'],
-    aws_secret_access_key=credentials['SecretAccessKey'],
-    aws_session_token=credentials['SessionToken']
+valid_catalogue_ids = (
+    df[df['is_cleared_for_catalogue_api']]
+    [['miro_catalogue_id', 'sierra_catalogue_id']]
+    .values.reshape(-1)
 )
 
-# Find miro_ids which are cleared for the catalogue api, and only use these
-# as valid results in the palette api
-table = dynamodb.Table('vhs-sourcedata-miro')
-response = table.scan(
-    ProjectionExpression='id,isClearedForCatalogueAPI'
-)
+miro_ids_in_palette_order = df.index.values
+
 miro_ids_cleared_for_catalogue_api = set(
-    item['id'] for item in response['Items']
-    if item['isClearedForCatalogueAPI']
-)
-while 'LastEvaluatedKey' in response:
-    response = table.scan(
-        ProjectionExpression='id,isClearedForCatalogueAPI',
-        ExclusiveStartKey=response['LastEvaluatedKey']
-    )
-    miro_ids_cleared_for_catalogue_api.update(set(
-        item['id'] for item in response['Items']
-        if item['isClearedForCatalogueAPI']
-    ))
-
-miro_ids = np.load(get_object_from_s3('palette/image_ids.npy'))
-
-all_miro_id_to_catalogue_id = pickle.load(
-    get_object_from_s3('palette/miro_id_to_catalogue_id.pkl')
+    df[df['is_cleared_for_catalogue_api']].index.values
 )
 
 catalogue_id_to_miro_id = {
-    all_miro_id_to_catalogue_id[miro_id]: miro_id
-    for miro_id in miro_ids_cleared_for_catalogue_api
+    **{v: k for k, v in df['sierra_catalogue_id'].items()},
+    **{v: k for k, v in df['miro_catalogue_id'].items()}
 }
 
-catalogue_ids = list(catalogue_id_to_miro_id.keys())
+index_lookup = df['palette_index'].to_dict()
 
 
 def miro_id_to_miro_uri(miro_id):
@@ -62,14 +34,14 @@ def miro_id_to_miro_uri(miro_id):
 
 
 def miro_id_to_catalogue_uri(miro_id):
-    catalogue_id = all_miro_id_to_catalogue_id[miro_id]
+    catalogue_id = df['sierra_catalogue_id'][miro_id]
     return 'https://wellcomecollection.org/works/' + catalogue_id
 
 
 def miro_id_to_identifiers(miro_id):
     return {
         'miro_id': miro_id,
-        'catalogue_id': all_miro_id_to_catalogue_id[miro_id],
+        'catalogue_id': df['sierra_catalogue_id'][miro_id],
         'miro_uri': miro_id_to_miro_uri(miro_id),
         'catalogue_uri': miro_id_to_catalogue_uri(miro_id)
     }
