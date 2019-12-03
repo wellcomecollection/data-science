@@ -69,11 +69,22 @@ def get_miro_catalogue_id(miro_id):
     return miro_catalogue_id
 
 
+def choose_correct_catalogue_id(miro_id, results):
+    sierra_catalogue_id = None
+    for work in results:
+        try:
+            if miro_id in work['thumbnail']['url']:
+                sierra_catalogue_id = work['id']
+        except KeyError:
+            pass
+    return sierra_catalogue_id
+
+
 def get_sierra_catalogue_id(miro_id):
     try:
         base_url = 'https://api.wellcomecollection.org/catalogue/v2/works?query='
-        response = requests.get(base_url + miro_id).json()
-        sierra_catalogue_id = response['results'][0]['id']
+        results = requests.get(base_url + miro_id).json()['results']
+        sierra_catalogue_id = choose_correct_catalogue_id(miro_id, results)
     except:
         sierra_catalogue_id = None
     return sierra_catalogue_id
