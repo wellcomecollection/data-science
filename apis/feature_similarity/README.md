@@ -40,5 +40,3 @@ Hitting [`https://labs.wellcomecollection.org/image_similarity`](https://labs.we
   ]
 }
 ```
-
-The API accepts query parameters `image_id`, and `n`. More detailed API docs can be obtained at `https://labs.wellcomecollection.org/image_similarity/docs` or `https://labs.wellcomecollection.org/image_similarity/redoc`
