@@ -12,7 +12,7 @@ valid_catalogue_ids = (
     .values.reshape(-1)
 )
 
-miro_ids_in_palette_order = df.index.values
+miro_ids_in_nmslib_order = df['palette_index'].sort_values().index.values
 
 miro_ids_cleared_for_catalogue_api = set(
     df[df['is_cleared_for_catalogue_api']].index.values
