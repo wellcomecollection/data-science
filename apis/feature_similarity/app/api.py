@@ -3,7 +3,6 @@ import re
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
-from starlette.middleware.cors import CORSMiddleware
 
 from .identifiers import (catalogue_id_to_miro_id, index_lookup,
                           miro_id_to_identifiers, valid_catalogue_ids)
@@ -15,12 +14,6 @@ app = FastAPI(
     description='Find similar images based on their structural features, using 4096d embeddings from the last hidden layer of a pretrained VGG16 network',
     docs_url='/feature-similarity/docs',
     redoc_url='/feature-similarity/redoc'
-)
-
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*']
 )
 
 
