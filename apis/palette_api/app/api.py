@@ -3,6 +3,7 @@ import re
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
+from starlette.middleware.cors import CORSMiddleware
 
 from .colours import random_hex
 from .identifiers import (catalogue_id_to_miro_id, valid_catalogue_ids,
@@ -14,8 +15,8 @@ from .palette_embedder import embed_hex_palette
 app = FastAPI(
     title='Palette Similarity',
     description='Find similar images based on their colour, using approximate embeddings of euclidean distance in LAB space between 5-colour palettes',
-    docs_url='/docs',
-    redoc_url='/redoc'
+    docs_url='palette-api/docs',
+    redoc_url='palette-api/redoc'
 )
 
 # CORS
