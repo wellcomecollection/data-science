@@ -10,13 +10,13 @@ if not os.path.exists(file_name):
     download_object_from_s3(f'image_pathways/{file_name}')
     download_object_from_s3(f'image_pathways/{file_name}.dat')
 
-feature_index = nmslib.init(method='hnsw', space='cosinesimil')
-feature_index.loadIndex('feature_vectors.hnsw', load_data=True)
+feature_vectors = nmslib.init(method='hnsw', space='cosinesimil')
+feature_vectors.loadIndex('feature_vectors.hnsw', load_data=True)
 
 
 def get_neighbour_ids(query_embedding, n=10, skip_first_result=False):
     '''returns n approximate nearest neigbours for a given feature vector'''
-    neighbours = feature_index.knnQueryBatch(query_embedding, n*2)
+    neighbours = feature_vectors.knnQueryBatch(query_embedding, n*2)
     neighbour_indexes, _ = zip(*neighbours)
     neighbour_ids = miro_ids_in_nmslib_order[neighbour_indexes].tolist()
     if skip_first_result:
