@@ -13,8 +13,8 @@ from .neighbours import feature_index, get_neighbour_ids
 app = FastAPI(
     title='Feature Similarity',
     description='Find similar images based on their structural features, using 4096d embeddings from the last hidden layer of a pretrained VGG16 network',
-    docs_url='feature-similarity/docs',
-    redoc_url='feature-similarity/redoc'
+    docs_url='/feature-similarity/docs',
+    redoc_url='/feature-similarity/redoc'
 )
 
 # CORS

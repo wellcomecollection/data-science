@@ -9,15 +9,15 @@ df = pd.DataFrame(pickle.load(
 )).T
 
 valid_catalogue_ids = (
-    df[df['is_cleared_for_catalogue_api']]
+    df[df['is_cleared_for_catalogue_api'].fillna(True)]
     [['miro_catalogue_id', 'sierra_catalogue_id']]
     .values.reshape(-1)
 )
 
-miro_ids_in_palette_order = df.index.values
+miro_ids_in_nmslib_order = df['feature_index'].sort_values().index.values
 
 miro_ids_cleared_for_catalogue_api = set(
-    df[df['is_cleared_for_catalogue_api']].index.values
+    df[df['is_cleared_for_catalogue_api'].fillna(True)].index.values
 )
 
 catalogue_id_to_miro_id = {
