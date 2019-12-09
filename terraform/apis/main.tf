@@ -1,10 +1,7 @@
 module "palette_api" {
-  source = "./modules/service/api"
-
-  namespace = "palette-api"
-
+  source          = "./modules/service/api"
+  namespace       = "palette-api"
   container_image = "wellcome/palette_api:latest"
-  container_port  = "9001"
 
   namespace_id = "${aws_service_discovery_private_dns_namespace.namespace.id}"
 
@@ -40,12 +37,9 @@ module "palette_api" {
 }
 
 module "feature_similarity" {
-  source = "./modules/service/api"
-
-  namespace = "feature-similarity"
-
+  source          = "./modules/service/api"
+  namespace       = "feature-similarity"
   container_image = "wellcome/feature_similarity:latest"
-  container_port  = "9001"
 
   namespace_id = "${aws_service_discovery_private_dns_namespace.namespace.id}"
 
@@ -72,10 +66,10 @@ module "feature_similarity" {
   api_gateway_vpc_link_id      = "${aws_api_gateway_vpc_link.apis.id}"
   listener_port                = "7001"
   cpu                          = 2048
-  memory                       = 4096
+  memory                       = 8192
   sidecar_cpu                  = 1024
-  sidecar_memory               = 2048
+  sidecar_memory               = 4096
   app_cpu                      = 1024
-  app_memory                   = 2048
+  app_memory                   = 4096
   task_desired_count           = 1
 }
