@@ -4,9 +4,7 @@ import pandas as pd
 
 from .aws import get_object_from_s3
 
-df = pd.DataFrame(pickle.load(
-    get_object_from_s3('palette/identifiers.pkl')
-)).T
+df = pd.DataFrame(pickle.load(get_object_from_s3('palette/identifiers.pkl'))).T
 
 valid_catalogue_ids = set(
     df[df['is_cleared_for_catalogue_api'].fillna(True)]

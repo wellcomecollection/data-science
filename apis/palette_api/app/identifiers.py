@@ -7,7 +7,7 @@ from .aws import get_object_from_s3
 df = pd.DataFrame(pickle.load(get_object_from_s3('palette/identifiers.pkl'))).T
 
 valid_catalogue_ids = set(
-    df[df['is_cleared_for_catalogue_api']]
+    df[df['is_cleared_for_catalogue_api'].fillna(True)]
     [['miro_catalogue_id', 'sierra_catalogue_id']]
     .values.reshape(-1)
 )
@@ -15,7 +15,7 @@ valid_catalogue_ids = set(
 miro_ids_in_nmslib_order = df['palette_index'].sort_values().index.values
 
 miro_ids_cleared_for_catalogue_api = set(
-    df[df['is_cleared_for_catalogue_api']].index.values
+    df[df['is_cleared_for_catalogue_api'].fillna(True)].index.values
 )
 
 catalogue_id_to_miro_id = {
