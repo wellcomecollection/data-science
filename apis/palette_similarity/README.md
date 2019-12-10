@@ -10,7 +10,7 @@ a query image.
 ## Output example
 
 Hitting
-[`https://labs.wellcomecollection.org/palette-api/works/{catalogue_id}`](https://labs.wellcomecollection.org/palette-api/works/{catalogue_id})
+[`https://labs.wellcomecollection.org/palette-similarity/works/{catalogue_id}`](https://labs.wellcomecollection.org/palette-similarity/works/{catalogue_id})
 will return the `n=10` nearest neighbours to the given image (`catalogue_id`) in the
 form:
 
@@ -90,7 +90,7 @@ form:
 The API accepts query parameters `catalogue_id`, and `n`.
 
 Alternatively, one can query by palette. Hitting
-[`https://labs.wellcomecollection.org/palette-api/palette`](https://labs.wellcomecollection.org/palette_similarity/by_palette)
+[`https://labs.wellcomecollection.org/palette-similarity/palette`](https://labs.wellcomecollection.org/palette_similarity/by_palette)
 will randomly select a hex query palette and return `n=10` nearest neighbours in
 the form:
 
@@ -168,6 +168,6 @@ The API accepts query parameters `palette` (a `length=5` list of `length=6` hex
 strings comprising a 5-colour palette), and `n` (the number of neighbours to
 return).
 
-More detailed API docs can be obtained at
-`https://labs.wellcomecollection.org/palette-api/docs` or
-`https://labs.wellcomecollection.org/palette-api/redoc`
+More detailed docs can be obtained at
+`https://labs.wellcomecollection.org/palette-similarity/docs` or
+`https://labs.wellcomecollection.org/palette-similarity/redoc`
