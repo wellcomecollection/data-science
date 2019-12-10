@@ -12,7 +12,7 @@ valid_catalogue_ids = set(
     .values.reshape(-1)
 )
 
-miro_ids_in_nmslib_order = df['palette_index'].sort_values().index.values
+miro_ids_in_nmslib_order = df['feature_index'].sort_values().index.values
 
 miro_ids_cleared_for_catalogue_api = set(
     df[df['is_cleared_for_catalogue_api'].fillna(True)].index.values
@@ -23,7 +23,7 @@ catalogue_id_to_miro_id = {
     **{v: k for k, v in df['miro_catalogue_id'].items()}
 }
 
-index_lookup = df['palette_index'].to_dict()
+index_lookup = df['feature_index'].to_dict()
 
 
 def miro_id_to_miro_uri(miro_id):
