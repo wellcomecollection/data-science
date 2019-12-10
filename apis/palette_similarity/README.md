@@ -87,7 +87,7 @@ form:
 }
 ```
 
-The similarity accepts query parameters `catalogue_id`, and `n`.
+The API accepts query parameters `catalogue_id`, and `n`.
 
 Alternatively, one can query by palette. Hitting
 [`https://labs.wellcomecollection.org/palette-similarity/palette`](https://labs.wellcomecollection.org/palette_similarity/by_palette)
@@ -164,10 +164,10 @@ the form:
 }
 ```
 
-The similarity accepts query parameters `palette` (a `length=5` list of `length=6` hex
+The API accepts query parameters `palette` (a `length=5` list of `length=6` hex
 strings comprising a 5-colour palette), and `n` (the number of neighbours to
 return).
 
-More detailed similarity docs can be obtained at
+More detailed docs can be obtained at
 `https://labs.wellcomecollection.org/palette-similarity/docs` or
 `https://labs.wellcomecollection.org/palette-similarity/redoc`
