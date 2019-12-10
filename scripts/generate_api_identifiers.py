@@ -102,6 +102,10 @@ def is_cleared_for_catalogue_api(miro_id):
 palette_ordered_miro_ids = np.load(get_object_from_s3(
     s3_data, 'model-core-data', 'palette/image_ids.npy'
 ))
+feature_ordered_miro_ids = np.load(get_object_from_s3(
+    s3_data, 'model-core-data', 'image_pathways/image_ids.npy'
+))
+
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
