@@ -1,7 +1,7 @@
 module "palette_api" {
   source          = "./modules/service/api"
-  namespace       = "palette-api"
-  container_image = "wellcome/palette_api:latest"
+  namespace       = "palette-similarity"
+  container_image = "wellcome/palette_similarity:latest"
 
   namespace_id = "${aws_service_discovery_private_dns_namespace.namespace.id}"
 
