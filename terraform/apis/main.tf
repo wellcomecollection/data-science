@@ -1,4 +1,4 @@
-module "palette_api" {
+module "palette_similarity" {
   source          = "./modules/service/api"
   namespace       = "palette-similarity"
   container_image = "wellcome/palette_similarity:latest"
