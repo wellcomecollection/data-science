@@ -1,0 +1,4 @@
+boto3==1.9.198
+elasticsearch==6.3.1
+numpy==1.17.0
+requests==2.19.1
