@@ -44,16 +44,12 @@ def put_object_to_s3(binary_object, key, bucket_name, session=None, profile_name
 def list_keys_in_bucket(profile_name, bucket_name, prefix=''):
     spinner = Halo(f'listing keys in {bucket_name}').start()
 
-    session = boto3.session.Session(
-        profile_name=profile_name,
-        region_name='eu-west-1'
-    )
-    s3 = session.client('s3')
+    s3_client = get_s3_client(profile_name=profile_name)
 
     keys = []
     kwargs = {'Bucket': bucket_name, 'Prefix': prefix}
     while True:
-        resp = s3.list_objects_v2(**kwargs)
+        resp = s3_client.list_objects_v2(**kwargs)
         for obj in resp['Contents']:
             keys.append(obj['Key'])
         try:

@@ -1,18 +1,9 @@
-import json
-import os
-import pickle
 from io import BytesIO
-from os import mkdir
-from os.path import exists, join, realpath, split
 
 import click
-import numpy as np
-from halo import Halo
 from PIL import Image
-from tqdm import tqdm
-import pandas as pd
 
-from src.aws import get_object_from_s3, put_object_to_s3
+from src.aws import get_object_from_s3
 from src.feature_extraction import extract_features
 
 
