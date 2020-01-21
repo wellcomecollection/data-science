@@ -1,10 +1,8 @@
 import os
 import pickle
-from io import BytesIO
 
 import click
 import numpy as np
-from PIL import Image
 from tqdm import tqdm
 
 from src.aws import get_object_from_s3
