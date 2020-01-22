@@ -7,6 +7,7 @@ from torchvision import transforms
 from torchvision.models.vgg import vgg16
 
 from .aws import get_object_from_s3, put_object_to_s3
+from .images import get_image
 
 device = (
     torch.device('cuda')
@@ -33,11 +34,7 @@ def extract_features(image):
 def extract_and_save_image_features(miro_id, object_key):
     spinner = Halo(f'Feature extraction - {miro_id}').start()
     try:
-        image = Image.open(BytesIO(get_object_from_s3(
-            object_key=object_key,
-            bucket_name='wellcomecollection-miro-images-public',
-            profile_name='platform-dev'
-        )))
+        image = get_image('wellcomecollection-miro-images-public', object_key)
         feature_vector = extract_features(image)
         put_object_to_s3(
             binary_object=feature_vector.tobytes(),
