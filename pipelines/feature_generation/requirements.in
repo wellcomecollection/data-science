@@ -1,0 +1,8 @@
+boto3==1.9.198
+click==7.0
+halo==0.0.26
+nmslib==1.8.1
+numpy==1.17.3
+torch==1.3.1
+torchvision==0.4.2
+tqdm==4.26.0
