@@ -64,11 +64,14 @@ class HAL(object):
         """
         Controller(set_up_ssh=True).send_file(local_path, remote_path)
 
-    def start(self, instance_type):
-        """Create an instance of a specified type
+    def start(self, instance_type, spot_price=None):
+        """Create an instance of a specified type.
+        Valid options are listed at https://aws.amazon.com/ec2/spot/pricing/
 
         Args:
-            instance_type (str): The type of instance to create. Valid options are listed at https://aws.amazon.com/ec2/spot/pricing/
+            instance_type (str): The type of instance to create.
+            spot_price (str), optional: The type of instance to create. Valid options are listed at https://aws.amazon.com/ec2/spot/pricing/
+
         """
         c = Controller()
         if c.instance:
@@ -82,7 +85,8 @@ class HAL(object):
         )
         instance_id, spot_price = c.create_instance(
             instance_type,
-            instance_name=instance_name
+            instance_name=instance_name,
+            spot_price=spot_price
         )
         print(f'instance_id:\t{instance_id}\nspot_price:\t£{spot_price}')
         c.set_up_ssh()

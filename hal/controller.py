@@ -81,7 +81,7 @@ class Controller():
         base_price = float(response['SpotPriceHistory'][0]['SpotPrice'])
         # multiply base price by factor (default 1.1x), rounded up to 2dp
         bid_price = math.ceil(base_price * multiplier * 100.0) / 100.0
-        return str(bid_price)
+        return bid_price
 
     def construct_spot_launch_spec(self, instance_type):
         '''
@@ -105,17 +105,19 @@ class Controller():
         return launch_spec
 
     @Halo(text='\nCreating instance')
-    def create_instance(self, instance_type, instance_name):
+    def create_instance(self, instance_type, instance_name, spot_price=None):
         '''
         Makes a spot request for an specified instance with a dynamically 
         calculated spot price based on the most recent available data
         '''
         launch_spec = self.construct_spot_launch_spec(instance_type)
-        spot_price = self.get_spot_price(instance_type)
+        if not spot_price:
+            spot_price = self.get_spot_price(instance_type)
+
         request_id = self.client.request_spot_instances(
             LaunchSpecification=launch_spec,
             InstanceInterruptionBehavior='terminate',
-            SpotPrice=spot_price,
+            SpotPrice=str(spot_price),
             Type='one-time'
         )['SpotInstanceRequests'][0]['SpotInstanceRequestId']
 
