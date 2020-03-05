@@ -25,10 +25,9 @@ app = FastAPI(
 )
 
 
-@app.get('/feature-vector/{image_id}')
-def feature_similarity_by_catalogue_id(image_id: str):
-    image_url = f'https://iiif.wellcomecollection.org/image/{image_id}.jpg/full/960,/0/default.jpg'
-    image = get_image_from_url(image_url)
+@app.get('/feature-vector/')
+def feature_similarity_by_catalogue_id(image_url: str):
+    image = get_image_from_url(unquote_plus(image_url))
     feature_vector = extract_features(image)
     lsh_encoded_features = lsh_encoder(feature_vector)
     return {
