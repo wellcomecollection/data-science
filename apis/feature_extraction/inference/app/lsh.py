@@ -12,12 +12,15 @@ def encode_for_elasticsearch(clusters):
 class LSHEncoder():
     def __init__(self, model_name):
         self.models = pickle.loads(
-            get_object_from_s3(f'lsh_models/{model_name}.pkl')
+            get_object_from_s3(
+                object_key=f'lsh_models/{model_name}.pkl',
+                bucket_name='model-core-data',
+                profile_name='data-dev'
+            )
         )
-        self.__len__ = len(self.models)
 
     def __call__(self, feature_vector):
-        feature_groups = np.split(feature_vector, len(self))
+        feature_groups = np.split(feature_vector, len(self.models))
 
         clusters = [
             model.predict(feature_group.reshape(1, -1))[0]
