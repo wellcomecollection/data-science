@@ -11,11 +11,6 @@ from .feature_extraction import extract_features
 
 lsh_encoder = LSHEncoder('2020-03-05')
 
-
-class Image(BaseModel):
-    url: str
-
-
 # initialise API
 app = FastAPI(
     title='Feature Vector',
