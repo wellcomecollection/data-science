@@ -18,7 +18,7 @@ def load_local_feature_vectors(feature_vector_path, sample_size):
     )
 
     feature_vectors = []
-    for id in tqdm(ids):
+    for id in ids:
         with open(os.path.join(feature_vector_path, id)) as f:
             feature_vectors.append(np.fromfile(f, dtype=np.float32))
 
