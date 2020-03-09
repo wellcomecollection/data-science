@@ -3,10 +3,10 @@ import numpy as np
 from elasticsearch import Elasticsearch, helpers
 
 
-def get_random_documents(n_documents, es_client):
-    scan_response = helpers.scan(
+def get_all_ids(es_client, index_name):
+    response = helpers.scan(
         client=es_client,
-        index='test-index',
+        index=index_name,
         query={
             "query": {
                 "match_all": {}
@@ -15,34 +15,29 @@ def get_random_documents(n_documents, es_client):
         }
     )
 
-    all_ids = [hit['_id'] for hit in list(scan_response)]
+    return [hit['_id'] for hit in list(response)]
 
-    if len(all_ids) > n_documents:
-        query_ids = np.random.choice(
-            all_ids, n_documents, replace=False).tolist()
+
+def get_random_documents(es_client, index_name, n):
+    all_ids = get_all_ids(es_client, index_name)
+    if len(all_ids) > n:
+        query_ids = np.random.choice(all_ids, n, replace=False).tolist()
     else:
         query_ids = all_ids
 
-    documents = es_client.mget(
-        index='test-index',
+    response = es_client.mget(
+        index=index_name,
         body={'ids': query_ids}
     )
 
-    return documents
+    return response
 
 
-def get_random_feature_vectors(n_documents, es_client=None):
-    es_client = es_client or Elasticsearch(
-        host=os.environ['ES_HOST'],
-        http_auth=(os.environ['ES_USERNAME'], os.environ['ES_PASSWORD'])
-    )
-
-    documents = get_random_documents(n_documents, es_client)
-    docs = [doc['_source']['doc'] for doc in documents['docs']]
+def get_random_feature_vectors(es_client, index_name, n):
+    response = get_random_documents(es_client, index_name, n)
+    docs = [doc['_source']['doc'] for doc in response['docs']]
     feature_vectors = np.stack([
-        np.concatenate(
-            [doc['feature_vector_1'], doc['feature_vector_2']],
-            axis=0
-        ) for doc in docs
+        np.concatenate([doc['features_1'], doc['features_2']], axis=0)
+        for doc in docs
     ])
     return feature_vectors
