@@ -33,11 +33,22 @@ def get_random_documents(es_client, index_name, n):
     return response
 
 
-def get_random_feature_vectors(es_client, index_name, n):
-    response = get_random_documents(es_client, index_name, n)
-    docs = [doc['_source']['doc'] for doc in response['docs']]
+def get_random_feature_vectors(n_documents):
+    es_client = Elasticsearch(
+        host=os.environ['ES_HOST'],
+        http_auth=(os.environ['ES_USERNAME'], os.environ['ES_PASSWORD'])
+    )
+
+    documents = get_random_documents(
+        es_client, os.environ['ES_INDEX_NAME'], n_documents
+    )
+
+    docs = [doc['_source']['doc'] for doc in documents['docs']]
     feature_vectors = np.stack([
-        np.concatenate([doc['features_1'], doc['features_2']], axis=0)
-        for doc in docs
+        np.concatenate(
+            [doc['feature_vector_1'], doc['feature_vector_2']],
+            axis=0
+        ) for doc in docs
     ])
+
     return feature_vectors
