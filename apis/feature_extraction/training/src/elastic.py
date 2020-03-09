@@ -40,7 +40,9 @@ def get_random_feature_vectors(n_documents, es_client=es_client):
     documents = get_random_documents(n_documents, es_client)
     docs = [doc['_source']['doc'] for doc in documents['docs']]
     feature_vectors = np.stack([
-        np.concatenate([doc['features_1'], doc['features_2']], axis=0)
-        for doc in docs
+        np.concatenate(
+            [doc['feature_vector_1'], doc['feature_vector_2']],
+            axis=0
+        ) for doc in docs
     ])
     return feature_vectors

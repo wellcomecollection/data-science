@@ -23,10 +23,13 @@ app = FastAPI(
 @app.get('/feature-vector/')
 def feature_similarity_by_catalogue_id(image_url: str):
     image = get_image_from_url(unquote_plus(image_url))
-    feature_vector = extract_features(image)
-    lsh_encoded_features = lsh_encoder(feature_vector)
+    features = extract_features(image)
+    lsh_encoded_features = lsh_encoder(features)
+    feature_vector_1, feature_vector_2 = features.reshape(2, 2048).tolist()
+
     return {
-        'feature_vector': feature_vector.tolist(),
+        'feature_vector_1': feature_vector_1,
+        'feature_vector_2': feature_vector_2,
         'lsh_encoded_features': lsh_encoded_features
     }
 
