@@ -4,7 +4,6 @@ import pickle
 from datetime import datetime
 import click
 import numpy as np
-from tqdm import tqdm
 
 from src.aws import get_keys_and_ids, get_object_from_s3, put_object_to_s3
 from src.lsh import split_features, train_clusters
