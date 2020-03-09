@@ -31,20 +31,15 @@ def load_local_feature_vectors(feature_vector_path, sample_size):
 @click.option('--sample_size', help='number of embeddings to train clusters on', default=25_000)
 @click.option('--feature_vector_path', help='path to a synced local version of the fvs in s3')
 def main(n, m, sample_size, feature_vector_path):
-    if not os.path.exists('models'):
-        os.mkdir('models')
-
     if feature_vector_path:
         feature_vectors = load_local_feature_vectors(
             feature_vector_path, sample_size)
     else:
         feature_vectors = get_random_feature_vectors(sample_size)
 
-    feature_groups = split_features(feature_vectors, n)
-
     model_list = [
         train_clusters(feature_group, m)
-        for feature_group in feature_groups
+        for feature_group in split_features(feature_vectors, n)
     ]
 
     model_name = datetime.now().strftime('%Y-%m-%d')

@@ -2,11 +2,6 @@ import os
 import numpy as np
 from elasticsearch import Elasticsearch, helpers
 
-es_client = Elasticsearch(
-    host=os.environ['ES_HOST'],
-    http_auth=(os.environ['ES_USERNAME'], os.environ['ES_PASSWORD'])
-)
-
 
 def get_random_documents(n_documents, es_client):
     scan_response = helpers.scan(
@@ -36,7 +31,12 @@ def get_random_documents(n_documents, es_client):
     return documents
 
 
-def get_random_feature_vectors(n_documents, es_client=es_client):
+def get_random_feature_vectors(n_documents, es_client=None):
+    es_client = es_client or Elasticsearch(
+        host=os.environ['ES_HOST'],
+        http_auth=(os.environ['ES_USERNAME'], os.environ['ES_PASSWORD'])
+    )
+
     documents = get_random_documents(n_documents, es_client)
     docs = [doc['_source']['doc'] for doc in documents['docs']]
     feature_vectors = np.stack([
