@@ -8,26 +8,18 @@ boto3==1.12.14            # via -r requirements.in
 botocore==1.15.14         # via boto3, s3transfer
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
-click==7.0                # via uvicorn
 docutils==0.15.2          # via botocore
-fastapi==0.52.0           # via -r requirements.in
-h11==0.9.0                # via uvicorn
-httptools==0.1.1          # via uvicorn
 idna==2.9                 # via requests
 jmespath==0.9.5           # via boto3, botocore
 numpy==1.18.1             # via -r requirements.in, scipy, torchvision
 pillow==7.0.0             # via -r requirements.in, torchvision
-pydantic==1.4             # via fastapi
 python-dateutil==2.8.1    # via botocore
+python-logstash==0.4.6    # via -r requirements.in
 requests==2.23.0          # via -r requirements.in
 s3transfer==0.3.3         # via boto3
 scikit-learn==0.19.2      # via -r requirements.in
 scipy==1.4.1              # via -r requirements.in
 six==1.14.0               # via python-dateutil, torchvision
-starlette==0.13.2         # via fastapi
 torch==1.4.0              # via -r requirements.in, torchvision
 torchvision==0.5.0        # via -r requirements.in
 urllib3==1.25.8           # via botocore, requests
-uvicorn==0.11.3           # via -r requirements.in
-uvloop==0.14.0            # via uvicorn
-websockets==8.1           # via uvicorn
