@@ -6,4 +6,4 @@ RUN pip install -r requirements.txt
 COPY ./src /src
 COPY ./train_lsh.py /train_lsh.py
 
-CMD ["python", "train_lsh.py", "--feature_vector_path=/feature_vectors"]
+CMD [ "python", "train_lsh.py" ]

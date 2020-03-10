@@ -1,5 +1,5 @@
-from sklearn.cluster import KMeans
 import numpy as np
+from sklearn.cluster import KMeans
 
 
 def split_features(feature_vectors, n_groups):

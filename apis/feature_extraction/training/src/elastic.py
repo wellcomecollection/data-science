@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 from elasticsearch import Elasticsearch, helpers
 
