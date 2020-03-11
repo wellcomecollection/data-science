@@ -1,9 +1,8 @@
 from fastapi import FastAPI, HTTPException
 
-from src.image import get_image_from_url, get_image_from_iiif_url
+from src.image import get_image_from_url, get_image_url_from_iiif_url
 from src.lsh import LSHEncoder
 from src.feature_extraction import extract_features
-from src.logging import logger
 
 lsh_encoder = LSHEncoder('2020-03-05')
 
@@ -18,15 +17,28 @@ app = FastAPI(
 
 @app.get('/feature-vector/')
 def feature_similarity_by_catalogue_id(image_url: str = None, iiif_url: str = None):
-    if image_url:
+    if (not (image_url or iiif_url)) or (iiif_url and image_url):
+        raise HTTPException(
+            status_code=400,
+            detail='API takes one of: image_url, iiif_url'
+        )
+
+    elif iiif_url and not image_url:
+        try:
+            image_url = get_image_url_from_iiif_url(iiif_url)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail='iiif_url is not a valid iiif url'
+            )
+
+    try:
         image = get_image_from_url(image_url)
-        url = image_url
-    elif iiif_url:
-        image = get_image_from_iiif_url(iiif_url)
-        url = iiif_url
-    else:
-        logger.error('No URL provided')
-        raise HTTPException(status_code=400, detail='No URL provided')
+    except ValueError:
+        raise HTTPException(
+            status_code=404,
+            detail=f'{image_url} is not a valid image url'
+        )
 
     features = extract_features(image)
     lsh_encoded_features = lsh_encoder(features)
@@ -34,8 +46,6 @@ def feature_similarity_by_catalogue_id(image_url: str = None, iiif_url: str = No
     # elasticsearch can only handle 2048-dimensional dense vectors, so we're
     # splitting them in the response.
     feature_vector_1, feature_vector_2 = features.reshape(2, 2048).tolist()
-
-    logger.info(f'extracted features from image at: {url}')
 
     return {
         'feature_vector_1': feature_vector_1,

@@ -4,8 +4,6 @@ from urllib.parse import unquote_plus
 import requests
 from PIL import Image
 
-from .logging import logger
-
 
 def is_valid_image_url(image_url):
     image_formats = ['image/png', 'image/jpeg', 'image/jpg']
@@ -25,13 +23,10 @@ def get_image_from_url(image_url):
         image = Image.open(BytesIO(r.content))
         return image
     else:
-        message = f'{image_url} is not a valid image URL'
-        logger.error(message)
-        raise ValueError(message)
+        raise ValueError(f'{image_url} is not a valid image URL')
 
 
-def get_image_from_iiif_url(iiif_url):
+def get_image_url_from_iiif_url(iiif_url):
     url = unquote_plus(iiif_url)
     image_url = url.replace('info.json', '/full/760,/0/default.jpg')
-    image = get_image_from_url(image_url)
-    return image
+    return image_url
