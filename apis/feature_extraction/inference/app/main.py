@@ -43,13 +43,8 @@ def feature_similarity_by_catalogue_id(image_url: str = None, iiif_url: str = No
     features = extract_features(image)
     lsh_encoded_features = lsh_encoder(features)
 
-    # elasticsearch can only handle 2048-dimensional dense vectors, so we're
-    # splitting them in the response.
-    feature_vector_1, feature_vector_2 = features.reshape(2, 2048).tolist()
-
     return {
-        'feature_vector_1': feature_vector_1,
-        'feature_vector_2': feature_vector_2,
+        'features': features,
         'lsh_encoded_features': lsh_encoded_features
     }
 
