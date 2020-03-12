@@ -21,7 +21,7 @@ except Exception as e:
 try:
     logger.info('Fetching pretrained LSHEncoder model')
     download_object_from_s3(
-        object_key=f'lsh_models/{os.environ["MODEL_NAME"]}.pkl',
+        object_key=os.environ['MODEL_OBJECT_KEY'],
         bucket_name='model-core-data',
         profile_name='data-dev'
     )

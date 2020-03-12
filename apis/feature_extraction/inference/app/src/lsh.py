@@ -8,7 +8,7 @@ from .aws import get_object_from_s3
 
 class LSHEncoder():
     def __init__(self):
-        model_path = os.environ['MODEL_NAME'] + '.pkl'
+        model_path = os.path.basename(os.environ['MODEL_OBJECT_KEY'])
         with open(model_path, 'rb') as f:
             self.models = pickle.load(f)
 
