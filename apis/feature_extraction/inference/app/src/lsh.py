@@ -1,3 +1,4 @@
+import os
 import pickle
 
 import numpy as np
@@ -6,14 +7,10 @@ from .aws import get_object_from_s3
 
 
 class LSHEncoder():
-    def __init__(self, model_name):
-        self.models = pickle.loads(
-            get_object_from_s3(
-                object_key=f'lsh_models/{model_name}.pkl',
-                bucket_name='model-core-data',
-                profile_name='data-dev'
-            )
-        )
+    def __init__(self):
+        model_path = os.environ['MODEL_NAME'] + '.pkl'
+        with open(model_path, 'rb') as f:
+            self.models = pickle.load(f)
 
     def encode_for_elasticsearch(self, clusters):
         return [f'{i}-{val}' for i, val in enumerate(clusters)]

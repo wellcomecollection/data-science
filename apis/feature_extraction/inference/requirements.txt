@@ -8,13 +8,14 @@ boto3==1.12.14            # via -r requirements.in
 botocore==1.15.14         # via boto3, s3transfer
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
+daiquiri==2.1.1           # via -r requirements.in
 docutils==0.15.2          # via botocore
 idna==2.9                 # via requests
 jmespath==0.9.5           # via boto3, botocore
 numpy==1.18.1             # via -r requirements.in, scipy, torchvision
 pillow==7.0.0             # via -r requirements.in, torchvision
 python-dateutil==2.8.1    # via botocore
-python-logstash==0.4.6    # via -r requirements.in
+python-json-logger==0.1.11  # via daiquiri
 requests==2.23.0          # via -r requirements.in
 s3transfer==0.3.3         # via boto3
 scikit-learn==0.19.2      # via -r requirements.in

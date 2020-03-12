@@ -4,7 +4,7 @@ from src.image import get_image_from_url, get_image_url_from_iiif_url
 from src.lsh import LSHEncoder
 from src.feature_extraction import extract_features
 
-lsh_encoder = LSHEncoder('2020-03-05')
+lsh_encoder = LSHEncoder()
 
 # initialise API
 app = FastAPI(
@@ -23,7 +23,7 @@ def feature_similarity_by_catalogue_id(image_url: str = None, iiif_url: str = No
             detail='API takes one of: image_url, iiif_url'
         )
 
-    elif iiif_url and not image_url:
+    if iiif_url:
         try:
             image_url = get_image_url_from_iiif_url(iiif_url)
         except ValueError:

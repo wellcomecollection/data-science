@@ -3,6 +3,7 @@ from io import BytesIO
 
 import boto3
 
+
 def get_s3_client(session=None, profile_name=None):
     if profile_name:
         session = boto3.session.Session(
@@ -25,3 +26,12 @@ def get_object_from_s3(object_key, bucket_name, session=None, profile_name=None)
         Key=object_key
     )
     return response['Body'].read()
+
+
+def download_object_from_s3(object_key, bucket_name, session=None, profile_name=None):
+    s3_client = get_s3_client(session, profile_name)
+    s3_client.download_file(
+        Bucket=bucket_name,
+        Key=object_key,
+        Filename=os.path.basename(object_key)
+    )
