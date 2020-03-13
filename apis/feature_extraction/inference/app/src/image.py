@@ -16,6 +16,16 @@ def is_valid_image_url(image_url):
         return False
 
 
+def is_valid_iiif_url(iiif_url):
+    try:
+        r = requests.head(iiif_url)
+        if (r.status_code == 200) and (r.headers['content-type'] == 'application/json'):
+            return True
+        return False
+    except:
+        return False
+
+
 def get_image_from_url(image_url):
     image_url = unquote_plus(image_url)
     if is_valid_image_url(image_url):
@@ -27,6 +37,9 @@ def get_image_from_url(image_url):
 
 
 def get_image_url_from_iiif_url(iiif_url):
-    url = unquote_plus(iiif_url)
-    image_url = url.replace('info.json', '/full/760,/0/default.jpg')
-    return image_url
+    if is_valid_iiif_url(iiif_url):
+        url = unquote_plus(iiif_url)
+        image_url = url.replace('info.json', '/full/760,/0/default.jpg')
+        return image_url
+    else:
+        raise ValueError(f'{iiif_url} is not a valid iiif URL')

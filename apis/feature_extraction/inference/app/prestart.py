@@ -13,7 +13,7 @@ logger = daiquiri.getLogger("prestart")
 try:
     logger.info('Fetching pretrained VGG16 model')
     feature_extractor = vgg16(pretrained=True, progress=False)
-    logger.info('Successfully fetched pretrained VGG model')
+    logger.info('Fetched pretrained VGG model')
 except Exception as e:
     logger.error(f'Failed to fetch pretrained VGG model: {e}')
     raise
@@ -25,7 +25,7 @@ try:
         bucket_name='model-core-data',
         profile_name='data-dev'
     )
-    logger.info('Successfully fetched pretrained LSHEncoder model')
+    logger.info('Fetched pretrained LSHEncoder model')
 except ClientError as e:
     logger.error(f'Failed to fetch pretrained LSHEncoder: {e}')
     raise
