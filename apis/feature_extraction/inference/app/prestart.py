@@ -1,14 +1,13 @@
 import logging
 import os
 
-import daiquiri
 from botocore.exceptions import ClientError
 from torchvision.models.vgg import vgg16
 
 from src.aws import download_object_from_s3
+from src.logging import get_logstash_logger
 
-daiquiri.setup(level=logging.INFO)
-logger = daiquiri.getLogger("prestart")
+logger = get_logstash_logger(__name__)
 
 try:
     logger.info('Fetching pretrained VGG16 model')
