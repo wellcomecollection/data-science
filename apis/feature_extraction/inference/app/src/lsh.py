@@ -3,8 +3,6 @@ import pickle
 
 import numpy as np
 
-from .aws import get_object_from_s3
-
 
 class LSHEncoder():
     def __init__(self):
