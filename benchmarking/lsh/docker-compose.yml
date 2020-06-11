@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  api:
+    build: api
+    ports:
+      - "80:80"
+    volumes:
+      - type: bind
+        source: ./src/elastic.py
+        target: /app/elastic.py
+      - type: bind
+        source: ~/datasets/image_pathways
+        target: /data
+    env_file:
+      - ./.env
+    networks:
+      - elk
+
+  populate:
+    build: populate
+    volumes:
+      - type: bind
+        source: ./src
+        target: /opt/src
+      - type: bind
+        source: ~/datasets/image_pathways
+        target: /data
+    env_file:
+      - ./.env
+    networks:
+      - elk
+
+  compare:
+    build: compare
+    networks:
+      - elk
+    ports:
+      - "3000:3000"
+
+  benchmark:
+    build: benchmark
+    volumes:
+      - type: bind
+        source: ~/datasets/image_pathways
+        target: /data
+    networks:
+      - elk
+
+  score:
+    build: score
+    env_file:
+      - ./.env
+    volumes:
+      - type: bind
+        source: ./src/elastic.py
+        target: /app/elastic.py
+    networks:
+      - elk
+
+networks:
+  elk:
+    external:
+      name: docker-elk_elk

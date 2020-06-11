@@ -1,0 +1,7 @@
+certifi==2020.4.5.1
+elasticsearch==7.7.0
+fastapi==0.55.1
+numpy==1.17.0
+pydantic==1.5.1
+starlette==0.13.2
+urllib3==1.25.9

@@ -1,0 +1,6 @@
+numpy==1.17.0
+tqdm==4.46.0
+typer==0.2.1
+wasabi==0.6.0
+requests==2.23.0
+pandas==1.0.4
