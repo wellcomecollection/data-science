@@ -1,0 +1,7 @@
+elasticsearch==7.7.0
+numpy==1.17.0
+scikit-learn==0.19.2
+scipy==1.4.1
+tqdm==4.41.1
+typer==0.2.1
+wasabi==0.6.0
