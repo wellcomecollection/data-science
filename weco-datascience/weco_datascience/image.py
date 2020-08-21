@@ -38,7 +38,12 @@ def is_valid_image(response):
 
 
 async def get_remote_image(url):
-    response = await fetch_url_bytes(url)
+    try:
+        image_url = get_image_url_from_iiif_url(url)
+    except ValueError:
+        image_url = url
+
+    response = await fetch_url_bytes(image_url)
     if is_valid_image(response["object"]):
         return response["bytes"]
     else:
