@@ -18,11 +18,9 @@ jobs:
         with:
           python-version: "3.x"
       - name: Install dependencies
-        run: |
-          (cd weco-datascience; make setup)
+        run: make setup
       - name: Build and publish
         env:
           FLIT_USERNAME: ${{ secrets.PYPI_USERNAME }}
           FLIT_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          (cd weco-datascience; make publish)
+        run: make publish
