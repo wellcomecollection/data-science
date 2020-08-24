@@ -1,33 +1,15 @@
 # :microscope: Data Science
 
 This repo contains the data science work being carried out on Wellcome
-Collection. The work is divided into four major sections:
+Collection.
 
-### [Research](./research)
+The majority of this work is experimental (ie not in production). This repo also holds the `weco-datascience` package
 
-Turning ideas from research papers into usable code. Lots of notebooks, lots of
-documentation of the problem to be solved and how the corresponding solution has
-developed.
+## weco-datascience
 
-### [APIs](./apis)
+Common functionality for data science applications in the Wellcome Collection platform.
 
-Demo APIs/interfaces crystalising the ideas from the research stage. These demo
-apis allow us to explore what a production service might look like and what kind
-of user experience it might facilitate.
-
-### [Services](./services)
-
-Full services running in the pipeline, transforming and enhancing source data.
-
-### [Infrastructure](./infrastructure)
-
-Code that facilitates all of the above, including a research environment for
-jupyter notebooks shared across flexible CPU/GPU hardware. That research
-environment is controlled by [HAL](./infrastructure/hal).
-
-### [Jupyter](./jupyter/README.md)
-
-Infrastructure to run jupyter in AWS.
+Install by running `pip install weco-datascience`
 
 ---
 
