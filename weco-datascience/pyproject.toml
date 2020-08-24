@@ -1,0 +1,28 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "weco_datascience"
+dist-name = "weco-datascience"
+author = "Harrison Pim"
+author-email = "h.pim@wellcome.ac.uk"
+home-page = "https://github.com/harrisonpim/hal"
+description-file = "README.md"
+classifiers = ["License :: OSI Approved :: MIT License"]
+requires-python = ">=3.7"
+requires = [
+    "aiofile==3.0.0",
+    "aiohttp[speedups]==3.6.2",
+    "async-timeout==3.0.1",
+    "boto3==1.12.14",
+    "Pillow==7.0.0",
+    "piffle==0.3.0",
+]
+
+[tool.flit.metadata.requires-extra]
+dev = [
+    "black==19.10b0",
+    "flake8==3.8.1",
+    "isort==4.3.21",
+]
