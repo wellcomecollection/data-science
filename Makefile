@@ -4,6 +4,7 @@ default: build
 
 # commands for building the package
 setup:
+	python -m pip install --upgrade pip
 	pip install flit
 	flit install -s
 
@@ -13,7 +14,7 @@ lint:
 	flake8 weco_datascience/
 
 test:
-	python -m unittest discover -s ./test
+	python -m unittest discover -s ./weco_datascience/test
 
 build: clean lint test
 	flit build
