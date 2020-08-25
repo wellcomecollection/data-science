@@ -8,15 +8,21 @@ class TestImage(unittest.TestCase):
         test_url = f"https://dlcs.io/iiif-img/wellcome/5/{image_id}/info.json"
         result = get_image_url_from_iiif_url(test_url)
         expected = (
-            f"https://dlcs.io/thumbs/wellcome/5/{image_id}/full/!400,400/0/default.jpg"
+            f"https://dlcs.io/thumbs/wellcome/5/{image_id}/"
+            "full/!400,400/0/default.jpg"
         )
         self.assertEqual(result, expected)
 
     def test_iiif_parse_other(self):
         image_id = "V0002882.jpg"
-        test_url = f"https://iiif.wellcomecollection.org/image/{image_id}/info.json"
+        test_url = (
+            f"https://iiif.wellcomecollection.org/image/{image_id}/info.json"
+        )
         result = get_image_url_from_iiif_url(test_url)
-        expected = f"https://iiif.wellcomecollection.org/image/{image_id}/full/224,224/0/default.jpg"
+        expected = (
+            f"https://iiif.wellcomecollection.org/image/{image_id}/"
+            "full/224,224/0/default.jpg"
+        )
         self.assertEqual(result, expected)
 
     def test_iiif_parse_invalid(self):

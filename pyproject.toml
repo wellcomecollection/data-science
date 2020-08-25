@@ -7,8 +7,8 @@ module = "weco_datascience"
 dist-name = "weco-datascience"
 author = "Harrison Pim"
 author-email = "h.pim@wellcome.ac.uk"
-home-page = "https://github.com/harrisonpim/hal"
-description-file = "README.md"
+home-page = "https://github.com/wellcomecollection/data-science"
+description-file = "weco_datascience/README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
 requires-python = ">=3.7"
 requires = [
