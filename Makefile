@@ -1,4 +1,4 @@
-.PHONY: setup lint test build publish clean
+.PHONY: setup lint check_version test build publish clean
 
 default: build
 
@@ -19,7 +19,10 @@ test:
 build: clean lint test
 	flit build
 
-publish: build
+check_version:
+	[ $(python -c "from weco_datascience import __version__ as v; print(v)") = $GITHUB_REF ]
+
+publish: check_version build
 	flit publish
 
 # general commands
