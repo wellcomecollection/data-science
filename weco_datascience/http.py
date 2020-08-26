@@ -13,9 +13,9 @@ def start_persistent_client_session():
     _session_store["session"] = aiohttp.ClientSession()
 
 
-def close_persistent_client_session():
+async def close_persistent_client_session():
     try:
-        _session_store["session"].close()
+        await _session_store["session"].close()
         del _session_store["session"]
     except Exception:
         pass
