@@ -19,8 +19,10 @@ test:
 build: clean lint test
 	flit build
 
+
+MODULE_VERSION := $(shell python -c "from weco_datascience import __version__ as v; print(v)")
 check_version:
-	[ $(python -c "from weco_datascience import __version__ as v; print(v)") = $GITHUB_REF ]
+	[ ${MODULE_VERSION} == ${GITHUB_REF} ]
 
 publish: check_version build
 	flit publish
