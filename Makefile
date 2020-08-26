@@ -22,7 +22,7 @@ build: clean lint test
 
 MODULE_VERSION := $(shell python -c "from weco_datascience import __version__ as v; print(v)")
 check_version:
-	[ "refs/tags/${MODULE_VERSION}" == "${GITHUB_REF}" ]
+	[ "refs/tags/${MODULE_VERSION}" = "${GITHUB_REF}" ]
 
 publish: check_version build
 	flit publish
