@@ -55,6 +55,6 @@ async def fetch_redirect_url(url, params=None):
     session = _get_persistent_session()
     async with session.get(url, params=params) as response:
         if response.status == 200:
-            return response.url
+            return {"object": response, "url": str(response.url)}
         else:
             raise ValueError(f"Looks like {url} isn't a valid url")

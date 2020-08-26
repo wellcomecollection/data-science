@@ -1,15 +1,12 @@
 from pathlib import Path
 
 import pytest
-from PIL import Image
-from weco_datascience.http import (
-    close_persistent_client_session,
-    start_persistent_client_session,
-)
-from weco_datascience.image import (
-    get_image_from_url,
-    get_image_url_from_iiif_url,
-)
+from PIL.Image import Image
+from weco_datascience.http import (close_persistent_client_session,
+                                   start_persistent_client_session)
+from weco_datascience.image import (get_image_from_url,
+                                    get_image_url_from_iiif_url)
+from . import iiif_url, image_url, local_image_path
 
 
 def test_iiif_parse_dlcs():
@@ -24,15 +21,8 @@ def test_iiif_parse_dlcs():
 
 
 def test_iiif_parse_other():
-
-    result = get_image_url_from_iiif_url(
-        "https://iiif.wellcomecollection.org/image/V0002882.jpg/info.json"
-    )
-    expected = (
-        "https://iiif.wellcomecollection.org/image/V0002882.jpg/"
-        "full/224,224/0/default.jpg"
-    )
-    assert result == expected
+    result = get_image_url_from_iiif_url(iiif_url)
+    assert result == image_url
 
 
 def test_iiif_parse_invalid():
@@ -43,38 +33,30 @@ def test_iiif_parse_invalid():
 
 @pytest.mark.asyncio
 async def test_get_local_image():
-    file_path = (Path(__file__).parent / "V0050680.jpg").absolute()
-    assert file_path.exists()
-    image = await get_image_from_url("file://" + str(file_path))
-    assert isinstance(image, Image.Image)
+    image = await get_image_from_url(local_image_path)
+    assert isinstance(image, Image)
 
 
 @pytest.mark.asyncio
 async def test_get_remote_image():
     start_persistent_client_session()
-    image = await get_image_from_url(
-        "https://iiif.wellcomecollection.org/image/V0050680.jpg/"
-        "full/224,224/0/default.jpg"
-    )
+    image = await get_image_from_url(image_url)
     await close_persistent_client_session()
-    assert isinstance(image, Image.Image)
+    assert isinstance(image, Image)
 
 
 @pytest.mark.asyncio
 async def test_get_iiif_image():
     start_persistent_client_session()
-
-    image = await get_image_from_url(
-        "https://iiif.wellcomecollection.org/image/V0050680.jpg/info.json"
-    )
+    image = await get_image_from_url(iiif_url)
     await close_persistent_client_session()
-    assert isinstance(image, Image.Image)
+    assert isinstance(image, Image)
 
 
 @pytest.mark.asyncio
 async def test_fails_nonexistant_local_image():
     start_persistent_client_session()
-    query_url = str(Path.cwd() / "V0050680.jpg")
+    query_url = "nonexistent_image.jpg"
     with pytest.raises(ValueError):
         await get_image_from_url(query_url)
     await close_persistent_client_session()
