@@ -14,7 +14,7 @@ lint:
 	flake8 weco_datascience/
 
 test:
-	python -m unittest discover -s ./weco_datascience/test
+	python -m pytest ./weco_datascience/test
 
 build: clean lint test
 	flit build
