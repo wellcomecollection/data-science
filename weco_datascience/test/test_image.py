@@ -5,8 +5,10 @@ from PIL.Image import Image
 from weco_datascience.http import (close_persistent_client_session,
                                    start_persistent_client_session)
 from weco_datascience.image import (get_image_from_url,
-                                    get_image_url_from_iiif_url)
-from . import iiif_url, image_url, local_image_path
+                                    get_image_url_from_iiif_url,
+                                    is_valid_image)
+from weco_datascience.http import fetch_url_bytes
+from . import iiif_url, image_url, local_image_path, invalid_url
 
 
 def test_iiif_parse_dlcs():
@@ -26,9 +28,24 @@ def test_iiif_parse_other():
 
 
 def test_iiif_parse_invalid():
-    test_url = "https://example.com/pictures/123/skateboard.png"
     with pytest.raises(ValueError):
-        get_image_url_from_iiif_url(test_url)
+        get_image_url_from_iiif_url(invalid_url)
+
+
+@pytest.mark.asyncio
+async def test_is_valid_image():
+    start_persistent_client_session()
+    response = await fetch_url_bytes(image_url)
+    await close_persistent_client_session()
+    assert is_valid_image(response["object"])
+
+
+@pytest.mark.asyncio
+async def test_is_invalid_image():
+    start_persistent_client_session()
+    response = await fetch_url_bytes(invalid_url)
+    await close_persistent_client_session()
+    assert not is_valid_image(response["object"])
 
 
 @pytest.mark.asyncio

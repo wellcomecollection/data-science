@@ -12,3 +12,5 @@ iiif_url = (
 local_image_path = (
     "file://" + str((Path(__file__).parent / image_id).absolute())
 )
+
+invalid_url = "https://example.com/pictures/123/skateboard.png"
