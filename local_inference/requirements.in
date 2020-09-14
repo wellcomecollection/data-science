@@ -1,0 +1,5 @@
+aiohttp[speedups]==3.6.2
+click==7.1.2
+elasticsearch==7.9.1
+tqdm==4.48.2
+weco-datascience==0.1.4
