@@ -95,7 +95,10 @@ class BatchExecutionQueue(Generic[Input, Result]):
         if queue_processed in done and execution_id in self.output:
             return self.output.pop(execution_id)
         else:
-            raise self.task.exception()
+            worker_exception = self.task.exception()
+            # Restart worker on exceptions
+            self.start_worker()
+            raise worker_exception
 
     def __mark_queue_done(self, n) -> None:
         """
@@ -107,8 +110,7 @@ class BatchExecutionQueue(Generic[Input, Result]):
     async def __worker(self):
         """
         The worker runs continuously, blocking asynchronously until it has
-        received items to process. If an exception is raised in here then the
-        task will stop silently.
+        received items to process.
         """
 
         # This implementation is based upon:
