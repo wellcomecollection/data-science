@@ -84,7 +84,7 @@ class BatchExecutionQueue(Generic[Input, Result]):
                 await self.queue.put((execution_id, input))
         except asyncio.TimeoutError as e:
             log.error(
-                "Queue slot did not become available in time, restarting worker"
+                "Queue slot didn't become available in time, restarting worker"
             )
             self.__restart_worker()
             raise e
