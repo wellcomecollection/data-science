@@ -83,7 +83,9 @@ class BatchExecutionQueue(Generic[Input, Result]):
             async with timeout(self.batch_size * self.timeout):
                 await self.queue.put((execution_id, input))
         except asyncio.TimeoutError as e:
-            log.error("Queue slot did not become available in time, restarting worker")
+            log.error(
+                "Queue slot did not become available in time, restarting worker"
+            )
             self.__restart_worker()
             raise e
 
@@ -105,7 +107,9 @@ class BatchExecutionQueue(Generic[Input, Result]):
             try:
                 worker_exception = self.task.exception()
             except asyncio.InvalidStateError:
-                worker_exception = Exception("Task failed before job was processed")
+                worker_exception = Exception(
+                    "Task failed before job was processed"
+                )
             self.__restart_worker()
             raise worker_exception from None
 
