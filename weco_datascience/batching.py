@@ -84,7 +84,7 @@ class BatchExecutionQueue(Generic[Input, Result]):
                 await self.queue.put((execution_id, input))
         except asyncio.TimeoutError as e:
             log.error("Queue slot did not become available in time, restarting worker")
-            self.start_worker()
+            self.__restart_worker()
             raise e
 
         # wait for the queue to be processed OR for an error in the worker to
@@ -102,10 +102,12 @@ class BatchExecutionQueue(Generic[Input, Result]):
         if queue_processed in done and execution_id in self.output:
             return self.output.pop(execution_id)
         else:
-            worker_exception = self.task.exception()
-            # Restart worker on exceptions
-            self.start_worker()
-            raise worker_exception
+            try:
+                worker_exception = self.task.exception()
+            except asyncio.InvalidStateError:
+                worker_exception = Exception("Task failed before job was processed")
+            self.__restart_worker()
+            raise worker_exception from None
 
     def __mark_queue_done(self, n) -> None:
         """
@@ -113,6 +115,14 @@ class BatchExecutionQueue(Generic[Input, Result]):
         for every task in the queue.
         """
         [self.queue.task_done() for _ in range(n)]
+
+    def __restart_worker(self):
+        try:
+            self.stop_worker()
+        except Exception:
+            pass
+        finally:
+            self.start_worker()
 
     async def __worker(self):
         """
@@ -129,11 +139,11 @@ class BatchExecutionQueue(Generic[Input, Result]):
                     while len(batch) < self.batch_size:
                         item = await self.queue.get()
                         batch.append(item)
-            except asyncio.TimeoutError:
+            except (asyncio.TimeoutError, asyncio.CancelledError):
                 pass
             except Exception as e:
                 log.error("Unexpected error consuming queue", e)
-                raise e
+                raise e from None
 
             if batch:
                 try:
@@ -143,6 +153,6 @@ class BatchExecutionQueue(Generic[Input, Result]):
                     self.output.update(dict(zip(ids, results)))
                 except Exception as e:
                     log.error("Error processing batch", e)
-                    raise e
+                    raise e from None
                 finally:
                     self.__mark_queue_done(len(batch))
