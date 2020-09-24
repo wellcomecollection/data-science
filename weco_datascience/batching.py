@@ -78,7 +78,14 @@ class BatchExecutionQueue(Generic[Input, Result]):
         # instead generate a UUID for each call, and use that as a key for
         # looking up outputs.
         execution_id = uuid4()
-        await self.queue.put((execution_id, input))
+
+        try:
+            async with timeout(self.batch_size * self.timeout):
+                await self.queue.put((execution_id, input))
+        except asyncio.TimeoutError as e:
+            log.error("Queue slot did not become available in time, restarting worker")
+            self.start_worker()
+            raise e
 
         # wait for the queue to be processed OR for an error in the worker to
         # occur
