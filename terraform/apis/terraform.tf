@@ -23,18 +23,6 @@ data "terraform_remote_state" "shared_infra" {
   }
 }
 
-data "terraform_remote_state" "datascience_data_infra" {
-  backend = "s3"
-
-  config {
-    role_arn = "arn:aws:iam::964279923020:role/data-developer"
-
-    bucket = "wellcomecollection-datascience-infra"
-    key    = "terraform/datascience_data.tfstate"
-    region = "eu-west-1"
-  }
-}
-
 provider "aws" {
   assume_role {
     role_arn = "arn:aws:iam::964279923020:role/data-admin"
