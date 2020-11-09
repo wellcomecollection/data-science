@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  get_images:
+    build: get_images
+    command: python get_images.py n43aqrgd
+    volumes:
+      - $HOME/repos/data-science/image_extraction/data:/data
