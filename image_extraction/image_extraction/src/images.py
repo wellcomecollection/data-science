@@ -1,8 +1,10 @@
 import hashlib
 import json
+from io import BytesIO
 from pathlib import Path
 
-import httpx
+from PIL import Image
+from weco_datascience.http import fetch_url_bytes
 from weco_datascience.image import get_image_from_url
 from weco_datascience.logging import get_logger
 
@@ -29,17 +31,20 @@ def update_ledger(image_url, ledger_path):
         json.dump(ledger, f)
 
 
-async def save_image(image_url, save_dir, ledger_path):
+async def save_image(image_url, save_dir, ledger_path=None):
     log.info(f"Downloading image from {image_url}")
-    image = await get_image_from_url(image_url)
+    image_response = await fetch_url_bytes(image_url)
+    image = Image.open(BytesIO(image_response["bytes"]))
+
     try:
         file_name = generate_file_name(image_url)
         save_path = Path(save_dir) / file_name
         image.save(save_path)
         log.info(f"Saving image at {save_path}")
-        try:
-            update_ledger(image_url, ledger_path)
-        except:
-            raise ValueError("couldn't update the ledger")
+        if ledger_path:
+            try:
+                update_ledger(image_url, ledger_path)
+            except:
+                raise ValueError("couldn't update the ledger")
     except:
         raise ValueError("couldn't save the image")

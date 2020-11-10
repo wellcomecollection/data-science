@@ -1,8 +1,17 @@
 version: "3.8"
 
 services:
-  get_images:
-    build: get_images
-    command: python get_images.py n43aqrgd
+  get_pages:
+    build: 
+      context: image_extraction
+      dockerfile: get_pages.dockerfile
+    command: python get_pages.py n43aqrgd
+    volumes:
+      - $HOME/repos/data-science/image_extraction/data:/data
+  ocr_images:
+    build: 
+      context: image_extraction
+      dockerfile: ocr_images.dockerfile
+    command: python ocr_images.py dxz7jg22
     volumes:
       - $HOME/repos/data-science/image_extraction/data:/data

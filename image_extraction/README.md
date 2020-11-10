@@ -8,4 +8,5 @@ We want to extract more 'interesting' images from our digitised books, archives 
 
 This project is divided into a few component docker containers which all serve different functions. They're coordinated into a complete set of services by the `docker-compose.yml` file.
 
-- **get_images**: Download all the images from a work
+- **get_pages**: Download all the images from a work
+- **ocr_images**: Download interesting images from a work as determined by the existing OCR software

@@ -13,8 +13,8 @@ from src.iiif import get_images_from_iiif_manifest
 
 async def main(work_id):
     data_dir = Path("/data")
-    save_dir = data_dir / "images" / work_id
-    ledger_path = data_dir / "ledger.json"
+    save_dir = data_dir / "pages" / work_id
+    ledger_path = save_dir / "ledger.json"
 
     if not save_dir.exists():
         save_dir.mkdir(parents=True)
@@ -27,7 +27,11 @@ async def main(work_id):
     await close_persistent_client_session()
 
 
-def run_async(work_id: str = typer.Argument(..., help="the ID of the work whose images we'll fetch")):
+def run_async(work_id: str = typer.Argument(
+        ...,
+        help="the ID of the work whose images we'll fetch"
+    )
+):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(work_id))
 

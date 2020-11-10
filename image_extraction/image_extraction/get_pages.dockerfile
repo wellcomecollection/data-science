@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 
 COPY src/ src/
-COPY get_images.py get_images.py
+COPY get_pages.py get_pages.py
