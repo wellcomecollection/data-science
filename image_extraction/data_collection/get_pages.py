@@ -1,16 +1,16 @@
-import csv
 import asyncio
+import csv
 from pathlib import Path
 
 import aiohttp
 import typer
-from weco_datascience.logging import get_logger
 from weco_datascience.http import (close_persistent_client_session,
                                    start_persistent_client_session)
+from weco_datascience.logging import get_logger
 
+from src.iiif import get_images_from_iiif_manifest
 from src.images import save_image
 from src.wellcome_api import get_manifest_url_from_work_id
-from src.iiif import get_images_from_iiif_manifest
 
 log = get_logger(__name__)
 
