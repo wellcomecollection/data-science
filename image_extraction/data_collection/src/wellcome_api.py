@@ -15,9 +15,10 @@ async def get_manifest_url_from_work_id(work_id):
     )
     if response["object"].status == 200:
         try:
-            for location in response["json"]["items"][0]["locations"]:
-                if location["locationType"]["id"] == "iiif-presentation":
-                    manifest_url = location["url"]
+            for item in response["json"]["items"]:
+                for location in item["locations"]:
+                    if location["locationType"]["id"] == "iiif-presentation":
+                        manifest_url = location["url"]
         except (KeyError, ValueError):
             raise ValueError(
                 f"Couldn't locate a IIIF manifest for work ID: {work_id}"
