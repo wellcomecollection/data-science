@@ -5,19 +5,20 @@ services:
     build: get_work_ids
     command: python get_work_ids.py --n=10 --query=horse
     volumes:
-      - $HOME/repos/data-science/image_extraction/data:/data
+      - $PWD/data:/data
   get_pages:
-    build:
-      context: data_collection
-      dockerfile: get_pages.dockerfile
+    build: data_collection
     command: python get_pages.py --work-id=n43aqrgd
     volumes:
-      - $HOME/repos/data-science/image_extraction/data:/data
+      - $PWD/data:/data
   ocr_images:
-    build:
-      context: data_collection
-      dockerfile: ocr_images.dockerfile
+    build: data_collection
     command: python ocr_images.py --work-id-path="/data/work_ids.csv"
     volumes:
-      - $HOME/repos/data-science/image_extraction/data:/data
-
+      - $PWD/data:/data
+  train_autoencoder:
+    build: train_autoencoder
+    command: python train_autoencoder.py /data/pages
+    volumes:
+      - $PWD/data:/data
+      - $HOME/.cache/torch/:/root/.cache/torch/

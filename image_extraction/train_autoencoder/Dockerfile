@@ -6,4 +6,4 @@ RUN pip-compile
 RUN pip install -r requirements.txt
 
 COPY src/ src/
-COPY ocr_images.py ocr_images.py
+COPY train_autoencoder.py train_autoencoder.py
