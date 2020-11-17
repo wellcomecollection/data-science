@@ -3,12 +3,12 @@ version: "3.8"
 services:
   get_work_ids:
     build: get_work_ids
-    command: python get_work_ids.py --n=10 --query=horse
+    command: python get_work_ids.py --n=500
     volumes:
       - $PWD/data:/data
   get_pages:
     build: data_collection
-    command: python get_pages.py --work-id=n43aqrgd
+    command: python get_pages.py --work-id-path="/data/work_ids.csv"
     volumes:
       - $PWD/data:/data
   ocr_images:
