@@ -10,7 +10,7 @@ author-email = "h.pim@wellcome.ac.uk"
 home-page = "https://github.com/wellcomecollection/data-science"
 description-file = "weco_datascience/README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
-requires-python = ">=3.7"
+requires-python = ">=3.6"
 requires = [
     "aiofile==3.1.0",
     "aiohttp[speedups]==3.6.2",
