@@ -1,12 +1,10 @@
 import json
+
 import pytest
-from weco_datascience.http import (
-    close_persistent_client_session,
-    fetch_redirect_url,
-    fetch_url_bytes,
-    fetch_url_json,
-    start_persistent_client_session,
-)
+from weco_datascience.http import (close_persistent_client_session,
+                                   fetch_redirect_url, fetch_url_bytes,
+                                   fetch_url_json,
+                                   start_persistent_client_session)
 
 from . import iiif_url, image_url
 
