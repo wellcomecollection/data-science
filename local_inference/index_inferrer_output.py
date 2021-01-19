@@ -36,8 +36,12 @@ def index_inferrer_output(elasticsearch_connection_string, input_file, index, ad
     def get_docs(results):
         id_regex = re.compile("/([a-z0-9]+?)\.jpg$")
         for result in results:
-            result["_id"] = id_regex.search(result["image"]).group(1)
-            yield result
+            try:
+                result["_id"] = id_regex.search(result["image"]).group(1)
+                yield result
+            except Exception as e:
+                print("Something went wrong!")
+                print(e)
 
     with open(input_file) as json_str:
         input_json = json.load(json_str)
@@ -45,7 +49,8 @@ def index_inferrer_output(elasticsearch_connection_string, input_file, index, ad
         for _ in streaming_bulk(
             client=es,
             actions=get_docs(input_json["results"]),
-            index=index
+            index=index,
+            max_retries=10
         ):
             progress.update(1)
 
