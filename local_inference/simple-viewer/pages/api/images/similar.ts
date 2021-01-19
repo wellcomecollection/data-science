@@ -1,5 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getDoc, getRandomDoc, getSimilar } from "../../../services/elastic";
+import {
+  DocResult,
+  getDoc,
+  getRandomDoc,
+  getSimilar,
+} from "../../../services/elastic";
 
 type ImageResponse = {
   id: string;
@@ -7,7 +12,7 @@ type ImageResponse = {
 };
 
 export type SimilarResponse = {
-  root: ImageResponse;
+  root?: ImageResponse;
   similar: ImageResponse[];
 };
 
@@ -35,17 +40,26 @@ export default async (
     return res.status(400).json({ error: "No field specified" });
   }
 
-  const root = await ("id" in req.query && typeof req.query.id === "string"
-    ? getDoc(index, req.query["id"])
-    : getRandomDoc(index));
-  const result = await getSimilar({
+  const params = {
     index,
     field,
-    id: root.id,
     n: singleQ(req.query["n"]) ? parseInt(req.query["n"], 10) : 1,
-  });
+  };
+  let result: DocResult[];
+  let root: DocResult | undefined;
 
-  const rootResponse = {
+  if (singleQ(req.query["id"])) {
+    root = await getDoc(index, req.query["id"]);
+    result = await getSimilar({ ...params, id: root.id });
+  } else if (singleQ(req.query["value"])) {
+    const value = JSON.parse(req.query["value"]);
+    result = await getSimilar({ ...params, value });
+  } else {
+    root = await getRandomDoc(index);
+    result = await getSimilar({ ...params, id: root.id });
+  }
+
+  const rootResponse = root && {
     ...root,
     file: idToFile(root.id),
   };

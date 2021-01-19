@@ -12,9 +12,16 @@ const usePersistedState = <T extends unknown>(
       return defaultValue;
     }
   };
-  const [state, setState] = useState<T>(getInitial);
+  const [state, setState] = useState<T>(defaultValue);
+
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
+    setState(getInitial());
+  }, []);
+
+  useEffect(() => {
+    if (state) {
+      localStorage.setItem(key, JSON.stringify(state));
+    }
   }, [key, state]);
   return [state, setState];
 };

@@ -11,7 +11,7 @@ const client = new Client({
       : undefined,
 });
 
-type DocResult = {
+export type DocResult = {
   id: string;
 };
 

@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { getIndices } from "../services/elastic";
 import { GetServerSideProps } from "next";
 import { SimilarResponse } from "./api/images/similar";
 import usePersistedState from "../src/usePersistedState";
 import RadioInput from "../src/RadioInput";
+import {
+  loadModule,
+  ModuleName,
+  moduleNames,
+  SimilarityModule,
+} from "../modules";
 
 const Content = styled.div`
   max-width: 1200px;
@@ -69,11 +75,23 @@ const Index: React.FC<Props> = ({ indices }) => {
   const [index, setIndex] = usePersistedState<string>("index", indices[0]);
   const [field, setField] = usePersistedState<string>("field", "");
   const [nSimilar, setNSimilar] = usePersistedState<number>("number", 3);
+  const [similarityModule, setSimilarityModule] = usePersistedState<
+    ModuleName | undefined
+  >("similarityModule", undefined);
+  const inputToField = useRef<SimilarityModule | undefined>();
+
+  useEffect(() => {
+    const doLoadEffect = async () => {
+      if (similarityModule) {
+        inputToField.current = await loadModule(similarityModule);
+      }
+    };
+    doLoadEffect();
+  }, [similarityModule]);
 
   const setRequestTypeAndClearInput = (value: RequestType) => {
     setInput("");
     setRequestType(value);
-    console.log(value);
   };
 
   const doRequest = async () => {
@@ -84,12 +102,17 @@ const Index: React.FC<Props> = ({ indices }) => {
     };
     if (requestType === "specified") {
       paramsObject["id"] = input;
+    } else if (requestType === "by-value") {
+      const computedFieldValue = inputToField.current?.(input);
+      if (computedFieldValue) {
+        paramsObject["value"] = JSON.stringify(computedFieldValue);
+      }
     }
     const params = new URLSearchParams(paramsObject);
     const result = await fetch("/api/images/similar?" + params.toString());
     if (result.status === 200) {
       const data = (await result.json()) as SimilarResponse;
-      setRootImage(data.root.file);
+      setRootImage(data.root?.file);
       setSimilarImages(data.similar.map((s) => s.file));
     }
   };
@@ -136,13 +159,29 @@ const Index: React.FC<Props> = ({ indices }) => {
               group="request-type"
               setValue={setRequestTypeAndClearInput}
             />
-            <Label htmlFor="by-value">Specified field value</Label>
+            <Label htmlFor="by-value">Calculated field value</Label>
             {requestType === "by-value" && (
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.currentTarget.value)}
-              />
+              <>
+                <select
+                  id="module"
+                  value={similarityModule || ""}
+                  onChange={(e) =>
+                    setSimilarityModule(e.currentTarget.value as ModuleName)
+                  }
+                >
+                  <option value="">-</option>
+                  {moduleNames.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.currentTarget.value)}
+                />
+              </>
             )}
           </p>
         </div>
@@ -154,9 +193,9 @@ const Index: React.FC<Props> = ({ indices }) => {
               value={index}
               onChange={(e) => setIndex(e.currentTarget.value)}
             >
-              {indices.map((index) => (
-                <option key={index} value={index}>
-                  {index}
+              {indices.map((i) => (
+                <option key={i} value={i}>
+                  {i}
                 </option>
               ))}
             </select>

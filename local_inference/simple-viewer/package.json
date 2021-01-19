@@ -9,12 +9,14 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.10.0",
+    "color-convert": "^2.0.1",
     "next": "10.0.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
+    "@types/color-convert": "^2.0.0",
     "@types/node": "^14.14.20",
     "@types/react": "^17.0.0",
     "@types/styled-components": "^5.1.7",
