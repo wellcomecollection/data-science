@@ -11,7 +11,7 @@ setup:
 lint:
 	isort weco_datascience/*.py
 	black weco_datascience/ --line-length 80
-	flake8 weco_datascience/
+	flake8 weco_datascience/ --max-line-length 80
 
 test:
 	python -m pytest ./weco_datascience/test

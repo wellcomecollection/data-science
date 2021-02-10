@@ -27,7 +27,9 @@ async def get_image_from_url(image_url, size=None):
         #
         # Rethrowing it with the image URL should give us more context if/when
         # this error occurs.
-        raise UnidentifiedImageError("cannot identify image from URL %r" % image_url)
+        raise UnidentifiedImageError(
+            "cannot identify image from URL %r" % image_url
+        )
 
     if size:
         image = image.resize((size, size), resample=Image.BILINEAR)

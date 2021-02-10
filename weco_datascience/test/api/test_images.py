@@ -1,6 +1,5 @@
 import pytest
-from weco_datascience.api.image import (get_image, get_random_image,
-                                        image_search)
+from weco_datascience.api.image import get_image, get_random_image, image_search
 
 from . import image_id
 

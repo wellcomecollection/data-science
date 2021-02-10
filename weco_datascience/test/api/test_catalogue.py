@@ -1,6 +1,9 @@
 import pytest
-from weco_datascience.api.catalogue import (get_random_work, get_work,
-                                            works_search)
+from weco_datascience.api.catalogue import (
+    get_random_work,
+    get_work,
+    works_search,
+)
 
 from . import work_id
 

@@ -18,6 +18,7 @@ requires = [
     "boto3==1.12.14",
     "Pillow==7.0.0",
     "piffle==0.3.0",
+    "urlpath==1.1.7",
 ]
 
 [tool.flit.metadata.requires-extra]

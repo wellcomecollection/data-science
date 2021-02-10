@@ -6,8 +6,6 @@ image_url = (
     "full/224,224/0/default.jpg"
 )
 iiif_url = f"https://iiif.wellcomecollection.org/image/{miro_id}/info.json"
-local_image_path = "file://" + str(
-    (Path(__file__).parent / miro_id).absolute()
-)
+local_image_path = "file://" + str((Path(__file__).parent / miro_id).absolute())
 
 invalid_url = "https://example.com/pictures/123/skateboard.png"

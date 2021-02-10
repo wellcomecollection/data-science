@@ -1,11 +1,15 @@
 import pytest
 from PIL.Image import Image
-from weco_datascience.http import (close_persistent_client_session,
-                                   fetch_url_bytes,
-                                   start_persistent_client_session)
-from weco_datascience.image import (get_image_from_url,
-                                    get_image_url_from_iiif_url,
-                                    is_valid_image)
+from weco_datascience.http import (
+    close_persistent_client_session,
+    fetch_url_bytes,
+    start_persistent_client_session,
+)
+from weco_datascience.image import (
+    get_image_from_url,
+    get_image_url_from_iiif_url,
+    is_valid_image,
+)
 
 from . import iiif_url, image_url, invalid_url, local_image_path
 

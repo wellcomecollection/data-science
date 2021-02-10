@@ -2,26 +2,28 @@ import random
 from . import api_url
 
 catalogue_url = api_url / "works"
-valid_query_args = set([
-    "pageSize",
-    "page",
-    "query",
-    "production.dates.from",
-    "production.dates.to",
-    "sortOrder",
-    "sort",
-    "license",
-    "identifiers",
-    "subjects.label",
-    "genres.label",
-    "language",
-    "aggregations",
-    "type",
-    "workType",
-    "items.locations.type",
-    "items.locations.locationType",
-    "include",
-])
+valid_query_args = set(
+    [
+        "pageSize",
+        "page",
+        "query",
+        "production.dates.from",
+        "production.dates.to",
+        "sortOrder",
+        "sort",
+        "license",
+        "identifiers",
+        "subjects.label",
+        "genres.label",
+        "language",
+        "aggregations",
+        "type",
+        "workType",
+        "items.locations.type",
+        "items.locations.locationType",
+        "include",
+    ]
+)
 
 
 def get_work(query_id):
@@ -46,7 +48,7 @@ def get_random_work():
 def works_search(**kwargs):
     for key in kwargs:
         if key not in valid_query_args:
-            raise ValueError(f"\"{key}\" is not a valid query parameter")
+            raise ValueError(f'"{key}" is not a valid query parameter')
     response = catalogue_url.with_query(**kwargs).get()
     if response.status_code == 200:
         return response.json()
