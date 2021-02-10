@@ -3,7 +3,7 @@ from urllib.parse import unquote_plus, urlparse
 
 from aiofile import AIOFile
 from piffle.iiif import IIIFImageClient, ParseError
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from .http import fetch_url_bytes
 
@@ -15,7 +15,20 @@ async def get_image_from_url(image_url, size=None):
         image_pointer = await get_local_image(parsed_url.path)
     else:
         image_pointer = await get_remote_image(image_url)
-    image = Image.open(BytesIO(image_pointer))
+
+    try:
+        image = Image.open(BytesIO(image_pointer))
+    except UnidentifiedImageError:
+
+        # If this error gets thrown from inside Pillow, it only has the BytesIO
+        # object, and we get the moderately unhelpful error:
+        #
+        #   cannot identify image file <_io.BytesIO object at 0x7fd5bc7d44d0>
+        #
+        # Rethrowing it with the image URL should give us more context if/when
+        # this error occurs.
+        raise UnidentifiedImageError("cannot identify image from URL %r" % image_url)
+
     if size:
         image = image.resize((size, size), resample=Image.BILINEAR)
     return image
