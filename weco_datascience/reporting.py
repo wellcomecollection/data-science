@@ -1,12 +1,12 @@
 from collections import MutableMapping
 
 import pandas as pd
-from elasticsearch import Elasticsearch, RequestError, helpers
+from elasticsearch import Elasticsearch, helpers
 
 
 def flatten(d, parent_key="", sep="."):
     """
-    flatten a nested dictionary so that it can be more neatly loaded into a 
+    flatten a nested dictionary so that it can be more neatly loaded into a
     pandas dataframe
 
     https://stackoverflow.com/questions/6027558/flatten-nested-dictionaries-compressing-keys
@@ -18,8 +18,8 @@ def flatten(d, parent_key="", sep="."):
     parent_key: str, optional
         in nested dicts, the name of the parent fields
     sep: str, optional
-        the string used to concatenate parent and child field names 
-    
+        the string used to concatenate parent and child field names
+
     Returns
     -------
     d: dict
@@ -52,19 +52,18 @@ def query_es(config, query):
         a pandas dataframe containing the flattened response data
     """
     client = Elasticsearch(
-        config["host"], http_auth=(config['username'], config['password'])
+        config["host"], http_auth=(config["username"], config["password"])
     )
     response = client.search(body=query, index=config["index"])
-    data = [
-        flatten(event['_source'])
-        for event in response["hits"]["hits"]
-    ]
+    data = [flatten(event["_source"]) for event in response["hits"]["hits"]]
     return pd.DataFrame(data)
 
-def get_data_in_date_range(config, start_date="now-1d", end_date="now", timestamp_field="@timestamp"):
+
+def get_data_in_date_range(
+    config, start_date="now-1d", end_date="now", timestamp_field="@timestamp"
+):
     """
     Fetch data within a specified date/time range
-    See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-range-query.html#ranges-on-dates
 
     Parameters
     ----------
@@ -84,12 +83,7 @@ def get_data_in_date_range(config, start_date="now-1d", end_date="now", timestam
     """
     query = {
         "query": {
-            "range": {
-                timestamp_field: {
-                    "gte": start_date,
-                    "lt": end_date
-                }   
-            }
+            "range": {timestamp_field: {"gte": start_date, "lt": end_date}}
         },
         "size": 1_000_000,
     }
@@ -99,7 +93,7 @@ def get_data_in_date_range(config, start_date="now-1d", end_date="now", timestam
 def get_recent_data(config, n, index, timestamp_field="@timestamp"):
     """
     Fetch the `n` most recent documents from a specified elasticsearch index
-        
+
     Parameters
     ----------
     config: dict
@@ -115,13 +109,13 @@ def get_recent_data(config, n, index, timestamp_field="@timestamp"):
         a pandas dataframe containing the flattened response data
     """
     client = Elasticsearch(
-        config["host"], http_auth=(config['username'], config['password'])
+        config["host"], http_auth=(config["username"], config["password"])
     )
     response = helpers.scan(
         client,
         query={"sort": [{timestamp_field: "desc"}]},
         index=config["index"],
-        preserve_order=True
+        preserve_order=True,
     )
     data = [flatten(next(response)["_source"]) for _ in range(n)]
     return pd.DataFrame(data)
