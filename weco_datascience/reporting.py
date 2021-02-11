@@ -1,6 +1,5 @@
 from collections import MutableMapping
 
-import dateparser
 import pandas as pd
 from elasticsearch import Elasticsearch, RequestError, helpers
 
