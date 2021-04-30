@@ -5,20 +5,46 @@
 #    pip-compile requirements.in
 #
 boto3==1.9.198
-botocore==1.12.253        # via boto3, s3transfer
+    # via -r requirements.in
+botocore==1.12.253
+    # via
+    #   boto3
+    #   s3transfer
 click==7.0
-colorama==0.3.9           # via halo, log-symbols
-cursor==1.2.0             # via halo
-docutils==0.15.2          # via botocore
+    # via -r requirements.in
+colorama==0.3.9
+    # via
+    #   halo
+    #   log-symbols
+cursor==1.2.0
+    # via halo
+docutils==0.15.2
+    # via botocore
 halo==0.0.26
-jmespath==0.9.4           # via boto3, botocore
-log-symbols==0.0.13       # via halo
+    # via -r requirements.in
+jmespath==0.9.4
+    # via
+    #   boto3
+    #   botocore
+log-symbols==0.0.13
+    # via halo
 numpy==1.17.3
-python-dateutil==2.8.1    # via botocore
-s3transfer==0.2.1         # via boto3
+    # via -r requirements.in
+python-dateutil==2.8.1
+    # via botocore
+s3transfer==0.2.1
+    # via boto3
 scikit-learn==0.19.2
-six==1.12.0               # via halo, python-dateutil
-spinners==0.0.23          # via halo
-termcolor==1.1.0          # via halo
+    # via -r requirements.in
+six==1.12.0
+    # via
+    #   halo
+    #   python-dateutil
+spinners==0.0.23
+    # via halo
+termcolor==1.1.0
+    # via halo
 tqdm==4.26.0
-urllib3==1.25.7           # via botocore
+    # via -r requirements.in
+urllib3==1.25.8
+    # via botocore
