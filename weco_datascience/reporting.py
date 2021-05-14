@@ -3,6 +3,8 @@ from collections import MutableMapping
 import pandas as pd
 from elasticsearch import Elasticsearch, helpers
 
+from .aws import get_secret_string, get_session
+
 
 def flatten(d, parent_key="", sep="."):
     """
@@ -119,3 +121,19 @@ def get_recent_data(config, n, index, timestamp_field="@timestamp"):
     )
     data = [flatten(next(response)["_source"]) for _ in range(n)]
     return pd.DataFrame(data)
+
+
+def get_es_client():
+    """
+    Returns an Elasticsearch client with read-only access to the
+    reporting cluster.
+    """
+    session = get_session(
+        role_arn="arn:aws:iam::760097843905:role/platform-developer"
+    )
+
+    host = get_secret_string(session, secret_id="reporting/es_host")
+    username = get_secret_string(session, secret_id="reporting/read_only/es_username")
+    password = get_secret_string(session, secret_id="reporting/read_only/es_password")
+
+    return Elasticsearch(f"https://{username}:{password}@{host}:9243")
