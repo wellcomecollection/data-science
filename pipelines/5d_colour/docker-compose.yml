@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  data:
+    build: .
+    volumes:
+      - $PWD/data:/data
+    command: python fetch_image_urls.py
+
+  extract:
+    build: .
+    volumes:
+      - $PWD/data:/data
+    command: python extract_colours.py
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: jupyter/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - type: bind
+        source: $PWD/jupyter/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: $PWD/data
+        target: /home/jovyan/data
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
