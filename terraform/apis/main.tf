@@ -21,8 +21,8 @@ module "palette_similarity" {
   nginx_container_image        = local.nginx_container_image
   env_vars                     = {}
   env_vars_length              = 0
-  lb_arn                       = module.nlb.arn
-  lb_dns_name                  = module.nlb.dns_name
+  lb_arn                       = aws_lb.network_load_balancer.arn
+  lb_dns_name                  = aws_lb.network_load_balancer.dns_name
   api_gateway_rest_api_id      = aws_api_gateway_rest_api.apis.id
   api_gateway_root_resource_id = aws_api_gateway_rest_api.apis.root_resource_id
   api_gateway_vpc_link_id      = aws_api_gateway_vpc_link.apis.id
@@ -57,8 +57,8 @@ module "feature_similarity" {
   nginx_container_image        = local.nginx_container_image
   env_vars                     = {}
   env_vars_length              = 0
-  lb_arn                       = module.nlb.arn
-  lb_dns_name                  = module.nlb.dns_name
+  lb_arn                       = aws_lb.network_load_balancer.arn
+  lb_dns_name                  = aws_lb.network_load_balancer.dns_name
   api_gateway_rest_api_id      = aws_api_gateway_rest_api.apis.id
   api_gateway_root_resource_id = aws_api_gateway_rest_api.apis.root_resource_id
   api_gateway_vpc_link_id      = aws_api_gateway_vpc_link.apis.id

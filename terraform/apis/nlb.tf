@@ -1,6 +1,6 @@
-module "nlb" {
-  source = "./modules/load_balancer/network"
-
-  namespace       = "datascience-apis"
-  private_subnets = local.private_subnets
+resource "aws_lb" "network_load_balancer" {
+  name               = "datascience-apis-nlb"
+  internal           = true
+  load_balancer_type = "network"
+  subnets            = local.private_subnets
 }

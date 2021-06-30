@@ -1,7 +1,7 @@
 resource "aws_api_gateway_vpc_link" "apis" {
   name        = "apis"
   description = "APIs"
-  target_arns = [module.nlb.arn]
+  target_arns = [aws_lb.network_load_balancer.arn]
 }
 
 resource "aws_api_gateway_rest_api" "apis" {
