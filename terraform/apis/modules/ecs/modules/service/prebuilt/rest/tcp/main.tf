@@ -15,18 +15,6 @@ resource "aws_service_discovery_service" "service_discovery" {
   }
 }
 
-module "target_group" {
-  source = "../../../modules/target_group/tcp"
-
-  service_name = var.service_name
-
-  vpc_id = var.vpc_id
-  lb_arn = var.lb_arn
-
-  listener_port  = var.listener_port
-  container_port = var.container_port
-}
-
 resource "aws_ecs_service" "service" {
   name            = var.service_name
   cluster         = var.ecs_cluster_id
@@ -49,7 +37,7 @@ resource "aws_ecs_service" "service" {
   }
 
   load_balancer {
-    target_group_arn = module.target_group.arn
+    target_group_arn = aws_lb_target_group.tcp.arn
     container_name   = var.container_name
     container_port   = var.container_port
   }

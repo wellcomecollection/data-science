@@ -3,5 +3,5 @@ output "name" {
 }
 
 output "target_group_arn" {
-  value = module.target_group.arn
+  value = aws_lb_target_group.tcp.arn
 }

@@ -1,3 +1,7 @@
+locals {
+  target_group_name = replace(var.service_name, "_", "-")
+}
+
 resource "aws_lb_target_group" "tcp" {
   # Must only contain alphanumerics and hyphens.
   name = local.target_group_name
