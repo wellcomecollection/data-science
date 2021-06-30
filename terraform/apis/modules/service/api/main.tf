@@ -1,5 +1,5 @@
 module "service" {
-  source = "git::https://github.com/wellcometrust/terraform.git//ecs/modules/service/prebuilt/rest/tcp?ref=v17.1.0"
+  source = "../../ecs/modules/service/prebuilt/rest/tcp"
 
   vpc_id  = "${var.vpc_id}"
   subnets = ["${var.subnets}"]
@@ -21,7 +21,7 @@ module "service" {
 }
 
 module "task" {
-  source = "git::https://github.com/wellcometrust/terraform.git//ecs/modules/task/prebuilt/container_with_sidecar?ref=v17.1.0"
+  source = "../../ecs/modules/task/prebuilt/container_with_sidecar"
 
   task_name = "${var.namespace}"
 

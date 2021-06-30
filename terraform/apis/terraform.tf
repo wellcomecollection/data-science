@@ -28,8 +28,7 @@ provider "aws" {
     role_arn = "arn:aws:iam::964279923020:role/data-admin"
   }
 
-  region  = "eu-west-1"
-  version = "1.59.0"
+  region = "eu-west-1"
 }
 
 provider "template" {
