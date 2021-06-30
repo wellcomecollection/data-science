@@ -14,11 +14,11 @@ terraform {
 data "terraform_remote_state" "accounts_data" {
   backend = "s3"
 
-  config {
-    role_arn = "arn:aws:iam::760097843905:role/platform-developer"
+  config = {
+    role_arn = "arn:aws:iam::760097843905:role/platform-read_only"
 
     bucket = "wellcomecollection-platform-infra"
-    key    = "terraform/accounts/data.tfstate"
+    key    = "terraform/platform-infrastructure/accounts/data.tfstate"
     region = "eu-west-1"
   }
 }

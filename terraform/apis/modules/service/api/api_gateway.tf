@@ -54,6 +54,6 @@ resource "aws_api_gateway_integration" "api_proxy" {
   connection_id   = "${var.api_gateway_vpc_link_id}"
 
   request_parameters = {
-    integration.request.path.proxy = "method.request.path.proxy"
+    "integration.request.path.proxy" = "method.request.path.proxy"
   }
 }

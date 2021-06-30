@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "allow_assume_roles" {
       "sts:AssumeRole",
     ]
 
-    resources = ["${var.assumable_roles}"]
+    resources = var.assumable_roles
   }
 }
 
@@ -47,7 +47,7 @@ resource "aws_iam_policy" "allow_read_core_data" {
 resource "aws_iam_role_policy_attachment" "attach_allow_assume_roles" {
   count      = "${local.assume_policy_count}"
   role       = "${module.task.task_role_name}"
-  policy_arn = "${aws_iam_policy.allow_assume_roles.arn}"
+  policy_arn = "${aws_iam_policy.allow_assume_roles[0].arn}"
 }
 
 resource "aws_iam_role_policy_attachment" "attach_allow_read_core_data" {

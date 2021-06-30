@@ -1,5 +1,5 @@
 module "nlb" {
-  source = "git::https://github.com/wellcometrust/terraform.git//load_balancer/network?ref=v19.16.3"
+  source = "./modules/load_balancer/network"
 
   namespace       = "datascience-apis"
   private_subnets = ["${local.private_subnets}"]
