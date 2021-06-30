@@ -1,9 +1,3 @@
-module "iam" {
-  source = "../../../modules/iam"
-
-  service_name = var.service_name
-}
-
 resource "aws_service_discovery_service" "service_discovery" {
   name = var.service_name
 
