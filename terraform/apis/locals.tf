@@ -1,5 +1,5 @@
 locals {
-  nginx_container_image          = "wellcome/nginx_apigw:8c68706fba97189fc72e3d0844458c7c5dee0bbc"
+  nginx_container_image          = "wellcome/nginx_api-gw:77d1ba9b060a184097a26bc685735be343b1a754"
   nginx_listener_port            = "9000"
   public_subnets                 = "${data.terraform_remote_state.accounts_data.outputs.datascience_vpc_public_subnets}"
   private_subnets                = "${data.terraform_remote_state.accounts_data.outputs.datascience_vpc_private_subnets}"

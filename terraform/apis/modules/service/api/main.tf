@@ -2,7 +2,7 @@ module "service" {
   source = "../../ecs/modules/service/prebuilt/rest/tcp"
 
   vpc_id  = "${var.vpc_id}"
-  subnets = ["${var.subnets}"]
+  subnets = var.subnets
 
   task_desired_count = "${var.task_desired_count}"
 
@@ -13,7 +13,7 @@ module "service" {
 
   lb_arn              = "${var.lb_arn}"
   listener_port       = "${var.listener_port}"
-  security_group_ids  = ["${var.security_group_ids}"]
+  security_group_ids  = var.security_group_ids
   launch_type         = "${var.launch_type}"
   task_definition_arn = "${module.task.task_definition_arn}"
   container_port      = "${var.nginx_container_port}"

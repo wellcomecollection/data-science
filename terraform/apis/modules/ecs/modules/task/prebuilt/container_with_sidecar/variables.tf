@@ -41,6 +41,6 @@ variable "sidecar_env_vars_length" {
 }
 
 variable "launch_types" {
-  type    = "list"
+  type    = list(string)
   default = ["FARGATE", "EC2"]
 }

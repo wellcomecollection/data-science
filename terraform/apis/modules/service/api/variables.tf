@@ -1,5 +1,5 @@
 variable "subnets" {
-  type = "list"
+  type = list(string)
 }
 
 variable "cluster_id" {}

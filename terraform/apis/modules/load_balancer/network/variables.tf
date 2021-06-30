@@ -1,5 +1,5 @@
 variable "private_subnets" {
-  type = "list"
+  type = list(string)
 }
 
 variable "namespace" {}

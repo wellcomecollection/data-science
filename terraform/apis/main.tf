@@ -16,7 +16,7 @@ module "palette_similarity" {
 
   assumable_roles = ["${local.miro_read_role}"]
 
-  subnets                      = ["${local.private_subnets}"]
+  subnets                      = local.private_subnets
   nginx_container_port         = "${local.nginx_listener_port}"
   nginx_container_image        = "${local.nginx_container_image}"
   env_vars                     = {}
@@ -52,7 +52,7 @@ module "feature_similarity" {
     "${aws_security_group.service_lb_ingress_security_group.id}",
   ]
 
-  subnets                      = ["${local.private_subnets}"]
+  subnets                      = local.private_subnets
   nginx_container_port         = "${local.nginx_listener_port}"
   nginx_container_image        = "${local.nginx_container_image}"
   env_vars                     = {}

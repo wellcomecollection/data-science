@@ -1,7 +1,7 @@
 variable "vpc_id" {}
 
 variable "subnets" {
-  type = "list"
+  type = list(string)
 }
 
 variable "ecs_cluster_id" {}
@@ -26,7 +26,7 @@ variable "deployment_maximum_percent" {
 }
 
 variable "security_group_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "assign_public_ip" {
