@@ -19,13 +19,13 @@ variable "app_cpu" {}
 variable "app_memory" {}
 
 variable "app_mount_points" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "app_env_vars" {
   description = "Environment variables to pass to the container"
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 
@@ -45,13 +45,13 @@ variable "sidecar_cpu" {}
 variable "sidecar_memory" {}
 
 variable "sidecar_mount_points" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "sidecar_env_vars" {
   description = "Environment variables to pass to the container"
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 

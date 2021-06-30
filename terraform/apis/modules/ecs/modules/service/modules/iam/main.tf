@@ -1,6 +1,6 @@
 resource "aws_iam_role" "ecs_service" {
-  name               = "${var.service_name}"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_ecs_role.json}"
+  name               = var.service_name
+  assume_role_policy = data.aws_iam_policy_document.assume_ecs_role.json
 }
 
 data "aws_iam_policy_document" "assume_ecs_role" {
@@ -17,9 +17,9 @@ data "aws_iam_policy_document" "assume_ecs_role" {
 }
 
 resource "aws_iam_role_policy" "ecs_service" {
-  name   = "${var.service_name}"
-  role   = "${aws_iam_role.ecs_service.name}"
-  policy = "${data.aws_iam_policy_document.ecs_service.json}"
+  name   = var.service_name
+  role   = aws_iam_role.ecs_service.name
+  policy = data.aws_iam_policy_document.ecs_service.json
 }
 
 data "aws_iam_policy_document" "ecs_service" {

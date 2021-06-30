@@ -1,3 +1,3 @@
 locals {
-  target_group_name = "${replace(var.service_name, "_", "-")}"
+  target_group_name = replace(var.service_name, "_", "-")
 }

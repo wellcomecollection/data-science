@@ -15,7 +15,7 @@ variable "app_memory" {}
 
 variable "app_env_vars" {
   description = "Environment variables to pass to the container"
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 
@@ -26,7 +26,7 @@ variable "sidecar_memory" {}
 
 variable "sidecar_env_vars" {
   description = "Environment variables to pass to the container"
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 

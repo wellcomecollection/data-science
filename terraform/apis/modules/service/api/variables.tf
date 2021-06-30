@@ -19,13 +19,13 @@ variable "nginx_container_image" {}
 variable "nginx_container_port" {}
 
 variable "security_group_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "env_vars_length" {}
 
 variable "env_vars" {
-  type = "map"
+  type = map(string)
 }
 
 variable "lb_arn" {}
@@ -73,6 +73,6 @@ variable "task_desired_count" {
 }
 
 variable "assumable_roles" {
-  type    = "list"
+  type    = list(string)
   default = []
 }

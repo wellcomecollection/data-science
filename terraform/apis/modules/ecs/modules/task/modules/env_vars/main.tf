@@ -56,16 +56,16 @@ data "template_file" "name_val_pair" {
   // from terraform resource types).
   //
   // TODO compute count once those issues are closed
-  count = "${var.env_vars_length}"
+  count = var.env_vars_length
 
   template = "{\"name\": $${jsonencode(key)}, \"value\": $${jsonencode(value)}}"
 
   vars = {
-    key   = "${element(keys(var.env_vars), count.index)}"
-    value = "${element(values(var.env_vars), count.index)}"
+    key   = element(keys(var.env_vars), count.index)
+    value = element(values(var.env_vars), count.index)
   }
 }
 
 locals {
-  env_var_string = "[${join(", ", "${data.template_file.name_val_pair.*.rendered}")}]"
+  env_var_string = "[${join(", ", data.template_file.name_val_pair.*.rendered)}]"
 }
