@@ -4,11 +4,21 @@ module "iam" {
   service_name = var.service_name
 }
 
-module "service_discovery" {
-  source = "../../../modules/service_discovery"
+resource "aws_service_discovery_service" "service_discovery" {
+  name = var.service_name
 
-  namespace_id = var.namespace_id
-  service_name = var.service_name
+  health_check_custom_config {
+    failure_threshold = 1
+  }
+
+  dns_config {
+    namespace_id = var.namespace_id
+
+    dns_records {
+      ttl  = 5
+      type = "A"
+    }
+  }
 }
 
 module "target_group" {
@@ -41,7 +51,7 @@ resource "aws_ecs_service" "service" {
   }
 
   service_registries {
-    registry_arn = module.service_discovery.arn
+    registry_arn = aws_service_discovery_service.service_discovery.arn
   }
 
   load_balancer {
