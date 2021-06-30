@@ -18,8 +18,8 @@ resource "aws_s3_bucket" "model_core_data" {
 
 # policies
 resource "aws_s3_bucket_policy" "model_core_data_policy" {
-  bucket = "${aws_s3_bucket.model_core_data.bucket}"
-  policy = "${data.aws_iam_policy_document.s3_read.json}"
+  bucket = aws_s3_bucket.model_core_data.bucket
+  policy = data.aws_iam_policy_document.s3_read.json
 }
 
 data "aws_iam_policy_document" "s3_read" {
@@ -27,11 +27,11 @@ data "aws_iam_policy_document" "s3_read" {
     actions = ["s3:*"]
 
     resources = [
-      "${aws_s3_bucket.model_core_data.arn}",
+      aws_s3_bucket.model_core_data.arn,
       "${aws_s3_bucket.model_core_data.arn}/*",
     ]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::964279923020:role/datascience_ec2"]
     }

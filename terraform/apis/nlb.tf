@@ -1,6 +1,6 @@
-module "nlb" {
-  source = "git::https://github.com/wellcometrust/terraform.git//load_balancer/network?ref=v19.16.3"
-
-  namespace       = "datascience-apis"
-  private_subnets = ["${local.private_subnets}"]
+resource "aws_lb" "network_load_balancer" {
+  name               = "datascience-apis-nlb"
+  internal           = true
+  load_balancer_type = "network"
+  subnets            = local.private_subnets
 }
