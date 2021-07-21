@@ -30,4 +30,4 @@ Each notebook container should be isolated in its own directory, and each should
 - a `.env` file, for storing secrets. These will be ignored by git but passed into the container as environment variables
 - a `.requirements.in` file, listing packages which will be installed when the container is built. Pinning the versions of those packages is recommended.
 
-A new service should be added to the `docker-compose.yml` file, following the same structure as the others. The
+A new service should be added to the `docker-compose.yml` file, following the same structure as the others.
