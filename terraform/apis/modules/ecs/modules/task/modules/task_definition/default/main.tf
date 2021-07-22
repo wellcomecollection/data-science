@@ -1,5 +1,5 @@
 module "iam_roles" {
-  source = "../../iam_roles"
+  source = "github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition/iam_role?ref=v3.9.3"
 
   task_name = var.task_name
 }
