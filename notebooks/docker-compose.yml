@@ -1,0 +1,181 @@
+version: "3.8"
+
+services:
+  analysis:
+    build:
+      context: ./analysis
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./analysis/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./analysis/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./analysis/src
+        target: /home/jovyan/src
+    env_file: ./analysis/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  archive_exploration:
+    build:
+      context: ./archive_exploration
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./archive_exploration/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./data/notebooks
+        target: /home/jovyan/data
+      - type: bind
+        source: ./archive_exploration/src
+        target: /home/jovyan/src
+    env_file: ./archive_exploration/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  devise:
+    build:
+      context: ./devise
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./devise/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./devise/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./devise/src
+        target: /home/jovyan/src
+    env_file: ./devise/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+  elastic_lsh:
+    build:
+      context: ./elastic_lsh
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./elastic_lsh/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./elastic_lsh/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./elastic_lsh/src
+        target: /home/jovyan/src
+    env_file: ./elastic_lsh/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  image_pathways:
+    build:
+      context: ./image_pathways
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./image_pathways/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./image_pathways/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./image_pathways/src
+        target: /home/jovyan/src
+    env_file: ./image_pathways/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  palette:
+    build:
+      context: ./palette
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./palette/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./palette/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./palette/src
+        target: /home/jovyan/src
+    env_file: ./palette/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  rank_analysis:
+    build:
+      context: ./rank_analysis
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./rank_analysis/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./rank_analysis/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./rank_analysis/src
+        target: /home/jovyan/src
+    env_file: ./rank_analysis/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  search_intentions:
+    build:
+      context: ./search_intentions
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./search_intentions/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./data/notebooks
+        target: /home/jovyan/data
+      - type: bind
+        source: ./search_intentions/src
+        target: /home/jovyan/src
+    env_file: ./search_intentions/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
+  wikipedia:
+    build:
+      context: ./wikipedia
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./wikipedia/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./wikipedia/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./wikipedia/src
+        target: /home/jovyan/src
+    env_file: ./wikipedia/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
