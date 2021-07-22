@@ -12,6 +12,9 @@ services:
         source: ./analysis/notebooks
         target: /home/jovyan/notebooks
       - type: bind
+        source: ./analysis/data
+        target: /home/jovyan/data
+      - type: bind
         source: ./analysis/src
         target: /home/jovyan/src
     env_file: ./analysis/.env
@@ -28,6 +31,9 @@ services:
       - type: bind
         source: ./archive_exploration/notebooks
         target: /home/jovyan/notebooks
+      - type: bind
+        source: ./data/notebooks
+        target: /home/jovyan/data
       - type: bind
         source: ./archive_exploration/src
         target: /home/jovyan/src
@@ -46,6 +52,9 @@ services:
         source: ./devise/notebooks
         target: /home/jovyan/notebooks
       - type: bind
+        source: ./devise/data
+        target: /home/jovyan/data
+      - type: bind
         source: ./devise/src
         target: /home/jovyan/src
     env_file: ./devise/.env
@@ -61,6 +70,9 @@ services:
       - type: bind
         source: ./elastic_lsh/notebooks
         target: /home/jovyan/notebooks
+      - type: bind
+        source: ./elastic_lsh/data
+        target: /home/jovyan/data
       - type: bind
         source: ./elastic_lsh/src
         target: /home/jovyan/src
@@ -79,6 +91,9 @@ services:
         source: ./image_pathways/notebooks
         target: /home/jovyan/notebooks
       - type: bind
+        source: ./image_pathways/data
+        target: /home/jovyan/data
+      - type: bind
         source: ./image_pathways/src
         target: /home/jovyan/src
     env_file: ./image_pathways/.env
@@ -95,6 +110,9 @@ services:
       - type: bind
         source: ./palette/notebooks
         target: /home/jovyan/notebooks
+      - type: bind
+        source: ./palette/data
+        target: /home/jovyan/data
       - type: bind
         source: ./palette/src
         target: /home/jovyan/src
@@ -113,6 +131,9 @@ services:
         source: ./rank_analysis/notebooks
         target: /home/jovyan/notebooks
       - type: bind
+        source: ./rank_analysis/data
+        target: /home/jovyan/data
+      - type: bind
         source: ./rank_analysis/src
         target: /home/jovyan/src
     env_file: ./rank_analysis/.env
@@ -130,6 +151,9 @@ services:
         source: ./search_intentions/notebooks
         target: /home/jovyan/notebooks
       - type: bind
+        source: ./data/notebooks
+        target: /home/jovyan/data
+      - type: bind
         source: ./search_intentions/src
         target: /home/jovyan/src
     env_file: ./search_intentions/.env
@@ -146,6 +170,9 @@ services:
       - type: bind
         source: ./wikipedia/notebooks
         target: /home/jovyan/notebooks
+      - type: bind
+        source: ./wikipedia/data
+        target: /home/jovyan/data
       - type: bind
         source: ./wikipedia/src
         target: /home/jovyan/src
