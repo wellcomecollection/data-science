@@ -12,6 +12,14 @@ The base image for each container is [jupyter/scipy-notebook](https://jupyter-do
 
 ## Running
 
+## Environment variables
+
+First run this command to create a blank .env file in each of the project subdirectories.
+
+```
+find * -type d -exec touch {}/.env \;
+```
+
 ### Reproducing an existing project
 
 To reproduce or modify an existing project, run:
