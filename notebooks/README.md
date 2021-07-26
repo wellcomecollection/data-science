@@ -12,12 +12,12 @@ The base image for each container is [jupyter/scipy-notebook](https://jupyter-do
 
 ## Running
 
-## Environment variables
+### Requirements & environment variables
 
-First run this command to create a blank .env file in each of the project subdirectories.
+First run this command to create a blank .env file in each of the project subdirectories and copy common requirements to all projects.
 
 ```
-find * -type d -exec touch {}/.env \;
+find * -type d -maxdepth 0 -exec cp requirements.common {} \;  -exec touch {}/.env \;
 ```
 
 ### Reproducing an existing project
