@@ -1,4 +1,4 @@
-from collections import MutableMapping
+from collections.abc import MutableMapping
 
 import pandas as pd
 from elasticsearch import Elasticsearch, helpers
@@ -37,14 +37,16 @@ def flatten(d, parent_key="", sep="."):
     return dict(items)
 
 
-def query_es(config, query):
+def query_es(config, index, query):
     """
     Run a query against a specified elasticsearch index
 
     Parameters
     ----------
     config: dict
-        elasticsearch username, password, index, and endpoint for the request
+        elasticsearch username, password, and endpoint for the request
+    index: str
+        the name of the index to query
     query: dict
         the query, following the elasticsearch json query structure
 
@@ -56,13 +58,13 @@ def query_es(config, query):
     client = Elasticsearch(
         config["host"], http_auth=(config["username"], config["password"])
     )
-    response = client.search(body=query, index=config["index"])
+    response = client.search(body=query, index=index)
     data = [flatten(event["_source"]) for event in response["hits"]["hits"]]
     return pd.DataFrame(data)
 
 
 def get_data_in_date_range(
-    config, start_date="now-1d", end_date="now", timestamp_field="@timestamp"
+    config, index, start_date="now-1d", end_date="now", timestamp_field="@timestamp"
 ):
     """
     Fetch data within a specified date/time range
@@ -70,7 +72,9 @@ def get_data_in_date_range(
     Parameters
     ----------
     config: dict
-        elasticsearch username, password, index, and endpoint for the request
+        elasticsearch username, password, and endpoint for the request
+    index: str
+        the name of the index to query
     start_date: str, datetime, optional
         defaults to now
     end_date: str, datetime, optional
@@ -89,7 +93,7 @@ def get_data_in_date_range(
         },
         "size": 1_000_000,
     }
-    return query_es(config, query)
+    return query_es(config, index, query)
 
 
 def get_recent_data(config, n, index, timestamp_field="@timestamp"):
@@ -99,9 +103,11 @@ def get_recent_data(config, n, index, timestamp_field="@timestamp"):
     Parameters
     ----------
     config: dict
-        elasticsearch username, password, index, and endpoint for the request
+        elasticsearch username, password, and endpoint for the request
     n: int
         the number of documents to return
+    index: str
+        the name of the index to query
     timestamp_field: str, optional
         the timestamp field which should be used to sort the data by recency
 
@@ -116,11 +122,30 @@ def get_recent_data(config, n, index, timestamp_field="@timestamp"):
     response = helpers.scan(
         client,
         query={"sort": [{timestamp_field: "desc"}]},
-        index=config["index"],
+        index=index,
         preserve_order=True,
     )
     data = [flatten(next(response)["_source"]) for _ in range(n)]
     return pd.DataFrame(data)
+
+
+def get_es_config():
+    session = get_session(
+        role_arn="arn:aws:iam::760097843905:role/platform-developer"
+    )
+
+    config = {
+        "host": get_secret_string(
+            session, secret_id="reporting/es_host"
+        ),
+        "username": get_secret_string(
+            session, secret_id="reporting/read_only/es_username"
+        ),
+        "password": get_secret_string(
+            session, secret_id="reporting/read_only/es_password"
+        )
+    }
+    return config
 
 
 def get_es_client():
@@ -128,12 +153,8 @@ def get_es_client():
     Returns an Elasticsearch client with read-only access to the
     reporting cluster.
     """
-    session = get_session(
-        role_arn="arn:aws:iam::760097843905:role/platform-developer"
-    )
-
-    host = get_secret_string(session, secret_id="reporting/es_host")
-    username = get_secret_string(session, secret_id="reporting/read_only/es_username")
-    password = get_secret_string(session, secret_id="reporting/read_only/es_password")
-
+    config = get_es_config()
+    username = config["username"]
+    password = config["password"]
+    host = config["host"]
     return Elasticsearch(f"https://{username}:{password}@{host}:9243")
