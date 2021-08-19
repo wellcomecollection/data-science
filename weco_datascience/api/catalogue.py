@@ -1,4 +1,5 @@
 import random
+
 from . import api_url
 
 catalogue_url = api_url / "works"

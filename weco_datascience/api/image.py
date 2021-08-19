@@ -1,4 +1,5 @@
 import random
+
 from . import api_url
 
 images_url = api_url / "images"
