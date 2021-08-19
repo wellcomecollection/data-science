@@ -1,5 +1,6 @@
 import pytest
 from PIL.Image import Image
+
 from weco_datascience.http import (
     close_persistent_client_session,
     fetch_url_bytes,

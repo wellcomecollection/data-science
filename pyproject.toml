@@ -19,6 +19,7 @@ requires = [
     "Pillow==7.0.0",
     "piffle==0.3.0",
     "urlpath==1.1.7",
+    "elasticsearch==7.14",
 ]
 
 [tool.flit.metadata.requires-extra]

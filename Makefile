@@ -4,7 +4,6 @@ default: build
 
 # commands for building the package
 setup:
-	python -m pip install --upgrade pip
 	pip install flit
 	flit install -s
 
@@ -29,8 +28,10 @@ publish: check_version build
 
 # general commands
 clean:
-	rm -rf .hypothesis
-	rm -rf .pytest_cache
-	rm -rf ./*/__pycache__
-	rm -rf ./dist
-	rm -rf ./site
+	isort weco_datascience/**/*.py
+	black weco_datascience --line-length 80
+	flake8 weco_datascience --max-line-length 80 --ignore=E501,W291
+	rm -rf *.pyc **/*.pyc
+	rm -rf .hypothesis **/.hypothesis
+	rm -rf .pytest_cache **/.pytest_cache
+	rm -rf __pycache__ ./**/__pycache__
