@@ -41,13 +41,11 @@ async def test_bad_json():
 
 @pytest.mark.asyncio
 async def test_redirect():
-    expected = "https://id.loc.gov/authorities/subjects/sh85101552.html"
     start_persistent_client_session()
-    response = await fetch_redirect_url(
-        "https://id.loc.gov/authorities/label/Physical geography"
-    )
+    original_url = "https://id.loc.gov/authorities/label/Physical%20geography"
+    response = await fetch_redirect_url(original_url)
     await close_persistent_client_session()
-    assert response["url"] == expected
+    assert response["url"] != original_url
 
 
 @pytest.mark.asyncio
