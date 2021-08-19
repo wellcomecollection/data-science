@@ -1,2 +1,2 @@
 weco-datascience
-elasticsearch
+elasticsearch==7.12
