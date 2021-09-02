@@ -21,6 +21,26 @@ services:
     environment:
       - JUPYTER_ENABLE_LAB=yes
 
+  concepts:
+    build:
+      context: ./concepts
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./concepts/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./concepts/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./concepts/src
+        target: /home/jovyan/src
+    env_file: ./concepts/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+
   archive_exploration:
     build:
       context: ./archive_exploration
