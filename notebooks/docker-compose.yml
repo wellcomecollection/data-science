@@ -199,3 +199,23 @@ services:
     env_file: ./wikipedia/.env
     environment:
       - JUPYTER_ENABLE_LAB=yes
+
+  dense_text_retrieval:
+    build:
+      context: ./dense_text_retrieval
+      dockerfile: ../Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - type: bind
+        source: ./dense_text_retrieval/notebooks
+        target: /home/jovyan/notebooks
+      - type: bind
+        source: ./dense_text_retrieval/data
+        target: /home/jovyan/data
+      - type: bind
+        source: ./dense_text_retrieval/src
+        target: /home/jovyan/src
+    env_file: ./dense_text_retrieval/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
