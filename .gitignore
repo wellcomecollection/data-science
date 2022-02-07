@@ -246,6 +246,8 @@ override.tf.json
 
 node_modules/
 .next/
-**/data/**/*
-!.gitkeep
+
 .DS_Store
+**/data/**/*.*
+!**/data/**/.gitkeep
+!**/README.md

@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  download_images:
+    build: .
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+    command: python main.py
