@@ -53,9 +53,8 @@ resource "aws_cloudwatch_log_group" "sidecar" {
 }
 
 module "sidecar_env_vars" {
-  source          = "../../env_vars"
-  env_vars        = var.sidecar_env_vars
-  env_vars_length = var.sidecar_env_vars_length
+  source   = "../../env_vars"
+  env_vars = var.sidecar_env_vars
 }
 
 # App
@@ -67,7 +66,6 @@ resource "aws_cloudwatch_log_group" "app" {
 }
 
 module "app_env_vars" {
-  source          = "../../env_vars"
-  env_vars        = var.app_env_vars
-  env_vars_length = var.app_env_vars_length
+  source   = "../../env_vars"
+  env_vars = var.app_env_vars
 }

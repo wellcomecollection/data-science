@@ -32,14 +32,6 @@ variable "sidecar_env_vars" {
 
 variable "aws_region" {}
 
-variable "app_env_vars_length" {
-  default = 0
-}
-
-variable "sidecar_env_vars_length" {
-  default = 0
-}
-
 variable "launch_types" {
   type    = list(string)
   default = ["FARGATE", "EC2"]
