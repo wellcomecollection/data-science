@@ -7,12 +7,9 @@ locals {
 
   app_container_name     = "app"
   sidecar_container_name = "sidecar"
-}
 
-data "template_file" "definition" {
-  template = file("${path.module}/task_definition.json.template")
-
-  vars = {
+  task_definition_template_path = "${path.module}/task_definition.json.template"
+  task_definition_template_vars = {
     log_group_region = var.aws_region
     log_group_prefix = var.log_group_prefix
 
@@ -56,9 +53,8 @@ resource "aws_cloudwatch_log_group" "sidecar" {
 }
 
 module "sidecar_env_vars" {
-  source          = "../../env_vars"
-  env_vars        = var.sidecar_env_vars
-  env_vars_length = var.sidecar_env_vars_length
+  source   = "../../env_vars"
+  env_vars = var.sidecar_env_vars
 }
 
 # App
@@ -70,7 +66,6 @@ resource "aws_cloudwatch_log_group" "app" {
 }
 
 module "app_env_vars" {
-  source          = "../../env_vars"
-  env_vars        = var.app_env_vars
-  env_vars_length = var.app_env_vars_length
+  source   = "../../env_vars"
+  env_vars = var.app_env_vars
 }

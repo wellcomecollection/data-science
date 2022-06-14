@@ -1,5 +1,8 @@
 output "rendered" {
-  value = data.template_file.definition.rendered
+  value = templatefile(
+    local.task_definition_template_path,
+    local.task_definition_template_vars
+  )
 }
 
 output "app_container_name" {

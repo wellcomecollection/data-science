@@ -33,14 +33,10 @@ module "task" {
 
   app_env_vars = var.env_vars
 
-  app_env_vars_length = var.env_vars_length
-
   sidecar_env_vars = {
     APP_HOST = "localhost"
     APP_PORT = var.container_port
   }
-
-  sidecar_env_vars_length = "2"
 
   cpu    = var.cpu
   memory = var.memory
