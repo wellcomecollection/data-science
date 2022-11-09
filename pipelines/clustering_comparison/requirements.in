@@ -1,0 +1,12 @@
+boto3==1.24.92
+cython==0.29.32
+elasticsearch==8.3.3
+hdbscan==0.8.28
+httpx==0.23.0
+loguru==0.6.0
+numpy==1.23
+scikit-learn==1.1.2
+tqdm==4.64.1
+typer==0.6.1
+joblib==1.1.0
+umap-learn==0.5.3

@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_PASSWORD: password
+    volumes:
+      - type: bind
+        source: ./data/elasticsearch
+        target: /usr/share/elasticsearch/data
+
+  python:
+    depends_on:
+      - elasticsearch
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+    entrypoint: python3
