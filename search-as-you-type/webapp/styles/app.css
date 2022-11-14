@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-a {
-  @apply underline;
-}
-
 h1 {
   @apply text-3xl;
 }

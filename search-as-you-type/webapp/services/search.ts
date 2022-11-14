@@ -7,7 +7,7 @@ export type Document = {
   type: string
   title: string
   description: string
-  url?: string
+  url: string
   image?: string
 }
 export type Result = { id: string } & Document

@@ -56,6 +56,7 @@ for result in tqdm(works_generator, total=min(total_works, max_docs)):
             "type": "work",
             "title": display_data["title"],
             "description": description,
+            "url": f"https://wellcomecollection.org/works/{result['_id']}",
         },
     )
 
@@ -78,6 +79,7 @@ for result in tqdm(concepts_generator, total=min(total_concepts, max_docs)):
         document={
             "type": "concept",
             "title": result["_source"]["query"]["label"],
+            "url": f"https://wellcomecollection.org/concepts/{result['_id']}",
         },
     )
 
@@ -101,6 +103,7 @@ for result in tqdm(stories_generator, total=min(total_stories, max_docs)):
             "type": "story",
             "title": result["data"]["title"][0]["text"],
             "description": standfirst,
+            "url": f"https://wellcomecollection.org/articles/{result['id']}",
         },
     )
 
