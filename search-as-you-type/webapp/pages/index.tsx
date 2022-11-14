@@ -59,11 +59,18 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
         />
         <Favicon emoji="👀" />
       </Head>
-      <div className="flex justify-center pt-8">
-        <div className="w-full px-8 lg:w-4/5">
-          <form className="block w-full" action={'/'} method="GET">
+      <div className="flex justify-center pt-4 lg:pt-8">
+        <div className="w-full px-6 lg:w-4/5">
+          <p className="text-sm">
+            {searchTotal
+              ? `found ${searchTotal} result${
+                  searchTotal !== 1 ? 's' : ''
+                } in ${searchTook}ms`
+              : 'no results'}
+          </p>
+          <form action={'/'} method="GET" className="pt-2">
             <div className="mx-auto flex justify-between gap-1">
-              <div className="relative flex w-full items-center border-2 border-black">
+              <div className="relative flex w-full items-center border-2 border-gray-500">
                 <input
                   className="w-full p-2 pr-8 text-lg focus:outline-none"
                   type="text"
@@ -83,31 +90,16 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
                   <XIcon className="w-5" />
                 </button>
               </div>
-              <button
-                className={`${
-                  searchTerms ? 'bg-black text-white' : 'bg-gray-300 text-black'
-                } px-3 text-center `}
-                type="submit"
-              >
-                <SearchIcon />
-              </button>
             </div>
           </form>
           {searchTotal > 0 && (
-            <div className="mt-4">
-              <p className="text-sm">
-                {`found ${searchTotal} result${
-                  searchTotal > 1 ? 's' : ''
-                } in ${searchTook}ms`}
-              </p>
-              <ul className="mt-4 divide-y-2 divide-gray-200 border-y-2 border-gray-200 ">
-                {searchResults.map((result) => (
-                  <li key={result.id} className="list-none">
-                    <SearchResult result={result} />
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className="divide-y-2 divide-gray-100 overflow-hidden rounded-b-lg border-x-2 border-b-2 border-gray-500">
+              {searchResults.map((result) => (
+                <li key={result.id} className="list-none">
+                  <SearchResult result={result} />
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </div>
@@ -121,6 +113,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       props: {
         queryParams: { searchTerms: '' },
         results: [],
+        total: 0,
+        took: 0,
       },
     }
   } else {

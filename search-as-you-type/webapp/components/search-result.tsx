@@ -8,7 +8,7 @@ type Props = {
 
 const SearchResult: FunctionComponent<Props> = ({ result }) => {
   return (
-    <a href={result.url} className="flex py-4 px-2 hover:bg-gray-100">
+    <a href={result.url} className="flex p-4 hover:bg-gray-100">
       {result.image && (
         <div className="relative mr-4 w-40 flex-none">
           <Image
@@ -23,7 +23,7 @@ const SearchResult: FunctionComponent<Props> = ({ result }) => {
 
       <div>
         <div className="flex items-start">
-          <p className="bg-gray-500 py-0.5 px-1.5 text-xs font-bold capitalize text-white">
+          <p className="bg-gray-500 py-0.5 px-1.5 text-xs font-bold capitalize text-white rounded-sm">
             {result.type}
           </p>
         </div>
@@ -33,4 +33,5 @@ const SearchResult: FunctionComponent<Props> = ({ result }) => {
     </a>
   )
 }
+
 export default SearchResult
