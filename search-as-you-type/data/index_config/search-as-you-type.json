@@ -22,9 +22,6 @@
     },
     "mappings": {
         "properties": {
-            "type": {
-                "type": "keyword"
-            },
             "title": {
                 "type": "search_as_you_type"
             },

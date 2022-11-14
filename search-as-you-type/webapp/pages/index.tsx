@@ -15,13 +15,14 @@ type Props = {
   took: number
 }
 
-const searchEndpoint = (query: string) => `/api/search?query=${query}&n=6`
+const searchEndpoint = (searchTerms: string) =>
+  `/api/search?query=${searchTerms}&n=6`
 
 const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
   const [searchTerms, setSearchTerms] = useState(queryParams.searchTerms)
   const [searchResults, setSearchResults] = useState(results)
   const [searchTotal, setSearchTotal] = useState(total)
-  const [searchTook, setSearchTook] = useState(0)
+  const [searchTook, setSearchTook] = useState(took)
 
   const handleChange = useCallback((e) => {
     const searchTerms = e.target.value
@@ -99,9 +100,9 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
                   searchTotal > 1 ? 's' : ''
                 } in ${searchTook}ms`}
               </p>
-              <ul className="mt-4 divide-y-2 divide-solid divide-gray-200">
+              <ul className="mt-4 divide-y-2 divide-gray-200 border-y-2 border-gray-200 ">
                 {searchResults.map((result) => (
-                  <li key={result.id} className="list-none py-4">
+                  <li key={result.id} className="list-none">
                     <SearchResult result={result} />
                   </li>
                 ))}

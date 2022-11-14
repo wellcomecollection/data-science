@@ -46,9 +46,12 @@ works_generator = yield_works(
 
 for result in tqdm(works_generator, total=min(total_works, max_docs)):
     display_data = result["_source"]["display"]
-    description = ""
+    description = None
     if "description" in display_data:
         description = display_data["description"]
+    thumbnail_url = None
+    if "thumbnail" in display_data:
+        thumbnail_url = display_data["thumbnail"]["url"]
     local_es.index(
         index=local_index_name,
         id=result["_id"],
@@ -57,6 +60,7 @@ for result in tqdm(works_generator, total=min(total_works, max_docs)):
             "title": display_data["title"],
             "description": description,
             "url": f"https://wellcomecollection.org/works/{result['_id']}",
+            "image": thumbnail_url,
         },
     )
 
@@ -71,7 +75,6 @@ log.info("Indexing concepts")
 concepts_generator = yield_concepts(
     es=concepts_es, index=concepts_index, batch_size=100, limit=max_docs
 )
-
 for result in tqdm(concepts_generator, total=min(total_concepts, max_docs)):
     local_es.index(
         index=local_index_name,
@@ -96,6 +99,10 @@ for result in tqdm(stories_generator, total=min(total_stories, max_docs)):
             standfirst = item["primary"]["text"][0]["text"]
             break
 
+    try:
+        thumbnail_url = result["data"]["promo"][0]["primary"]["image"]["url"]
+    except (KeyError, IndexError):
+        thumbnail_url = None
     local_es.index(
         index=local_index_name,
         id=result["id"],
@@ -104,6 +111,7 @@ for result in tqdm(stories_generator, total=min(total_stories, max_docs)):
             "title": result["data"]["title"][0]["text"],
             "description": standfirst,
             "url": f"https://wellcomecollection.org/articles/{result['id']}",
+            "image": thumbnail_url,
         },
     )
 
