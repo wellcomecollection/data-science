@@ -9,12 +9,15 @@ const SearchResult: FunctionComponent<Props> = (props) => {
   return (
     <div>
       <div className="flex items-start">
-        <p className="bg-gray-400 py-0.5 px-2 text-sm font-bold capitalize text-white">
+        <p className="bg-gray-500 py-0.5 px-1.5 text-xs font-bold capitalize text-white">
           {props.result.type}
         </p>
       </div>
 
-      <div className="pt-2">{props.result.text}</div>
+      <div className="pt-1 font-bold">{props.result.title}</div>
+      <div className="pt-1 text-sm text-gray-500">
+        {props.result.description}
+      </div>
     </div>
   )
 }

@@ -12,14 +12,16 @@ type Props = {
   queryParams: { searchTerms: string }
   results: Result[]
   total: number
+  took: number
 }
 
 const searchEndpoint = (query: string) => `/api/search?query=${query}&n=6`
 
-const Search: NextPage<Props> = ({ queryParams, results, total }) => {
+const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
   const [searchTerms, setSearchTerms] = useState(queryParams.searchTerms)
   const [searchResults, setSearchResults] = useState(results)
   const [searchTotal, setSearchTotal] = useState(total)
+  const [searchTook, setSearchTook] = useState(0)
 
   const handleChange = useCallback((e) => {
     const searchTerms = e.target.value
@@ -34,12 +36,15 @@ const Search: NextPage<Props> = ({ queryParams, results, total }) => {
         .then((res) => {
           setSearchResults(res.results)
           setSearchTotal(res.total)
+          setSearchTook(res.took)
         })
-
-      console.log('searching')
     } else {
       setSearchResults([])
       setSearchTotal(0)
+      setSearchTook(0)
+      const url = new URL(window.location.href)
+      url.searchParams.delete('query')
+      window.history.pushState({}, '', url.toString())
     }
   }, [])
 
@@ -89,10 +94,10 @@ const Search: NextPage<Props> = ({ queryParams, results, total }) => {
           </form>
           {searchTotal > 0 && (
             <div className="mt-4">
-              <p className="text-lg font-bold">
-                {`${searchTotal} result${
-                  searchTotal > 1 && 's'
-                } for "${searchTerms}"`}
+              <p className="text-sm">
+                {`found ${searchTotal} result${
+                  searchTotal > 1 ? 's' : ''
+                } in ${searchTook}ms`}
               </p>
               <ul className="mt-4 divide-y-2 divide-solid divide-gray-200">
                 {searchResults.map((result) => (
@@ -119,12 +124,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     }
   } else {
     const client = getClient()
-    const { results, total } = await search(client, query.query as string, 6)
+    const response = await search(client, query.query as string, 6)
     return {
       props: {
         queryParams: { searchTerms: query.query as string },
-        results,
-        total,
+        ...response,
       },
     }
   }

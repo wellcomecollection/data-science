@@ -1,12 +1,17 @@
 {
     "query": {
-        "multi_match": {
-            "query": "{{query}}",
-            "type": "bool_prefix",
-            "fields": [
-                "text",
-                "text._2gram",
-                "text._3gram"
+        "bool": {
+            "should": [
+                {
+                    "multi_match": {
+                        "query": "{{query}}",
+                        "type": "bool_prefix",
+                        "fields": [
+                            "title*^10",
+                            "description*"
+                        ]
+                    }
+                }
             ]
         }
     }
