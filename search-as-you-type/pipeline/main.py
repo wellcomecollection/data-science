@@ -1,5 +1,5 @@
-import os
 import json
+import os
 from pathlib import Path
 
 from src.elasticsearch import (
@@ -45,12 +45,17 @@ works_generator = yield_works(
 )
 
 for result in tqdm(works_generator, total=min(total_works, max_docs)):
+    display_data = result["_source"]["display"]
+    description = ""
+    if "description" in display_data:
+        description = display_data["description"]
     local_es.index(
         index=local_index_name,
         id=result["_id"],
         document={
             "type": "work",
-            "text": result["_source"]["display"]["title"],
+            "title": display_data["title"],
+            "description": description,
         },
     )
 
@@ -72,7 +77,7 @@ for result in tqdm(concepts_generator, total=min(total_concepts, max_docs)):
         id=result["_id"],
         document={
             "type": "concept",
-            "text": result["_source"]["query"]["label"],
+            "title": result["_source"]["query"]["label"],
         },
     )
 
@@ -83,12 +88,19 @@ total_stories = get_total_stories()
 log.info("Indexing stories")
 stories_generator = yield_stories(batch_size=100, limit=max_docs)
 for result in tqdm(stories_generator, total=min(total_stories, max_docs)):
+    standfirst = ""
+    for item in result["data"]["body"]:
+        if item["slice_type"] == "standfirst":
+            standfirst = item["primary"]["text"][0]["text"]
+            break
+
     local_es.index(
         index=local_index_name,
         id=result["id"],
         document={
             "type": "story",
-            "text": result["data"]["title"][0]["text"],
+            "title": result["data"]["title"][0]["text"],
+            "description": standfirst,
         },
     )
 

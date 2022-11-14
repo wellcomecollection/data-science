@@ -25,7 +25,10 @@
             "type": {
                 "type": "keyword"
             },
-            "text": {
+            "title": {
+                "type": "search_as_you_type"
+            },
+            "description": {
                 "type": "search_as_you_type"
             }
         }
