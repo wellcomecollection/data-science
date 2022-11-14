@@ -1,3 +1,4 @@
+import os
 import json
 from pathlib import Path
 
@@ -19,7 +20,7 @@ from tqdm import tqdm
 log = get_logger()
 
 max_docs = 1000
-local_index_name = "search-as-you-type"
+local_index_name = os.environ.get("LOCAL_INDEX_NAME")
 config_path = Path("/data/index_config").absolute()
 with open(config_path / "search-as-you-type.json", "r") as f:
     config = json.load(f)
@@ -28,7 +29,7 @@ with open(config_path / "search-as-you-type.json", "r") as f:
 log.info("Loading local elastic client")
 local_es = get_local_elastic_client()
 
-log.info("Creating search-as-you-type index")
+log.info("Creating index")
 local_es.indices.delete(index=local_index_name, ignore_unavailable=True)
 local_es.indices.create(index=local_index_name, **config)
 
@@ -40,7 +41,7 @@ total_works = catalogue_es.count(index=works_index)["count"]
 
 log.info("Indexing works")
 works_generator = yield_works(
-    es=catalogue_es, index=works_index, batch_size=1000, limit=max_docs
+    es=catalogue_es, index=works_index, batch_size=100, limit=max_docs
 )
 
 for result in tqdm(works_generator, total=min(total_works, max_docs)):
@@ -49,7 +50,7 @@ for result in tqdm(works_generator, total=min(total_works, max_docs)):
         id=result["_id"],
         document={
             "type": "work",
-            "search-as-you-type": result["_source"]["display"]["title"],
+            "text": result["_source"]["display"]["title"],
         },
     )
 
@@ -62,7 +63,7 @@ total_concepts = concepts_es.count(index=concepts_index)["count"]
 
 log.info("Indexing concepts")
 concepts_generator = yield_concepts(
-    es=concepts_es, index=concepts_index, batch_size=1000, limit=max_docs
+    es=concepts_es, index=concepts_index, batch_size=100, limit=max_docs
 )
 
 for result in tqdm(concepts_generator, total=min(total_concepts, max_docs)):
@@ -71,7 +72,7 @@ for result in tqdm(concepts_generator, total=min(total_concepts, max_docs)):
         id=result["_id"],
         document={
             "type": "concept",
-            "search-as-you-type": result["_source"]["query"]["label"],
+            "text": result["_source"]["query"]["label"],
         },
     )
 
@@ -87,7 +88,7 @@ for result in tqdm(stories_generator, total=min(total_stories, max_docs)):
         id=result["id"],
         document={
             "type": "story",
-            "search-as-you-type": result["data"]["title"][0]["text"],
+            "text": result["data"]["title"][0]["text"],
         },
     )
 

@@ -32,8 +32,13 @@ def yield_stories(batch_size: int, limit: int) -> Generator[dict, None, None]:
     ).json()
 
     i = 0
-    while response["next_page"] is not None and i < limit:
+    while True:
         for result in response["results"]:
             i += 1
             yield result
-        response = httpx.get(response["next_page"]).json()
+            if i >= limit:
+                return
+        if response["next_page"] is None:
+            break
+        else:
+            response = httpx.get(response["next_page"]).json()

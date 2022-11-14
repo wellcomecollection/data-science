@@ -20,12 +20,14 @@ def yield_works(
         "search_after": [0],
     }
     i = 0
-    while True and i < limit:
+    while True:
         try:
             hits = es.search(**search_params).body["hits"]["hits"]
             search_params["search_after"] = hits[-1]["sort"]
             for result in hits:
                 i += 1
                 yield result
+                if i >= limit:
+                    return
         except IndexError:
             break
