@@ -1,0 +1,33 @@
+{
+    "settings": {
+        "analysis": {
+            "analyzer": {
+                "suggestion_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "standard",
+                    "filter": [
+                        "lowercase",
+                        "suggestion_filter"
+                    ]
+                }
+            },
+            "filter": {
+                "suggestion_filter": {
+                    "type": "edge_ngram",
+                    "min_gram": 1,
+                    "max_gram": 20
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "type": {
+                "type": "keyword"
+            },
+            "text": {
+                "type": "search_as_you_type"
+            }
+        }
+    }
+}
