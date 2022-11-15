@@ -1,5 +1,5 @@
+import { ArrowUpRight, Search as SearchIcon, X as XIcon } from 'react-feather'
 import { GetServerSideProps, NextPage } from 'next'
-import { Search as SearchIcon, X as XIcon } from 'react-feather'
 import { getClient, search } from '../services/search'
 import { useCallback, useState } from 'react'
 
@@ -72,7 +72,7 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
             <div className="mx-auto flex justify-between gap-1">
               <div className="relative flex w-full items-center border-2 border-gray-500">
                 <input
-                  className="w-full p-2 pr-8 text-lg focus:outline-none"
+                  className="w-full py-2 pl-4 pr-8 text-lg focus:outline-none"
                   type="text"
                   name="query"
                   value={searchTerms}
@@ -91,16 +91,27 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
                 </button>
               </div>
             </div>
+            {searchTotal > 0 && (
+              <ul className="divide-y-2 divide-gray-100 overflow-hidden rounded-b-lg border-x-2 border-b-2 border-gray-500">
+                <a
+                  href={`https://wellcomecollection.org/works?query=${searchTerms}`}
+                >
+                  <li
+                    key={'search'}
+                    className="flex list-none items-center p-4 text-gray-500 hover:bg-gray-100"
+                  >
+                    {`Search for "${searchTerms}"`}{' '}
+                    <ArrowUpRight className="ml-2 h-5" />
+                  </li>
+                </a>
+                {searchResults.map((result) => (
+                  <li key={result.id} className="list-none ">
+                    <SearchResult result={result} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </form>
-          {searchTotal > 0 && (
-            <ul className="divide-y-2 divide-gray-100 overflow-hidden rounded-b-lg border-x-2 border-b-2 border-gray-500">
-              {searchResults.map((result) => (
-                <li key={result.id} className="list-none">
-                  <SearchResult result={result} />
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </div>
     </>
