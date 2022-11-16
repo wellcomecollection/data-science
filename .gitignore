@@ -248,6 +248,7 @@ node_modules/
 .next/
 
 .DS_Store
-**/data/**/*.*
-!**/data/**/.gitkeep
+**/data/**/*
+!**/data/**/
+!**/.gitkeep
 !**/README.md
