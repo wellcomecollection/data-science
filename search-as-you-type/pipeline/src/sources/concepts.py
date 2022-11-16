@@ -26,7 +26,8 @@ def yield_concepts(
             for result in hits:
                 i += 1
                 yield result
-                if i >= limit:
-                    return
+                if limit:
+                    if i >= limit:
+                        return
         except IndexError:
             break

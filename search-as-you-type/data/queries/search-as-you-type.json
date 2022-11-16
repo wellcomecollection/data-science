@@ -1,17 +1,11 @@
 {
     "query": {
-        "bool": {
-            "should": [
-                {
-                    "multi_match": {
-                        "query": "{{query}}",
-                        "type": "bool_prefix",
-                        "fields": [
-                            "title*^10",
-                            "description*"
-                        ]
-                    }
-                }
+        "multi_match": {
+            "query": "{{query}}",
+            "type": "bool_prefix",
+            "fields": [
+                "contributors*^10",
+                "title*"
             ]
         }
     }

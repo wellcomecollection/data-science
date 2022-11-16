@@ -25,7 +25,7 @@
             "title": {
                 "type": "search_as_you_type"
             },
-            "description": {
+            "contributors": {
                 "type": "search_as_you_type"
             }
         }

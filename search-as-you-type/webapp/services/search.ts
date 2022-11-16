@@ -6,7 +6,7 @@ import blankQuery from '../../data/queries/search-as-you-type.json'
 export type Document = {
   type: string
   title: string
-  description: string
+  contributors: string
   url: string
   image?: string
 }
@@ -33,7 +33,7 @@ export async function search(
     JSON.stringify(blankQuery).replace(/{{query}}/g, searchTerms)
   )
   const searchResponse: estypes.SearchResponse<Document> = await client.search({
-    index: process.env.LOCAL_INDEX_NAME,
+    index: process.env.INDEX_NAME,
     body: query,
     size: n,
   })

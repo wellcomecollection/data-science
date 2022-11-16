@@ -2,6 +2,21 @@ from typing import Generator
 
 from elasticsearch import Elasticsearch
 
+query = {
+    "bool": {
+        "should": [{"match_all": {}}],
+        "filter": [{"term": {"type": "Visible"}}],
+    }
+}
+
+random_sort_query = {
+    "function_score": {
+        "query": query,
+        "functions": [{"random_score": {}}],
+        "boost_mode": "replace",
+    }
+}
+
 
 def yield_works(
     es: Elasticsearch, index: str, batch_size: int, limit: int
@@ -9,13 +24,12 @@ def yield_works(
     search_params = {
         "index": index,
         "size": batch_size,
-        "query": {
-            "bool": {
-                "should": {"match_all": {}},
-                "filter": [{"term": {"type": {"value": "Visible"}}}],
-            }
-        },
-        "source": ["display.title"],
+        "query": random_sort_query,
+        "source": [
+            "display.title",
+            "display.contributors",
+            "display.thumbnail",
+        ],
         "sort": [{"query.id": {"order": "asc"}}],
         "search_after": [0],
     }
@@ -27,7 +41,12 @@ def yield_works(
             for result in hits:
                 i += 1
                 yield result
-                if i >= limit:
-                    return
+                if limit:
+                    if i >= limit:
+                        return
         except IndexError:
             break
+
+
+def count_works(es: Elasticsearch, index: str) -> int:
+    return es.count(index=index, query=query)["count"]
