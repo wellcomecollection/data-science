@@ -15,10 +15,10 @@ export type Result = { id: string } & Document
 let client: Client
 export function getClient(): Client {
   client = new Client({
-    node: process.env.ES_PROTOTYPE_HOST,
+    node: process.env.ES_PROTOTYPE_HOST as string,
     auth: {
-      username: process.env.ES_PROTOTYPE_USERNAME,
-      password: process.env.ES_PROTOTYPE_PASSWORD,
+      username: process.env.ES_PROTOTYPE_USERNAME as string,
+      password: process.env.ES_PROTOTYPE_PASSWORD as string,
     },
   })
   return client
@@ -33,7 +33,7 @@ export async function search(
     JSON.stringify(blankQuery).replace(/{{query}}/g, searchTerms)
   )
   const searchResponse: estypes.SearchResponse<Document> = await client.search({
-    index: process.env.INDEX_NAME,
+    index: process.env.INDEX_NAME as string,
     body: query,
     size: n,
   })
