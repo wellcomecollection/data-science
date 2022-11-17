@@ -4,8 +4,12 @@
             "query": "{{query}}",
             "type": "bool_prefix",
             "fields": [
-                "contributors*^10",
-                "title*"
+                "contributors^10",
+                "contributors._2gram^10",
+                "contributors._3gram^10",
+                "title",
+                "title._2gram",
+                "title._3gram"
             ]
         }
     }
