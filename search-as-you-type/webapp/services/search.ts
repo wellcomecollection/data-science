@@ -15,10 +15,10 @@ export type Result = { id: string } & Document
 let client: Client
 export function getClient(): Client {
   client = new Client({
-    node: 'http://localhost:9200',
+    node: process.env.ES_PROTOTYPE_HOST,
     auth: {
-      username: 'elastic',
-      password: 'password',
+      username: process.env.ES_PROTOTYPE_USERNAME,
+      password: process.env.ES_PROTOTYPE_PASSWORD,
     },
   })
   return client
