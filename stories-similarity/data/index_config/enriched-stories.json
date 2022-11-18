@@ -1,0 +1,18 @@
+{
+    "mappings": {
+        "properties": {
+            "title_embedding": {
+                "type": "dense_vector",
+                "dims": 768,
+                "index": true,
+                "similarity": "cosine"
+            },
+            "standfirst_embedding": {
+                "type": "dense_vector",
+                "dims": 768,
+                "index": true,
+                "similarity": "cosine"
+            }
+        }
+    }
+}
