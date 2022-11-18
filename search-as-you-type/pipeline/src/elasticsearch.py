@@ -59,6 +59,19 @@ def get_local_elastic_client() -> Elasticsearch:
     return es
 
 
+def get_concepts_prototype_elastic_client() -> Elasticsearch:
+    es = Elasticsearch(
+        hosts=os.environ.get("ES_PROTOTYPE_HOST"),
+        basic_auth=(
+            os.environ.get("ES_PROTOTYPE_USERNAME"),
+            os.environ.get("ES_PROTOTYPE_PASSWORD"),
+        ),
+        request_timeout=3600,
+    )
+    wait_for_client(es)
+    return es
+
+
 def wait_for_client(es: Elasticsearch):
     while True:
         try:

@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 
 
 def yield_concepts(
-    es: Elasticsearch, index: str, batch_size: int, limit: int
+    es: Elasticsearch, index: str, batch_size: int
 ) -> Generator[dict, None, None]:
     search_params = {
         "index": index,
@@ -18,16 +18,10 @@ def yield_concepts(
         "sort": [{"query.id": {"order": "asc"}}],
         "search_after": [0],
     }
-    i = 0
     while True:
         try:
             hits = es.search(**search_params).body["hits"]["hits"]
             search_params["search_after"] = hits[-1]["sort"]
-            for result in hits:
-                i += 1
-                yield result
-                if limit:
-                    if i >= limit:
-                        return
+            yield hits
         except IndexError:
             break
