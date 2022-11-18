@@ -2,7 +2,7 @@ import json
 import os
 
 from sentence_transformers import SentenceTransformer
-from src.elasticsearch import get_local_elastic_client
+from src.elasticsearch import get_elastic_client
 from src.log import get_logger
 from src.stories import count_stories, yield_stories
 from tqdm import tqdm
@@ -10,8 +10,8 @@ from tqdm import tqdm
 log = get_logger()
 
 log.info("Connecting to target elasticsearch client")
-target_es = get_local_elastic_client()
-target_index = os.environ.get("TARGET_INDEX")
+target_es = get_elastic_client()
+target_index = os.environ.get("ES_INDEX")
 
 log.info("Creating target index")
 with open("/data/index_config/enriched-stories.json", encoding="utf-8") as f:
@@ -36,11 +36,17 @@ for result in tqdm(yield_stories(batch_size=100), total=count_stories()):
             break
     standfirst_embedding = model.encode(standfirst)
 
+    try:
+        thumbnail_url = result["data"]["promo"][0]["primary"]["image"]["url"]
+    except (KeyError, IndexError):
+        thumbnail_url = None
+
     target_es.index(
         index=target_index,
         id=result["id"],
         document={
-            "url": f"https://wellcomecollection.org/works/{result['id']}",
+            "url": f"https://wellcomecollection.org/articles/{result['id']}",
+            "thumbnail": thumbnail_url,
             "title": title,
             "title_embedding": title_embedding,
             "standfirst": standfirst,
