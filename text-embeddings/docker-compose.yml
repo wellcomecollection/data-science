@@ -27,7 +27,18 @@ services:
       - type: bind
         source: ./data
         target: /data
-      - type: bind
-        source: ${HOME}/.aws
-        target: /root/.aws
     command: python main.py
+
+  get-similar:
+    depends_on:
+      - elasticsearch
+    build:
+      dockerfile: pipeline/Dockerfile
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+    command: python get_similar.py
