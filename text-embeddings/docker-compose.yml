@@ -42,3 +42,20 @@ services:
         source: ./data
         target: /data
     command: python get_similar.py
+
+  webapp:
+    build:
+      dockerfile: webapp/Dockerfile
+      context: .
+    working_dir: /webapp
+    depends_on:
+      - elasticsearch
+    ports:
+      - 3000:3000
+    volumes:
+      - ./webapp:/webapp
+      - type: bind
+        source: ./data
+        target: /data
+    env_file: .env
+    command: yarn dev
