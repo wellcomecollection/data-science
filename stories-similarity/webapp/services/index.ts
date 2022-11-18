@@ -61,7 +61,11 @@ export async function getRandomId(client: Client): Promise<string> {
       size: 1,
       query: {
         function_score: {
-          random_score: {},
+          functions: [
+            {
+              random_score: {},
+            },
+          ],
         },
       },
     },
