@@ -39,7 +39,7 @@ export async function getSimilarStories(
     body: query,
   })
 
-  const results = knnResponse.hits.hits.map((hit) => parse(hit))
+  const results = knnResponse.hits.hits.slice(1).map((hit) => parse(hit))
   const took = knnResponse.took
   return { results, took }
 }
