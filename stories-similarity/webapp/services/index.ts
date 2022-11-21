@@ -24,12 +24,12 @@ export async function getSimilarStories(
       index: process.env.ES_INDEX as string,
       id: queryId,
     })
-    .then((res) => res._source as Story)
+    .then((res) => res._source)
 
   const query = {
     knn: {
-      field: field ? field : 'title_embedding',
-      query_vector: queryData[field ? field : 'title_embedding'],
+      field: field,
+      query_vector: (queryData as any)[field],
       k: n,
       num_candidates: 100,
     },
