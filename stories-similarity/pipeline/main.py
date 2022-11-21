@@ -1,3 +1,4 @@
+import numpy as np
 import json
 import os
 
@@ -16,7 +17,8 @@ target_index = os.environ.get("ES_INDEX")
 log.info("Creating target index")
 with open("/data/index_config/enriched-stories.json", encoding="utf-8") as f:
     index_config = json.load(f)
-target_es.indices.delete(index=target_index, ignore=[400, 404])
+if target_es.indices.exists(target_index):
+    target_es.indices.delete(index=target_index)
 target_es.indices.create(index=target_index, **index_config)
 
 log.info("Loading sentence transformer model")
@@ -41,6 +43,10 @@ for result in tqdm(yield_stories(batch_size=100), total=count_stories()):
     except (KeyError, IndexError):
         thumbnail_url = None
 
+    shared_embedding_max = np.maximum(title_embedding, standfirst_embedding)
+    shared_embedding_concat = np.concatenate(
+        [title_embedding[:512], standfirst_embedding[:512]]
+    )
     target_es.index(
         index=target_index,
         id=result["id"],
@@ -51,5 +57,7 @@ for result in tqdm(yield_stories(batch_size=100), total=count_stories()):
             "title_embedding": title_embedding,
             "standfirst": standfirst,
             "standfirst_embedding": standfirst_embedding,
-        },
+            "shared_embedding_max": shared_embedding_max,
+            "shared_embedding_concat": shared_embedding_concat
+        }
     )

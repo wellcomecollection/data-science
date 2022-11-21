@@ -12,6 +12,18 @@
                 "dims": 768,
                 "index": true,
                 "similarity": "cosine"
+            },
+            "shared_embedding_max": {
+                "type": "dense_vector",
+                "dims": 768,
+                "index": true,
+                "similarity": "cosine"
+            },
+            "shared_embedding_concat": {
+                "type": "dense_vector",
+                "dims": 1024,
+                "index": true,
+                "similarity": "cosine"
             }
         }
     }
