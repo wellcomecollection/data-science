@@ -1,5 +1,5 @@
 import { Client, estypes } from '@elastic/elasticsearch'
-import { DisplayStory, Story } from '../types'
+import { DisplayStory, EmbeddingField, Story } from '../types'
 
 let client: Client
 export function getClient(): Client {
@@ -16,7 +16,8 @@ export function getClient(): Client {
 export async function getSimilarStories(
   client: Client,
   queryId: string,
-  n: number
+  n: number,
+  field: EmbeddingField
 ): Promise<{ results: DisplayStory[]; took: number }> {
   const queryData = await client
     .get({
@@ -27,8 +28,8 @@ export async function getSimilarStories(
 
   const query = {
     knn: {
-      field: 'title_embedding',
-      query_vector: queryData.title_embedding,
+      field: field ? field : 'title_embedding',
+      query_vector: queryData[field ? field : 'title_embedding'],
       k: n,
       num_candidates: 100,
     },
@@ -36,7 +37,7 @@ export async function getSimilarStories(
 
   const knnResponse: estypes.KnnSearchResponse<Story> = await client.knnSearch({
     index: process.env.ES_INDEX as string,
-    body: query,
+    ...query,
   })
 
   const results = knnResponse.hits.hits.slice(1).map((hit) => parse(hit))

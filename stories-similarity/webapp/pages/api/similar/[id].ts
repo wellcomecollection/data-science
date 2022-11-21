@@ -7,10 +7,16 @@ export default async function searchEndpoint(
 ) {
   if (req.method === 'GET') {
     try {
-      const { id, n } = req.query
+      const { id, n, field } = req.query
       const nResults = n ? parseInt(n as string) : 10
+      const queryField = field ? (field as string) : 'title_embedding'
       const client = getClient()
-      const response = await getSimilarStories(client, id as string, nResults)
+      const response = await getSimilarStories(
+        client,
+        id as string,
+        nResults,
+        queryField as string
+      )
       res.status(200).json(response)
     } catch {
       res.status(500).json({ error: 'Unable to query' })
