@@ -109,7 +109,9 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
 
         {results && (
           <p className="pt-2 text-sm">
-            {total} result{total === 1 ? "" : "s"} found in {took}ms
+            <span>
+              {total} result{total === 1 ? "" : "s"} found in {took}ms
+            </span>
           </p>
         )}
 

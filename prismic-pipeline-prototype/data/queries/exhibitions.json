@@ -5,11 +5,10 @@
                 "multi_match": {
                     "query": "{{query}}",
                     "fields": [
-                        "title.shingles^100",
+                        "title.shingles^1000",
                         "contributors^100",
-                        "title.cased^10",
-                        "body",
-                        "promo_caption"
+                        "promo_caption^10",
+                        "body"
                     ]
                 }
             },
@@ -18,7 +17,7 @@
                     "gauss": {
                         "starts": {
                             "origin": "now/d",
-                            "scale": "365d",
+                            "scale": "730d",
                             "offset": "7d",
                             "decay": 0.5
                         }
