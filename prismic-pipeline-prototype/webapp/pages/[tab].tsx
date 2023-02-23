@@ -21,8 +21,8 @@ import { useState } from "react";
 type Result = ArticleResultType | ExhibitionResultType | EventResultType;
 
 type Props = {
-  queryParams: { searchTerms: string; tab: Tab };
-  results: Result[];
+  queryParams: { searchTerms?: string; tab: Tab };
+  results?: Result[];
   total: number;
   took: number;
 };
@@ -107,27 +107,34 @@ const Search: NextPage<Props> = ({ queryParams, results, total, took }) => {
           </button>
         </form>
 
-        <p className="pt-2 text-sm">
-          {total} result{total === 1 ? "" : "s"} found in {took}ms
-        </p>
+        {results && (
+          <p className="pt-2 text-sm">
+            {total} result{total === 1 ? "" : "s"} found in {took}ms
+          </p>
+        )}
 
         <ul className="flex flex-col gap-y-6 pt-4">
-          {results.map((result) => (
-            <li key={result.id}>
-              {(() => {
-                switch (result.type) {
-                  case "article":
-                    return <ArticleResult {...(result as ArticleResultType)} />;
-                  case "exhibition":
-                    return (
-                      <ExhibitionResult {...(result as ExhibitionResultType)} />
-                    );
-                  case "event":
-                    return <EventResult {...(result as EventResultType)} />;
-                }
-              })()}
-            </li>
-          ))}
+          {results &&
+            results.map((result) => (
+              <li key={result.id}>
+                {(() => {
+                  switch (result.type) {
+                    case "article":
+                      return (
+                        <ArticleResult {...(result as ArticleResultType)} />
+                      );
+                    case "exhibition":
+                      return (
+                        <ExhibitionResult
+                          {...(result as ExhibitionResultType)}
+                        />
+                      );
+                    case "event":
+                      return <EventResult {...(result as EventResultType)} />;
+                  }
+                })()}
+              </li>
+            ))}
         </ul>
       </main>
     </div>
@@ -140,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     return {
       props: {
         queryParams: { searchTerms: "", tab: query.tab as Tab },
-        results: [],
+        results: null,
       },
     };
   } else {

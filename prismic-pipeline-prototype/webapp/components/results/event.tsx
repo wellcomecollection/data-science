@@ -6,8 +6,8 @@ export type EventResultType = {
   title: string;
   body: string[];
   published: string;
-  starts: string;
-  ends: string;
+  starts: string[];
+  ends: string[];
   promo_image: string;
   promo_caption: string;
   contributors?: string[];
@@ -27,7 +27,7 @@ export const EventResult = ({
   return (
     <a
       className="no-underline"
-      href={`https://wellcomecollection.org/exhibitions/${id}`}
+      href={`https://wellcomecollection.org/events/${id}`}
     >
       <div className="flex flex-col gap-y-3 gap-x-2 md:flex-row ">
         <div className="flex-shrink-0">
@@ -40,9 +40,7 @@ export const EventResult = ({
         <div>
           <h2 className="pt-0">{title}</h2>
           <div className="text-sm text-dark-gray dark:text-light-gray">
-            <p className="pt-0.5">
-              {formatDateTime(starts)} - {formatDateTime(ends)}
-            </p>
+            {starts.map((start) => formatDateTime(start)).join(", ")}
             <p className="pt-1">{promo_caption}</p>
           </div>
         </div>

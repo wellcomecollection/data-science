@@ -1,10 +1,32 @@
 {
     "query": {
-        "multi_match": {
-            "query": "{{query}}",
-            "fields": [
-                "title"
-            ]
+        "function_score": {
+            "query": {
+                "multi_match": {
+                    "query": "{{query}}",
+                    "fields": [
+                        "title.shingles^1000",
+                        "contributors^100",
+                        "promo_caption^10",
+                        "body.shingles^100",
+                        "body"
+                    ]
+                }
+            },
+            "functions": [
+                {
+                    "gauss": {
+                        "starts": {
+                            "origin": "now/d",
+                            "scale": "365d",
+                            "offset": "7d",
+                            "decay": 0.5
+                        }
+                    }
+                }
+            ],
+            "score_mode": "multiply",
+            "boost_mode": "multiply"
         }
     }
 }

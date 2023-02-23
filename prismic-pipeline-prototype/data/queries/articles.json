@@ -3,10 +3,12 @@
         "multi_match": {
             "query": "{{query}}",
             "fields": [
-                "title^100",
+                "title.shingles^100",
                 "contributors^100",
+                "title.cased^10",
                 "standfirst^10",
-                "body"
+                "body",
+                "promo_caption"
             ]
         }
     }
