@@ -10,7 +10,8 @@ def get_prismic_master_ref() -> str:
 
 master_ref = get_prismic_master_ref()
 
-
-from .events import count_events, yield_events  # isort
+from .articles import count_articles, yield_articles  # isort
 from .exhibitions import count_exhibitions, yield_exhibitions  # isort
-from .stories import count_stories, yield_stories  # isort
+from .events import count_events, yield_events  # isort
+from .people import count_people, yield_people  # isort
+

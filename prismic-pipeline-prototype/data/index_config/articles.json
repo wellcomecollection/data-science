@@ -60,6 +60,18 @@
                         "analyzer": "english_cased_analyzer"
                     }
                 }
+            },
+            "contributors": {
+                "type": "text",
+                "fields": {
+                    "shingles": {
+                        "type": "text",
+                        "analyzer": "english_shingle_analyzer"
+                    },
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
             }
         }
     },

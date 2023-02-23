@@ -4,19 +4,25 @@ from pathlib import Path
 
 from src.elasticsearch import get_elastic_client
 from src.log import get_logger
-from src.prismic import yield_events, yield_exhibitions, yield_stories
+from src.prismic import yield_events, yield_exhibitions, yield_articles, yield_people
 from src.transform import transform_data
 
 log = get_logger()
 
 # make the data directories
 data_dir = Path("/data/prismic")
-types = [
-    "stories",
+types_to_fetch = [
+    "articles",
     "exhibitions",
-    "events"
+    "events",
+    "people",
 ]
-for type in types:
+types_to_index = [
+    "articles",
+    "exhibitions",
+    "events",
+]
+for type in types_to_fetch:
     (data_dir / type).mkdir(parents=True, exist_ok=True)
 
 # if it hasn't already been done, save all of the data from prismic locally
@@ -24,11 +30,11 @@ for type in types:
 if any((data_dir / type).iterdir()):
     log.info("Data already exists locally")
 else:
-    log.info("Saving all of the stories locally")
-    for story in yield_stories(batch_size=100, limit=None):
-        log.info(f"Saved story {story['id']}")
-        Path(data_dir / "stories" / f"{story['id']}.json").write_text(
-            json.dumps(story), encoding="utf-8"
+    log.info("Saving all of the articles locally")
+    for article in yield_articles(batch_size=100, limit=None):
+        log.info(f"Saved article {article['id']}")
+        Path(data_dir / "articles" / f"{article['id']}.json").write_text(
+            json.dumps(article), encoding="utf-8"
         )
 
     log.info("Saving all of the exhibitions locally")
@@ -45,11 +51,18 @@ else:
         )
         log.info(f"Saved event {event['id']}")
 
+    log.info("Saving all of the people locally")
+    for person in yield_people(batch_size=100, limit=None):
+        Path(data_dir / "people" / f"{person['id']}.json").write_text(
+            json.dumps(person), encoding="utf-8"
+        )
+        log.info(f"Saved person {person['id']}")
+
 
 # format the data according to the index config and post it to elasticsearch
 todays_date = datetime.now().strftime("%Y-%m-%d")
 es = get_elastic_client()
-for type in types:
+for type in types_to_index:
     index_name = f"prismic-{type}-{todays_date}"
 
     index_config = json.loads(
@@ -70,5 +83,7 @@ for type in types:
         id, document = transform_data(raw_data, type=type)
         log.info(f"Indexing {type} {id}")
         es.index(
-            index=f"prismic-{type}-{todays_date}", id=id, document=document
+            index=f"prismic-{type}-{todays_date}",
+            id=id,
+            document=document
         )

@@ -5,20 +5,20 @@ import httpx
 from . import api_url, master_ref
 
 
-def count_stories() -> int:
+def count_people() -> int:
     response = httpx.get(
         api_url + "documents/search",
-        params={"ref": master_ref, "q": '[[at(document.type,"articles")]]'},
+        params={"ref": master_ref, "q": '[[at(document.type,"people")]]'},
     ).json()
     return response["total_results_size"]
 
 
-def yield_stories(batch_size: int, limit: int) -> Generator[dict, None, None]:
+def yield_people(batch_size: int, limit: int) -> Generator[dict, None, None]:
     response = httpx.get(
         api_url + "documents/search",
         params={
             "ref": master_ref,
-            "q": '[[at(document.type,"articles")]]',
+            "q": '[[at(document.type,"people")]]',
             "pageSize": batch_size,
         },
     ).json()

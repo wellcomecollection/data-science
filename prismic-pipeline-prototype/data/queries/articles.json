@@ -3,7 +3,10 @@
         "multi_match": {
             "query": "{{query}}",
             "fields": [
-                "title"
+                "title^100",
+                "contributors^100",
+                "standfirst^10",
+                "body"
             ]
         }
     }

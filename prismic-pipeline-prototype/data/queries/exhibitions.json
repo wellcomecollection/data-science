@@ -1,10 +1,9 @@
 {
     "query": {
         "multi_match": {
-            "query": "test",
+            "query": "{{query}}",
             "fields": [
-                "title",
-                "content"
+                "title"
             ]
         }
     }
