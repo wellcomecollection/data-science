@@ -1,0 +1,134 @@
+{
+    "mappings": {
+        "properties": {
+            "title": {
+                "type": "text",
+                "fields": {
+                    "shingles": {
+                        "type": "text",
+                        "analyzer": "english_shingle_analyzer"
+                    },
+                    "cased": {
+                        "type": "text",
+                        "analyzer": "english_cased_analyzer"
+                    }
+                }
+            },
+            "standfirst": {
+                "type": "text",
+                "fields": {
+                    "shingles": {
+                        "type": "text",
+                        "analyzer": "english_shingle_analyzer"
+                    },
+                    "cased": {
+                        "type": "text",
+                        "analyzer": "english_cased_analyzer"
+                    }
+                }
+            },
+            "body": {
+                "type": "text",
+                "fields": {
+                    "shingles": {
+                        "type": "text",
+                        "analyzer": "english_shingle_analyzer"
+                    },
+                    "cased": {
+                        "type": "text",
+                        "analyzer": "english_cased_analyzer"
+                    }
+                }
+            },
+            "published": {
+                "type": "date",
+                "format": "date_optional_time"
+            },
+            "promo_image": {
+                "type": "keyword",
+                "index": false
+            },
+            "promo_caption": {
+                "type": "text",
+                "fields": {
+                    "shingles": {
+                        "type": "text",
+                        "analyzer": "english_shingle_analyzer"
+                    },
+                    "cased": {
+                        "type": "text",
+                        "analyzer": "english_cased_analyzer"
+                    }
+                }
+            },
+            "contributors": {
+                "type": "text",
+                "fields": {
+                    "shingles": {
+                        "type": "text",
+                        "analyzer": "english_shingle_analyzer"
+                    },
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            }
+        }
+    },
+    "settings": {
+        "analysis": {
+            "char_filter": {
+                "hyphens_char_filter": {
+                    "pattern": "-",
+                    "type": "pattern_replace",
+                    "replacement": ""
+                }
+            },
+            "filter": {
+                "shingle_filter": {
+                    "type": "shingle",
+                    "min_shingle_size": 2,
+                    "max_shingle_size": 4,
+                    "output_unigrams": true
+                },
+                "english_stemmer": {
+                    "type": "stemmer",
+                    "language": "english"
+                },
+                "english_possessive_stemmer": {
+                    "type": "stemmer",
+                    "language": "possessive_english"
+                },
+                "asciifolding_token_filter": {
+                    "type": "asciifolding",
+                    "preserve_original": true
+                }
+            },
+            "analyzer": {
+                "english_shingle_analyzer": {
+                    "filter": [
+                        "lowercase",
+                        "asciifolding_token_filter",
+                        "english_stemmer",
+                        "english_possessive_stemmer",
+                        "shingle_filter"
+                    ],
+                    "type": "custom",
+                    "tokenizer": "standard"
+                },
+                "english_cased_analyzer": {
+                    "filter": [
+                        "asciifolding_token_filter",
+                        "english_stemmer",
+                        "english_possessive_stemmer"
+                    ],
+                    "char_filter": [
+                        "hyphens_char_filter"
+                    ],
+                    "type": "custom",
+                    "tokenizer": "standard"
+                }
+            }
+        }
+    }
+}

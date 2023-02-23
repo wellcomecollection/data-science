@@ -1,0 +1,15 @@
+{
+    "query": {
+        "multi_match": {
+            "query": "{{query}}",
+            "fields": [
+                "title.shingles^100",
+                "contributors^100",
+                "title.cased^10",
+                "standfirst^10",
+                "body",
+                "promo_caption"
+            ]
+        }
+    }
+}

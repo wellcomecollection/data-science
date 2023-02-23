@@ -1,0 +1,5 @@
+boto3==1.24.92
+elasticsearch==8.5.1
+httpx==0.23.0
+loguru==0.6.0
+tqdm==4.64.1
