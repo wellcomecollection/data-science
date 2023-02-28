@@ -4,12 +4,17 @@
             "query": "{{query}}",
             "fields": [
                 "title.shingles^100",
-                "contributors^100",
+                "title.keyword^100",
+                "contributors^10",
+                "contributors.keyword^100",
                 "title.cased^10",
                 "standfirst^10",
                 "body",
                 "promo_caption"
-            ]
+            ],
+            "operator": "or",
+            "type": "cross_fields",
+            "minimum_should_match": "90%"
         }
     }
 }

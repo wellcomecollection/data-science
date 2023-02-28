@@ -1,31 +1,49 @@
 {
     "query": {
-        "function_score": {
-            "query": {
-                "multi_match": {
-                    "query": "{{query}}",
-                    "fields": [
-                        "title.shingles^1000",
-                        "contributors^100",
-                        "promo_caption^10",
-                        "body"
-                    ]
-                }
-            },
-            "functions": [
+        "bool": {
+            "should": [
                 {
-                    "gauss": {
-                        "starts": {
-                            "origin": "now/d",
-                            "scale": "365d",
-                            "offset": "7d",
-                            "decay": 0.5
+                    "function_score": {
+                        "query": {
+                            "multi_match": {
+                                "query": "{{query}}",
+                                "fields": [
+                                    "title.shingles^1000",
+                                    "contributors^10",
+                                    "contributors.keyword^100",
+                                    "promo_caption^10",
+                                    "body"
+                                ],
+                                "operator": "or",
+                                "type": "cross_fields",
+                                "minimum_should_match": "90%"
+                            }
+                        },
+                        "functions": [
+                            {
+                                "gauss": {
+                                    "starts": {
+                                        "origin": "now/d",
+                                        "scale": "365d",
+                                        "offset": "7d",
+                                        "decay": 0.5
+                                    }
+                                }
+                            }
+                        ],
+                        "score_mode": "multiply",
+                        "boost_mode": "multiply"
+                    }
+                },
+                {
+                    "match": {
+                        "title.keyword": {
+                            "query": "{{query}}",
+                            "boost": 1000
                         }
                     }
                 }
-            ],
-            "score_mode": "multiply",
-            "boost_mode": "multiply"
+            ]
         }
     }
 }

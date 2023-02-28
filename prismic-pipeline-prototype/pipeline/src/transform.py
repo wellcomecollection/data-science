@@ -15,6 +15,7 @@ def transform_data(data, type):
 
 
 contributor_data_dir = Path("/data/prismic/people")
+contributor_data_dir.mkdir(parents=True, exist_ok=True)
 id_to_name = {}
 for file in contributor_data_dir.iterdir():
     data_path = contributor_data_dir / file
@@ -71,6 +72,12 @@ def transform_exhibition(data: dict) -> Tuple[str, dict]:
     published = data["first_publication_date"]
     starts = data["data"]["start"]
     ends = data["data"]["end"]
+    contributors = []
+    for contributor in data["data"]["contributors"]:
+        try:
+            contributors += [id_to_name[contributor["contributor"]["id"]]]
+        except KeyError:
+            pass
     try:
         promo_image = data["data"]["promo"][0]["primary"]["image"]["url"]
     except (KeyError, IndexError):
@@ -88,6 +95,7 @@ def transform_exhibition(data: dict) -> Tuple[str, dict]:
         "ends": ends,
         "promo_image": promo_image,
         "promo_caption": promo_caption,
+        "contributors": contributors
     }
     return data["id"], document
 
@@ -112,6 +120,12 @@ def transform_event(data: dict) -> Tuple[str, dict]:
         promo_caption = data["data"]["promo"][0]["primary"]["caption"][0]["text"]
     except (KeyError, IndexError):
         promo_caption = None
+    contributors = []
+    for contributor in data["data"]["contributors"]:
+        try:
+            contributors += [id_to_name[contributor["contributor"]["id"]]]
+        except KeyError:
+            pass
     document = {
         "type": "event",
         "title": title,
@@ -121,5 +135,6 @@ def transform_event(data: dict) -> Tuple[str, dict]:
         "ends": ends,
         "promo_image": promo_image,
         "promo_caption": promo_caption,
+        "contributors": contributors
     }
     return data["id"], document

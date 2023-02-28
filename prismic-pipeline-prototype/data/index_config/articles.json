@@ -11,6 +11,10 @@
                     "cased": {
                         "type": "text",
                         "analyzer": "english_cased_analyzer"
+                    },
+                    "keyword": {
+                        "type": "keyword",
+                        "normalizer": "keyword_lowercase"
                     }
                 }
             },
@@ -69,7 +73,8 @@
                         "analyzer": "english_shingle_analyzer"
                     },
                     "keyword": {
-                        "type": "keyword"
+                        "type": "keyword",
+                        "normalizer": "keyword_lowercase"
                     }
                 }
             }
@@ -77,11 +82,12 @@
     },
     "settings": {
         "analysis": {
-            "char_filter": {
-                "hyphens_char_filter": {
-                    "pattern": "-",
-                    "type": "pattern_replace",
-                    "replacement": ""
+            "normalizer": {
+                "keyword_lowercase": {
+                    "type": "custom",
+                    "filter": [
+                        "lowercase"
+                    ]
                 }
             },
             "filter": {
@@ -102,6 +108,11 @@
                 "asciifolding_token_filter": {
                     "type": "asciifolding",
                     "preserve_original": true
+                },
+                "punctuation_token_filter": {
+                    "type": "pattern_replace",
+                    "pattern": "[^\\w\\s]",
+                    "replacement": ""
                 }
             },
             "analyzer": {
@@ -111,7 +122,8 @@
                         "asciifolding_token_filter",
                         "english_stemmer",
                         "english_possessive_stemmer",
-                        "shingle_filter"
+                        "shingle_filter",
+                        "punctuation_token_filter"
                     ],
                     "type": "custom",
                     "tokenizer": "standard"
@@ -120,10 +132,8 @@
                     "filter": [
                         "asciifolding_token_filter",
                         "english_stemmer",
-                        "english_possessive_stemmer"
-                    ],
-                    "char_filter": [
-                        "hyphens_char_filter"
+                        "english_possessive_stemmer",
+                        "punctuation_token_filter"
                     ],
                     "type": "custom",
                     "tokenizer": "standard"

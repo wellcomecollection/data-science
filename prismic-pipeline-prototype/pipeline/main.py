@@ -11,6 +11,8 @@ log = get_logger()
 
 # make the data directories
 data_dir = Path("/data/prismic")
+data_dir.mkdir(parents=True, exist_ok=True)
+
 types_to_fetch = [
     "articles",
     "exhibitions",
