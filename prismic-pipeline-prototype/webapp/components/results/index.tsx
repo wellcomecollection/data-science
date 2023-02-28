@@ -11,11 +11,5 @@ import { ArticleResult, ArticleResultType } from "./article";
 import { EventResult, EventResultType } from "./event";
 import { ExhibitionResult, ExhibitionResultType } from "./exhibition";
 
-export {
-  ArticleResult,
-  EventResult,
-  ExhibitionResult,
-  ArticleResultType,
-  EventResultType,
-  ExhibitionResultType,
-};
+export { ArticleResult, EventResult, ExhibitionResult };
+export type { ArticleResultType, EventResultType, ExhibitionResultType };
