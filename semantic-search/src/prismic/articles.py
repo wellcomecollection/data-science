@@ -13,9 +13,7 @@ def count_articles() -> int:
     return response["total_results_size"]
 
 
-def yield_articles(
-    batch_size: int, limit: int = 1000
-) -> Generator[dict, None, None]:
+def yield_articles(batch_size: int, limit: int = 1000) -> Generator[dict, None, None]:
     response = httpx.get(
         api_url + "documents/search",
         params={

@@ -2,12 +2,13 @@ from rich.prompt import Prompt
 from sentence_transformers import SentenceTransformer
 from src.elasticsearch import get_elastic_client
 import rich
+import os
 
 target_es = get_elastic_client()
-index = "enriched-articles-2023-03-20"
+index = os.environ["INDEX_NAME"]
 
 
-def get_nearest(query_vector: str, k: int = 10) -> list[str]:
+def get_nearest(query_vector: str, k: int=10) -> list[str]:
     """run a knn query against the target index"""
     response = target_es.search(
         index=index,
@@ -16,7 +17,7 @@ def get_nearest(query_vector: str, k: int = 10) -> list[str]:
             "query_vector": query_vector,
             "k": k,
             "num_candidates": 100,
-        }
+        },
     )
     return response["hits"]["hits"]
 
