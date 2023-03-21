@@ -13,9 +13,7 @@ def count_exhibitions() -> int:
     return response["total_results_size"]
 
 
-def yield_exhibitions(
-    batch_size: int, limit: int
-) -> Generator[dict, None, None]:
+def yield_exhibitions(batch_size: int, limit: int) -> Generator[dict, None, None]:
     response = httpx.get(
         api_url + "documents/search",
         params={
