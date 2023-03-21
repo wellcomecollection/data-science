@@ -1,47 +1,27 @@
+version: '3.8'
+
 services:
   embed:
     build: pipeline
-    working_dir: /app
-    env_file:
-      - .env
+    env_file: .env
     volumes:
       - type: bind
         source: ./data
         target: /data
       - type: bind
         source: ./src
-        target: /app/src
+        target: /src
       - type: bind
         source: ${HOME}/.aws
         target: /root/.aws
         read_only: true
     command: python embed.py
 
-  get-nearest:
-    build: pipeline
-    working_dir: /app
-    env_file:
-      - .env
-    volumes:
-      - type: bind
-        source: ./data
-        target: /data
-      - type: bind
-        source: ./src
-        target: /app/src
-      - type: bind
-        source: ${HOME}/.aws
-        target: /root/.aws
-        read_only: true
-    command: python get-nearest.py
-
   api:
     build: api
     ports:
-      - target: 80
-        published: 5000
-    env_file:
-      - .env
+      - 5000:5000
+    env_file: .env
     volumes:
       - type: bind
         source: ./data
@@ -53,3 +33,16 @@ services:
         source: ${HOME}/.aws
         target: /root/.aws
         read_only: true
+    networks:
+      - default
+
+
+  webapp:
+    build: webapp
+    depends_on: 
+      - api
+    ports:
+      - 3000:3000
+    env_file: .env
+    networks:
+      - default
