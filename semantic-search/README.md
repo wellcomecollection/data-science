@@ -1,3 +1,3 @@
-# Prismic Pipeline Prototype
+# Semantic search
 
-Prismic -> Elasticsearch proto-pipeline to establish a basic mapping+query for exhibitions, events, articles, and functional content.
+Prototype semantic search api and webapp for wellcomecollection content.
