@@ -1,0 +1,40 @@
+services:
+  embed:
+    build: pipeline
+    working_dir: /app
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+        read_only: true
+    command: python embed.py
+
+  get-nearest:
+    build: pipeline
+    working_dir: /app
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+        read_only: true
+    command: python get-nearest.py
+
+  api:
+    build: api
+    ports:
+      - 5000:5000
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+        read_only: true
+    command: python app.py

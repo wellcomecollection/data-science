@@ -1,0 +1,20 @@
+{
+    "mappings": {
+        "properties": {
+            "id": {
+                "type": "keyword",
+                "index": false
+            },
+            "text_chunk": {
+                "type": "text",
+                "index": false
+            },
+            "embedding": {
+                "type": "dense_vector",
+                "dims": 768,
+                "index": true,
+                "similarity": "cosine"
+            }
+        }
+    }
+}
