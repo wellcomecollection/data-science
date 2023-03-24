@@ -3,13 +3,23 @@
         "properties": {
             "id": {
                 "type": "keyword",
-                "index": false
+                "index": true
             },
-            "text_chunk": {
+            "text": {
                 "type": "text",
                 "index": false
             },
-            "embedding": {
+            "text-embedding": {
+                "type": "dense_vector",
+                "dims": 768,
+                "index": true,
+                "similarity": "cosine"
+            },
+            "title": {
+                "type": "text",
+                "index": false
+            },
+            "title-embedding": {
                 "type": "dense_vector",
                 "dims": 768,
                 "index": true,

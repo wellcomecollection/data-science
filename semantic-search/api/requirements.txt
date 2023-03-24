@@ -4,8 +4,19 @@
 #
 #    pip-compile
 #
+aiohttp==3.8.4
+    # via openai
+aiosignal==1.3.1
+    # via aiohttp
 anyio==3.6.2
-    # via starlette
+    # via
+    #   httpcore
+    #   starlette
+    #   watchfiles
+async-timeout==4.0.2
+    # via aiohttp
+attrs==22.2.0
+    # via aiohttp
 boto3==1.24.92
     # via -r requirements.in
 botocore==1.27.96
@@ -15,26 +26,46 @@ botocore==1.27.96
 certifi==2022.12.7
     # via
     #   elastic-transport
+    #   httpcore
+    #   httpx
     #   requests
 charset-normalizer==3.1.0
-    # via requests
+    # via
+    #   aiohttp
+    #   requests
 click==8.1.3
     # via
     #   nltk
     #   uvicorn
+dnspython==2.3.0
+    # via email-validator
 elastic-transport==8.4.0
     # via elasticsearch
 elasticsearch==8.5.1
     # via -r requirements.in
-fastapi==0.95.0
+email-validator==1.3.1
+    # via fastapi
+fastapi[all]==0.95.0
     # via -r requirements.in
 filelock==3.10.0
     # via
     #   huggingface-hub
     #   torch
     #   transformers
+frozenlist==1.3.3
+    # via
+    #   aiohttp
+    #   aiosignal
 h11==0.14.0
+    # via
+    #   httpcore
+    #   uvicorn
+httpcore==0.16.3
+    # via httpx
+httptools==0.5.0
     # via uvicorn
+httpx==0.23.3
+    # via fastapi
 huggingface-hub==0.13.3
     # via
     #   sentence-transformers
@@ -42,9 +73,16 @@ huggingface-hub==0.13.3
 idna==3.4
     # via
     #   anyio
+    #   email-validator
     #   requests
+    #   rfc3986
+    #   yarl
+itsdangerous==2.1.2
+    # via fastapi
 jinja2==3.1.2
-    # via torch
+    # via
+    #   fastapi
+    #   torch
 jmespath==1.0.1
     # via
     #   boto3
@@ -59,6 +97,10 @@ markupsafe==2.1.2
     # via jinja2
 mpmath==1.3.0
     # via sympy
+multidict==6.0.4
+    # via
+    #   aiohttp
+    #   yarl
 networkx==3.0
     # via torch
 nltk==3.8.1
@@ -70,6 +112,10 @@ numpy==1.24.2
     #   sentence-transformers
     #   torchvision
     #   transformers
+openai==0.27.2
+    # via -r requirements.in
+orjson==3.8.8
+    # via fastapi
 packaging==23.0
     # via
     #   huggingface-hub
@@ -82,10 +128,16 @@ pydantic==1.10.6
     #   fastapi
 python-dateutil==2.8.2
     # via botocore
+python-dotenv==1.0.0
+    # via uvicorn
+python-multipart==0.0.6
+    # via fastapi
 pyyaml==6.0
     # via
+    #   fastapi
     #   huggingface-hub
     #   transformers
+    #   uvicorn
 regex==2022.10.31
     # via
     #   nltk
@@ -93,8 +145,11 @@ regex==2022.10.31
 requests==2.28.2
     # via
     #   huggingface-hub
+    #   openai
     #   torchvision
     #   transformers
+rfc3986[idna2008]==1.5.0
+    # via httpx
 s3transfer==0.6.0
     # via boto3
 scikit-learn==1.2.2
@@ -110,7 +165,10 @@ sentencepiece==0.1.97
 six==1.16.0
     # via python-dateutil
 sniffio==1.3.0
-    # via anyio
+    # via
+    #   anyio
+    #   httpcore
+    #   httpx
 starlette==0.26.1
     # via fastapi
 sympy==1.11.1
@@ -129,6 +187,7 @@ tqdm==4.65.0
     # via
     #   huggingface-hub
     #   nltk
+    #   openai
     #   sentence-transformers
     #   transformers
 transformers==4.27.2
@@ -138,10 +197,22 @@ typing-extensions==4.5.0
     #   huggingface-hub
     #   pydantic
     #   torch
+ujson==5.7.0
+    # via fastapi
 urllib3==1.26.15
     # via
     #   botocore
     #   elastic-transport
     #   requests
-uvicorn==0.21.1
-    # via -r requirements.in
+uvicorn[standard]==0.21.1
+    # via
+    #   -r requirements.in
+    #   fastapi
+uvloop==0.17.0
+    # via uvicorn
+watchfiles==0.18.1
+    # via uvicorn
+websockets==10.4
+    # via uvicorn
+yarl==1.8.2
+    # via aiohttp

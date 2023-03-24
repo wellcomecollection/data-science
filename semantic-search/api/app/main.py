@@ -2,25 +2,16 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 
 from fastapi import FastAPI
-from sentence_transformers import SentenceTransformer
-
+from .src.embed import TextEmbedder
 from .src.elasticsearch import get_elastic_client
 
 target_es = get_elastic_client()
-index = os.environ["INDEX_NAME"]
+model_name = os.environ["MODEL_NAME"]
+index = f"articles-{model_name}"
 
-model_name = "paraphrase-distilroberta-base-v1"
-
-model = SentenceTransformer(
-    model_name_or_path=model_name,
-    cache_folder="/data/models",
-)
-
+model = TextEmbedder(model=model_name, cache_dir="/data/embeddings")
 
 app = FastAPI()
-
-
-# configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://webapp:3000"],
@@ -33,32 +24,29 @@ app.add_middleware(
 @app.get("/embed")
 def embed(query: str) -> dict:
     """Get an embedding for a supplied string"""
-    embedding = model.encode(query).tolist()
+    embedding = model.embed(query)
     return {"embedding": embedding, "model": model_name}
-
-
-@app.get("/tokenise")
-def tokenise(query: str) -> dict:
-    """Get tokens for a supplied string"""
-    tokens = model.tokenize([query])
-    return {"tokens": tokens, "model": model_name}
 
 
 @app.get("/nearest")
 def nearest(query: str, n: int = 10) -> dict:
     """Get nearest embeddings for a supplied string"""
-    embedding = model.encode(query).tolist()
+    embedding = model.embed(query)
     response = target_es.search(
         index=index,
         knn={
-            "field": "embedding",
+            "field": "text-embedding",
             "query_vector": embedding,
             "k": n,
             "num_candidates": 1000,
         },
+        collapse={"field": "id"},
     )
     return {
-        "embeddings": {hit["_id"]: hit["_source"] for hit in response["hits"]["hits"]},
+        "embeddings": {
+            hit["_id"]: {**hit["_source"], "score": hit["_score"]}
+            for hit in response["hits"]["hits"]
+        },
         "total": response["hits"]["total"]["value"],
     }
 

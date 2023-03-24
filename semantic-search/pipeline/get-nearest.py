@@ -5,10 +5,10 @@ import rich
 import os
 
 target_es = get_elastic_client()
-index = os.environ["INDEX_NAME"]
+index = f"prismic-{os.environ['MODEL_NAME']}"
 
 
-def get_nearest(query_vector: str, k: int=10) -> list[str]:
+def get_nearest(query_vector: str, k: int = 10) -> list[str]:
     """run a knn query against the target index"""
     response = target_es.search(
         index=index,

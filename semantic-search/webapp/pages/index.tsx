@@ -68,11 +68,7 @@ const Search: NextPage<Props> = (props) => {
           {results &&
             Object.entries(results).map(([key, result]) => (
               <li key={key}>
-                <Result
-                  id={result.id}
-                  text={result.text}
-                  embedding={result.embedding}
-                />
+                <Result {...result} />
               </li>
             ))}
         </ul>
