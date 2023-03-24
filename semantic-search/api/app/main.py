@@ -1,24 +1,19 @@
-from fastapi.middleware.cors import CORSMiddleware
+from typing import Literal, Annotated
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from .src.embed import TextEmbedder
 from .src.elasticsearch import get_elastic_client
 
 target_es = get_elastic_client()
 model_name = os.environ["MODEL_NAME"]
-index = f"articles-{model_name}"
+index = f"prismic-{model_name}"
 
 model = TextEmbedder(model=model_name, cache_dir="/data/embeddings")
 
 app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://webapp:3000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+allowed_includes = Literal["embedding"]
 
 
 @app.get("/embed")
@@ -29,18 +24,19 @@ def embed(query: str) -> dict:
 
 
 @app.get("/nearest")
-def nearest(query: str, n: int = 10) -> dict:
+def nearest(query: str, n: int = 10, includes: Annotated[list[allowed_includes] | None, Query()] = []):
     """Get nearest embeddings for a supplied string"""
     embedding = model.embed(query)
     response = target_es.search(
         index=index,
         knn={
-            "field": "text-embedding",
+            "field": "embedding",
             "query_vector": embedding,
             "k": n,
             "num_candidates": 1000,
         },
         collapse={"field": "id"},
+        _source=["id", "type", "title", "text", *includes],
     )
     return {
         "embeddings": {
@@ -51,9 +47,9 @@ def nearest(query: str, n: int = 10) -> dict:
     }
 
 
-@app.get("/articles")
-def get_articles():
-    """Get embeddings, grouped by article id"""
+@app.get("/documents")
+def get_documents(includes: Annotated[list[allowed_includes] | None, Query()] = []):
+    """Get embeddings, grouped by document id"""
     response = target_es.search(
         index=index,
         body={
@@ -73,10 +69,11 @@ def get_articles():
                 },
             },
         },
+        _source=["id", "type", "title", "text", *includes],
     )
     return {
         "total": response["aggregations"]["unique_ids"]["value"],
-        "articles": {
+        "documents": {
             bucket["key"]: {
                 "total:": bucket["doc_count"],
                 "embeddings": {
@@ -89,13 +86,14 @@ def get_articles():
     }
 
 
-@app.get("/articles/{id}")
-def get_article(id: str):
-    """Get embeddings, filtered by article id"""
+@app.get("/documents/{id}")
+def get_document(id: str, includes: Annotated[list[allowed_includes] | None, Query()] = []):
+    """Get embeddings, filtered by document id"""
     response = target_es.search(
+        index=index,
         body={"query": {"match": {"id": id}},
               "sort": [{"id": {"order": "asc"}}]},
-        index=index,
+        _source=["id", "type", "title", "text", *includes],
     )
     return {
         "embeddings": {hit["_id"]: hit["_source"] for hit in response["hits"]["hits"]},
@@ -104,14 +102,25 @@ def get_article(id: str):
 
 
 @app.get("/embeddings")
-def get_embeddings():
+def get_embeddings(includes: Annotated[list[allowed_includes] | None, Query()] = []):
     """Get all embeddings"""
-    response = target_es.search(index=index, body={"query": {"match_all": {}}})
-    return {hit["_id"]: hit["_source"] for hit in response["hits"]["hits"]}
+    response = target_es.search(
+        index=index,
+        body={"query": {"match_all": {}}},
+        _source=["id", "type", "title", "text", *includes],
+    )
+    return {
+        "embeddings": {hit["_id"]: hit["_source"] for hit in response["hits"]["hits"]},
+        "total": response["hits"]["total"]["value"],
+    }
 
 
 @app.get("/embeddings/{id}")
-def get_embedding(id: str):
+def get_embedding(id: str, includes: Annotated[list[allowed_includes] | None, Query()] = []):
     """Get embedding by id"""
-    response = target_es.get(index=index, id=id)
+    response = target_es.get(
+        index=index,
+        id=id,
+        _source=["id", "type", "title", "text", *includes],
+    )
     return response["_source"]
