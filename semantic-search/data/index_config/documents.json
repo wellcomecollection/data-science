@@ -9,6 +9,10 @@
                 "type": "keyword",
                 "index": true
             },
+            "format": {
+                "type": "keyword",
+                "index": true
+            },
             "text": {
                 "type": "text",
                 "index": false
