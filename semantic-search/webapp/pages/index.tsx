@@ -8,6 +8,8 @@ import { useState } from "react";
 type Props = {
   queryParams: { searchTerms?: string; n?: number };
   results?: { [key: string]: ResultType };
+  took?: number;
+  total?: number;
 };
 
 const Search: NextPage<Props> = (props) => {
@@ -21,8 +23,11 @@ const Search: NextPage<Props> = (props) => {
           rel="icon"
           href={`data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🤔</text></svg>`}
         />
-        <title>Semantic content search</title>
-        <meta name="description" content="Very clever semantic search" />
+        <title>Semantic search</title>
+        <meta
+          name="description"
+          content="Very clever search big brain wellcome collection"
+        />
       </Head>
       <main className="min-h-screen">
         <form
@@ -64,10 +69,17 @@ const Search: NextPage<Props> = (props) => {
           </button>
         </form>
 
-        <ul className="flex flex-col gap-y-6 pt-4">
+        {results && (
+          <p className="pt-2 text-sm">
+            found {props.total} result{props.total == 1 ? "" : "s"} in{" "}
+            {props.took}ms
+          </p>
+        )}
+
+        <ul className="flex flex-col space-y-4 divide-y divide-light-gray py-6 dark:divide-gray">
           {results &&
             Object.entries(results).map(([key, result]) => (
-              <li key={key}>
+              <li key={key} className="pt-4">
                 <Result {...result} />
               </li>
             ))}
@@ -83,11 +95,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       props: {
         queryParams: { searchTerms: "" },
         results: null,
+        total: null,
+        took: null,
       },
     };
   } else {
     const searchResponse = await fetch(
-      `http://localhost:5000/nearest?query=${query.query}&n=${
+      `http://api:5000/nearest?query=${query.query}&n=${
         query.n ? query.n : 10
       }`,
       {
@@ -100,6 +114,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       props: {
         queryParams: { searchTerms: query.query },
         results: searchResponse.embeddings,
+        total: searchResponse.total,
+        took: searchResponse.took,
       },
     };
   }

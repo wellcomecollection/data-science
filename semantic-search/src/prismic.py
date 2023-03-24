@@ -40,10 +40,8 @@ def yield_documents(batch_size: int) -> Generator[dict, None, None]:
             },
         ).json()
 
-        i = 0
         while True:
             for result in response["results"]:
-                i += 1
                 yield result
             if response["next_page"] is None:
                 break

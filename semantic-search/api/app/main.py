@@ -7,13 +7,21 @@ from .src.elasticsearch import get_elastic_client
 
 target_es = get_elastic_client()
 model_name = os.environ["MODEL_NAME"]
-index = f"prismic-{model_name}"
+index = f"works-{model_name}"
 
 model = TextEmbedder(model=model_name, cache_dir="/data/embeddings")
 
 app = FastAPI()
 
 allowed_includes = Literal["embedding"]
+allowed_formats = Literal[
+    "articles",
+    "webcomics",
+    "events",
+    "exhibitions",
+    "books",
+    "pages",
+]
 
 
 @app.get("/embed")
@@ -24,7 +32,12 @@ def embed(query: str) -> dict:
 
 
 @app.get("/nearest")
-def nearest(query: str, n: int = 10, includes: Annotated[list[allowed_includes] | None, Query()] = []):
+def nearest(
+    query: str,
+    n: int = 10,
+    includes: Annotated[list[allowed_includes] | None, Query()] = [],
+    formats: Annotated[list[allowed_formats] | None, Query()] = [],
+):
     """Get nearest embeddings for a supplied string"""
     embedding = model.embed(query)
     response = target_es.search(
@@ -32,11 +45,12 @@ def nearest(query: str, n: int = 10, includes: Annotated[list[allowed_includes] 
         knn={
             "field": "embedding",
             "query_vector": embedding,
-            "k": n,
+            "k": 1000,
             "num_candidates": 1000,
         },
         collapse={"field": "id"},
         _source=["id", "type", "title", "text", *includes],
+        size=n,
     )
     return {
         "embeddings": {
@@ -44,11 +58,15 @@ def nearest(query: str, n: int = 10, includes: Annotated[list[allowed_includes] 
             for hit in response["hits"]["hits"]
         },
         "total": response["hits"]["total"]["value"],
+        "took": response["took"],
     }
 
 
 @app.get("/documents")
-def get_documents(includes: Annotated[list[allowed_includes] | None, Query()] = []):
+def get_documents(
+    includes: Annotated[list[allowed_includes] | None, Query()] = [],
+    formats: Annotated[list[allowed_formats] | None, Query()] = [],
+):
     """Get embeddings, grouped by document id"""
     response = target_es.search(
         index=index,
@@ -73,6 +91,7 @@ def get_documents(includes: Annotated[list[allowed_includes] | None, Query()] = 
     )
     return {
         "total": response["aggregations"]["unique_ids"]["value"],
+        "took": response["took"],
         "documents": {
             bucket["key"]: {
                 "total:": bucket["doc_count"],
@@ -87,7 +106,11 @@ def get_documents(includes: Annotated[list[allowed_includes] | None, Query()] = 
 
 
 @app.get("/documents/{id}")
-def get_document(id: str, includes: Annotated[list[allowed_includes] | None, Query()] = []):
+def get_document(
+    id: str,
+    includes: Annotated[list[allowed_includes] | None, Query()] = [],
+    formats: Annotated[list[allowed_formats] | None, Query()] = [],
+):
     """Get embeddings, filtered by document id"""
     response = target_es.search(
         index=index,
@@ -98,11 +121,15 @@ def get_document(id: str, includes: Annotated[list[allowed_includes] | None, Que
     return {
         "embeddings": {hit["_id"]: hit["_source"] for hit in response["hits"]["hits"]},
         "total": response["hits"]["total"]["value"],
+        "took": response["took"],
     }
 
 
 @app.get("/embeddings")
-def get_embeddings(includes: Annotated[list[allowed_includes] | None, Query()] = []):
+def get_embeddings(
+    includes: Annotated[list[allowed_includes] | None, Query()] = [],
+    formats: Annotated[list[allowed_formats] | None, Query()] = [],
+):
     """Get all embeddings"""
     response = target_es.search(
         index=index,
@@ -112,11 +139,16 @@ def get_embeddings(includes: Annotated[list[allowed_includes] | None, Query()] =
     return {
         "embeddings": {hit["_id"]: hit["_source"] for hit in response["hits"]["hits"]},
         "total": response["hits"]["total"]["value"],
+        "took": response["took"],
     }
 
 
 @app.get("/embeddings/{id}")
-def get_embedding(id: str, includes: Annotated[list[allowed_includes] | None, Query()] = []):
+def get_embedding(
+    id: str,
+    includes: Annotated[list[allowed_includes] | None, Query()] = [],
+    formats: Annotated[list[allowed_formats] | None, Query()] = [],
+):
     """Get embedding by id"""
     response = target_es.get(
         index=index,

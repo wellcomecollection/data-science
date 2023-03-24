@@ -15,7 +15,7 @@ services:
         source: ${HOME}/.aws
         target: /root/.aws
         read_only: true
-    command: python main.py
+    command: python works.py
 
   api:
     build: api
