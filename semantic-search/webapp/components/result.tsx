@@ -19,15 +19,13 @@ export function formatDateString(date: Date) {
 }
 
 const getLink = (result: ResultType) => {
-  let path;
   if (result.type === "works") {
-    path = "works";
+    return `https://wellcomecollection.org/works/${result.id}`;
   } else if (result.type === "webcomics") {
-    path = "articles";
+    return `https://wellcomecollection.org/articles/${result.id}`;
   } else {
-    path = result.type;
+    return `https://wellcomecollection.org/${result.type}/${result.id}`;
   }
-  return `https://wellcomecollection.org/${path}/${result.id}`;
 };
 
 const getLabel = (result: ResultType) => {

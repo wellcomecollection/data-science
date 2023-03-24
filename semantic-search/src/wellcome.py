@@ -45,11 +45,14 @@ def yield_popular_works(size: int = 10_000) -> Generator[dict, None, None]:
                 ]
             }
         },
-        aggs={"popular_works": {"terms": {"field": "page.query.id", "size": size}}},
+        aggs={
+            "popular_works": {"terms": {"field": "page.query.id", "size": size}}
+        },
     )
 
     popular_work_ids = [
-        bucket["key"] for bucket in response["aggregations"]["popular_works"]["buckets"]
+        bucket["key"]
+        for bucket in response["aggregations"]["popular_works"]["buckets"]
     ]
 
     log.debug(f"Found popular work IDs: {popular_work_ids}")
@@ -60,8 +63,7 @@ def yield_popular_works(size: int = 10_000) -> Generator[dict, None, None]:
         log.debug(f"Fetching work {work_id}")
         try:
             document = pipeline_es_client.get(
-                index=works_index_name,
-                id=work_id
+                index=works_index_name, id=work_id
             )
             work = document["_source"]["display"]
             yield work

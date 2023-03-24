@@ -25,7 +25,8 @@ target_es.indices.create(index=target_index, **index_config)
 
 log.info("Loading sentence transformer model")
 model = TextEmbedder(
-    model=os.environ["MODEL_NAME"], cache_dir="/data/embeddings")
+    model=os.environ["MODEL_NAME"], cache_dir="/data/embeddings"
+)
 
 embeddable_slice_types = [
     "text",
@@ -81,16 +82,17 @@ for document in progress_bar:
             )
         else:
             progress_bar.set_description(
-                f"Indexed {document['type']} {document['id']}")
+                f"Indexed {document['type']} {document['id']}"
+            )
 
     if actions:
         target_es.bulk(operations=actions)
         log.debug(f"Indexed {document['type']} {document['id']}")
         progress_bar.set_description(
-            f"Indexed {document['type']} {document['id']}")
+            f"Indexed {document['type']} {document['id']}"
+        )
     else:
-        log.debug(
-            f"Skipping {document['type']} with no text: {document['id']}")
+        log.debug(f"Skipping {document['type']} with no text: {document['id']}")
         progress_bar.set_description(
             f"Skipping {document['type']} with no text: {document['id']}"
         )
