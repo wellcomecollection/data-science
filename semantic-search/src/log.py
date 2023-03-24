@@ -11,12 +11,12 @@ logger.remove()
 logger.add(
     log_dir / "{time}.log",
     format="{time} | {level} | {message} | {extra}",
-    level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+    level=os.environ.get("LOG_LEVEL_FILE", "INFO").upper(),
 )
 logger.add(
     sys.stdout,
     format="{message}",
-    level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+    level=os.environ.get("LOG_LEVEL_STDOUT", "INFO").upper(),
 )
 
 

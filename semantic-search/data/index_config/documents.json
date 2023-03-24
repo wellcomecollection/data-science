@@ -5,21 +5,19 @@
                 "type": "keyword",
                 "index": true
             },
+            "type": {
+                "type": "keyword",
+                "index": true
+            },
             "text": {
                 "type": "text",
                 "index": false
-            },
-            "text-embedding": {
-                "type": "dense_vector",
-                "dims": 768,
-                "index": true,
-                "similarity": "cosine"
             },
             "title": {
                 "type": "text",
                 "index": false
             },
-            "title-embedding": {
+            "embedding": {
                 "type": "dense_vector",
                 "dims": 768,
                 "index": true,

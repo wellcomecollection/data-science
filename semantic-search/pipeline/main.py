@@ -24,32 +24,69 @@ if target_es.indices.exists(index=target_index):
 target_es.indices.create(index=target_index, **index_config)
 
 log.info("Loading sentence transformer model")
-model = TextEmbedder(
-    model=os.environ["MODEL_NAME"], cache_dir="/data/embeddings"
-)
+model = TextEmbedder(model=os.environ["MODEL_NAME"], cache_dir="/data/embeddings")
 
+embeddable_slice_types = [
+    "text",
+    "standfirst",
+    "quoteV2",
+]
 
 progress_bar = tqdm(yield_documents(batch_size=100), total=count_documents())
 for document in progress_bar:
     actions = []
+    try:
+        body = document["data"]["body"]
+    except KeyError:
+        log.debug(f"Skipping document with no body: {document['id']}")
+        continue
+
+    title = document["data"]["title"][0]["text"]
+    actions.append(
+        {"index": {"_index": target_index, "_id": f"{document['id']}-title"}}
+    )
+    actions.append(
+        {
+            "id": document["id"],
+            "type": document["type"],
+            "title": title,
+            "text": title,
+            "embedding": model.embed(title),
+        }
+    )
     for i, slice in enumerate(document["data"]["body"]):
-        if slice["slice_type"] in ["text", "standfirst", "quoteV2"]:
-            title = document["data"]["title"][0]["text"]
+        if slice["slice_type"] in embeddable_slice_types:
             text = "\n".join(
                 [paragraph["text"] for paragraph in slice["primary"]["text"]]
             ).strip()
             if not text:
                 continue
             actions.append(
-                {"index": {"_index": target_index, "_id": f"{document['id']}-slice-{i}"}})
-            actions.append({
-                "id": document["id"],
-                "title": title,
-                "title-embedding": model.embed(title),
-                "text": text,
-                "text-embedding": model.embed(text),
-            })
+                {
+                    "index": {
+                        "_index": target_index,
+                        "_id": f"{document['id']}-slice-{i}",
+                    }
+                }
+            )
+            actions.append(
+                {
+                    "id": document["id"],
+                    "type": document["type"],
+                    "title": title,
+                    "text": text,
+                    "embedding": model.embed(text),
+                }
+            )
+        else:
+            progress_bar.set_description(f"Indexed {document['type']} {document['id']}")
 
     if actions:
         target_es.bulk(operations=actions)
-        progress_bar.set_description(f"Indexed {document['id']}")
+        log.debug(f"Indexed {document['type']} {document['id']}")
+        progress_bar.set_description(f"Indexed {document['type']} {document['id']}")
+    else:
+        log.debug(f"Skipping {document['type']} with no text: {document['id']}")
+        progress_bar.set_description(
+            f"Skipping {document['type']} with no text: {document['id']}"
+        )

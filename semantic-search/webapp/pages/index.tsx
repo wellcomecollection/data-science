@@ -21,7 +21,7 @@ const Search: NextPage<Props> = (props) => {
           rel="icon"
           href={`data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🤔</text></svg>`}
         />
-        <title>Semantic stories search</title>
+        <title>Semantic content search</title>
         <meta name="description" content="Very clever semantic search" />
       </Head>
       <main className="min-h-screen">
@@ -87,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     };
   } else {
     const searchResponse = await fetch(
-      `http://api:5000/nearest?query=${query.query}&n=${
+      `http://localhost:5000/nearest?query=${query.query}&n=${
         query.n ? query.n : 10
       }`,
       {
