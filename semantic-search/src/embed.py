@@ -58,7 +58,9 @@ class TextEmbedder:
         Requires a valid OpenAI API key to be set in the OPENAI_API_KEY
         environment variable
         """
-        response = openai.Embedding.create(model=self.model, input=string_to_embed)
+        response = openai.Embedding.create(
+            model=self.model, input=string_to_embed
+        )
         embedding = response["data"][0]["embedding"]
         return np.array(embedding)
 

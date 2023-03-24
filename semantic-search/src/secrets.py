@@ -12,6 +12,8 @@ def get_secret(secret_id, region_name="eu-west-1"):
         aws_secret_access_key=assumed_role["Credentials"]["SecretAccessKey"],
         aws_session_token=assumed_role["Credentials"]["SessionToken"],
     )
-    client = session.client(service_name="secretsmanager", region_name=region_name)
+    client = session.client(
+        service_name="secretsmanager", region_name=region_name
+    )
     response = client.get_secret_value(SecretId=secret_id)
     return response["SecretString"]
