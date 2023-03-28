@@ -5,16 +5,29 @@ import Head from "next/head";
 import { X as XIcon } from "react-feather";
 import { useState } from "react";
 
+type Tab = "works" | "prismic";
+const tabs = ["works", "prismic"];
 type Props = {
   queryParams: { searchTerms?: string; n?: number };
   results?: { [key: string]: ResultType };
   took?: number;
   total?: number;
+  tab: Tab;
 };
 
 const Search: NextPage<Props> = (props) => {
   const [searchTerms, setSearchTerms] = useState(props.queryParams.searchTerms);
   const [results, setResults] = useState(props.results);
+  const [currentTab, setTab] = useState(props.tab);
+
+  const handleTabChange = (tab: Tab) => {
+    setTab(tab);
+    if (searchTerms === "") {
+      window.location.href = `/${tab}`;
+    } else {
+      window.location.href = `/${tab}?query=${searchTerms}`;
+    }
+  };
 
   return (
     <div className="">
@@ -30,6 +43,24 @@ const Search: NextPage<Props> = (props) => {
         />
       </Head>
       <main className="min-h-screen">
+        <div className="flex flex-row">
+          <div className="divide-x-2 border-2 border-b-0">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                className={`${
+                  tab === currentTab
+                    ? "underline decoration-yellow-400 decoration-8 underline-offset-8"
+                    : ""
+                } px-4 pt-2 pb-4 text-lg capitalize`}
+                onClick={() => handleTabChange(tab as Tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <form
           className="border-gray-500 flex w-full divide-x-2 border-2 "
           autoComplete="off"
@@ -100,8 +131,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       },
     };
   } else {
+    // encode the search terms
+
     const searchResponse = await fetch(
-      `http://api:5000/nearest?query=${query.query}&n=${
+      `http://localhost:5000/${query.index}?query=${query.query}&n=${
         query.n ? query.n : 10
       }`,
       {
@@ -112,8 +145,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
     return {
       props: {
+        tab: query.index,
         queryParams: { searchTerms: query.query },
-        results: searchResponse.embeddings,
+        results: searchResponse.results,
         total: searchResponse.total,
         took: searchResponse.took,
       },

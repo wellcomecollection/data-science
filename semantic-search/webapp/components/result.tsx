@@ -21,20 +21,20 @@ export function formatDateString(date: Date) {
 const getLink = (result: ResultType) => {
   if (result.type === "works") {
     return `https://wellcomecollection.org/works/${result.id}`;
-  } else if (result.type === "webcomics") {
+  } else if (result.format === "webcomics") {
     return `https://wellcomecollection.org/articles/${result.id}`;
   } else {
-    return `https://wellcomecollection.org/${result.type}/${result.id}`;
+    return `https://wellcomecollection.org/${result.format}/${result.id}`;
   }
 };
 
 const getLabel = (result: ResultType) => {
   if (result.type === "works") {
     return result.format;
-  } else if (result.type === "series") {
+  } else if (result.format === "series") {
     return "series";
   } else {
-    return result.type.replace(/s$/, "");
+    return result.format.replace(/s$/, "");
   }
 };
 

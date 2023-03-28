@@ -15,7 +15,7 @@ services:
         source: ${HOME}/.aws
         target: /root/.aws
         read_only: true
-    command: python works.py
+    command: python prismic.py
 
   api:
     build: api
