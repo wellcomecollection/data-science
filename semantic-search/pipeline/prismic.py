@@ -50,7 +50,8 @@ for document in progress_bar:
     actions.append(
         {
             "id": document["id"],
-            "type": document["type"],
+            "type": "prismic",
+            "format": document["type"],
             "title": title,
             "text": title,
             "embedding": model.embed(title),
@@ -74,7 +75,8 @@ for document in progress_bar:
             actions.append(
                 {
                     "id": document["id"],
-                    "type": document["type"],
+                    "type": "prismic",
+                    "format": document["type"],
                     "title": title,
                     "text": text,
                     "embedding": model.embed(text),
@@ -92,7 +94,8 @@ for document in progress_bar:
             f"Indexed {document['type']} {document['id']}"
         )
     else:
-        log.debug(f"Skipping {document['type']} with no text: {document['id']}")
+        log.debug(
+            f"Skipping {document['type']} with no text: {document['id']}")
         progress_bar.set_description(
             f"Skipping {document['type']} with no text: {document['id']}"
         )
