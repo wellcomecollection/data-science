@@ -23,10 +23,12 @@ if target_es.indices.exists(index=target_index):
     target_es.indices.delete(index=target_index)
 target_es.indices.create(index=target_index, **index_config)
 
-log.info("Loading sentence transformer model")
+
+log.info("Loading text embedding model")
 model = TextEmbedder(
     model=os.environ["MODEL_NAME"], cache_dir="/data/embeddings"
 )
+
 
 embeddable_slice_types = [
     "text",

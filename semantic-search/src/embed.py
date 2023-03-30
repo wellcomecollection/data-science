@@ -13,6 +13,8 @@ class TextEmbedder:
             "all-distilroberta-v1",
             "msmarco-bert-base-dot-v5",
             "all-mpnet-base-v2",
+            "sentence-t5-xxl",
+            "sentence-t5-xl",
         ],
         cache_dir: str | Path = None,
     ):
