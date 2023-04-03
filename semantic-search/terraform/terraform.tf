@@ -26,5 +26,5 @@ locals {
   data_vpcs = data.terraform_remote_state.accounts_data.outputs
 
   vpc_id          = local.data_vpcs["datascience_vpc_id"]
-  subnets         = local.data_vpcs["datascience_vpc_private_subnets"]
+  subnets         = local.data_vpcs["datascience_vpc_public_subnets"]
 }
