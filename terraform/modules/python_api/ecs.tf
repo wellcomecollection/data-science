@@ -65,7 +65,7 @@ module "service" {
   task_definition_arn = module.task_definition.arn
 
   subnets            = var.subnets
-  security_group_ids = [aws_security_group.allow_all_ingress.id, aws_security_group.allow_all_egress.id]
+  security_group_ids = [aws_security_group.load_balancer.id, aws_security_group.interservice.id, aws_security_group.allow_all_ingress.id, aws_security_group.allow_all_egress.id]
 
   desired_task_count = 3
   use_fargate_spot   = true
