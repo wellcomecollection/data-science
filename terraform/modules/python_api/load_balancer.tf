@@ -1,5 +1,5 @@
-resource "aws_security_group" "allow_all_inbound" {
-  name        = "${var.name}-inbound"
+resource "aws_security_group" "allow_all_ingress" {
+  name        = "${var.name}-all_ingress"
   description = "Allow traffic from anywhere on the Internet"
   vpc_id      = var.vpc_id
 
@@ -11,10 +11,23 @@ resource "aws_security_group" "allow_all_inbound" {
   }
 }
 
+resource "aws_security_group" "allow_all_egress" {
+  name        = "${var.name}-all_egress"
+  description = "Allow traffic to anywhere on the Internet"
+  vpc_id      = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_alb" "alb" {
   name            = var.name
   subnets         = var.subnets
-  security_groups = [aws_security_group.allow_all_inbound.id]
+  security_groups = [aws_security_group.allow_all_ingress.id, aws_security_group.allow_all_egress.id]
 }
 
 resource "aws_alb_target_group" "ecs_service_default" {
@@ -30,7 +43,7 @@ resource "aws_alb_listener" "http" {
   protocol = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.ecs_service_default.arn
+    target_group_arn = aws_lb_target_group.http.arn
     type = "forward"
   }
 }

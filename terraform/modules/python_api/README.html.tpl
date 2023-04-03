@@ -88,6 +88,14 @@
 
           <pre><code>docker push ${ecr_repo_url}:latest</code></pre>
         </li>
+
+        <li>
+          <p>Tell ECS to redeploy the API using your new images by running the following command:</p>
+
+          <pre><code>AWS_PROFILE=data-dev aws ecs update-service \
+  --service ${service_name} \
+  --cluster ${cluster_name} \
+  --force-new-deployment
       </ol>
     </main>
   </body>
