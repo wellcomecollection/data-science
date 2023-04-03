@@ -1,19 +1,27 @@
 resource "aws_s3_bucket" "miro_images_feature_vectors" {
   bucket = "miro-images-feature-vectors"
-  acl    = "private"
 
   lifecycle {
     prevent_destroy = true
   }
 }
 
+resource "aws_s3_bucket_acl" "miro_images_feature_vectors" {
+  bucket = aws_s3_bucket.miro_images_feature_vectors.id
+  acl    = "private"
+}
+
 resource "aws_s3_bucket" "model_core_data" {
   bucket = "model-core-data"
-  acl    = "private"
 
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "aws_s3_bucket_acl" "model_core_data" {
+  bucket = aws_s3_bucket.model_core_data.id
+  acl    = "private"
 }
 
 # policies
