@@ -7,17 +7,8 @@ resource "aws_alb" "python_api" {
   internal           = false
 }
 
-resource "aws_alb_listener" "https" {
-  load_balancer_arn = aws_alb.python_api.arn
-  port              = "443"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = module.cert.arn
-
-  default_action {
-    type             = "forward"
-    target_group_arn = module.service.target_group_arn
-  }
+locals {
+  domain_name = aws_alb.python_api.dns_name
 }
 
 resource "aws_alb_listener" "http" {
@@ -26,12 +17,7 @@ resource "aws_alb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
+    type             = "forward"
+    target_group_arn = module.service.target_group_arn
   }
 }
