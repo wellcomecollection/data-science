@@ -26,6 +26,10 @@ module "api" {
 
   container_port = 5000
 
+  env_vars = {
+    ENVIRONMENT = "aws"
+  }
+
   vpc_id          = local.vpc_id
   private_subnets = local.private_subnets
   public_subnets  = local.public_subnets
