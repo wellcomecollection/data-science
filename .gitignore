@@ -1,4 +1,4 @@
-### Project 
+### Project
 .idea
 *.iml
 .lambda_hashes.json
@@ -15,6 +15,9 @@ shared_infra/.releases
 .Dockerfile
 .pytest-cache
 .pytest_cache
+
+# Auto-generated README files
+api.README.html
 
 # Created by https://www.gitignore.io/api/flask,python,terraform,jupyternotebook
 # Edit at https://www.gitignore.io/?templates=flask,python,terraform,jupyternotebook

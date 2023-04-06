@@ -2,7 +2,11 @@ variable "name" {
   type = string
 }
 
-variable "subnets" {
+variable "private_subnets" {
+  type = list(string)
+}
+
+variable "public_subnets" {
   type = list(string)
 }
 
@@ -21,11 +25,11 @@ variable "secret_env_vars" {
 }
 
 variable "cpu" {
-  type    = number
+  type = number
 }
 
 variable "memory" {
-  type    = number
+  type = number
 }
 
 variable "container_port" {
