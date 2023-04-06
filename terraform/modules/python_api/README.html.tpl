@@ -45,7 +45,7 @@
       <h1>README for ${name}</h1>
 
       <p>
-        You can access this API at URL <strong><a href="https://${domain_name}">${domain_name}</a></strong>.
+        You can access this API at URL <strong><a href="http://${domain_name}">http://${domain_name}</a></strong>.
       </p>
 
       <h2>Deploying a new version of the API</h2>
