@@ -6,6 +6,9 @@
 #
 # Terraform will create instructions for deploying code into your new API,
 # and how to access it once created.
+#
+# When you're finished with this API and don't need it any more,
+# run `terraform destroy` and then delete this file.
 
 locals {
   default_tags = {
