@@ -1,24 +1,35 @@
 from typing import Generator
-
 import httpx
+from .log import get_logger
 
-from . import api_url, master_ref
+log = get_logger()
+
+api_url = "https://wellcomecollection.cdn.prismic.io/api/v2/"
 
 
-def count_people() -> int:
+def get_prismic_master_ref() -> str:
+    response = httpx.get(api_url).json()
+    return response["refs"][0]["ref"]
+
+
+master_ref = get_prismic_master_ref()
+
+
+def count_documents(document_type: str) -> int:
     response = httpx.get(
         api_url + "documents/search",
-        params={"ref": master_ref, "q": '[[at(document.type,"people")]]'},
+        params={"ref": master_ref,
+                "q": f'[[at(document.type,"{document_type}")]]'},
     ).json()
     return response["total_results_size"]
 
 
-def yield_people(batch_size: int, limit: int) -> Generator[dict, None, None]:
+def yield_documents(batch_size: int, limit: int, document_type: str) -> Generator[dict, None, None]:
     response = httpx.get(
         api_url + "documents/search",
         params={
             "ref": master_ref,
-            "q": '[[at(document.type,"people")]]',
+            "q": f'[[at(document.type,"{document_type}")]]',
             "pageSize": batch_size,
         },
     ).json()

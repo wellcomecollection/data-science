@@ -180,10 +180,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         size: n,
       });
 
-    const results = searchResponse.hits.hits.map((hit: any) => ({
-      id: hit._id,
-      ...hit._source,
-    }));
+    const results = searchResponse.hits.hits.map((hit: any) => hit._source);
     const total = (searchResponse.hits.total as SearchTotalHits).value;
     const took = searchResponse.took;
 

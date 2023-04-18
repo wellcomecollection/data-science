@@ -3,18 +3,21 @@
         "multi_match": {
             "query": "{{query}}",
             "fields": [
-                "title.shingles^100",
-                "title.keyword^100",
-                "contributors^10",
+                "id",
+                "title.*^100",
+                "contributors.*^10",
                 "contributors.keyword^100",
-                "title.cased^10",
-                "standfirst^10",
-                "body",
-                "promo_caption"
+                "standfirst.*^10",
+                "body.*",
+                "caption.*",
+                "partOf.id",
+                "partOf.title.*^80",
+                "partOf.contributors*^8",
+                "partOf.contributors.keyword^80"
             ],
             "operator": "or",
             "type": "cross_fields",
-            "minimum_should_match": "90%"
+            "minimum_should_match": "-25%"
         }
     }
 }
