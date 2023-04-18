@@ -21,13 +21,20 @@ module "api" {
 
   name = "semantic-search"
 
-  cpu    = 256
-  memory = 512
+  cpu    = 2048
+  memory = 4096
 
   container_port = 5000
 
   env_vars = {
     ENVIRONMENT = "aws"
+    MODEL_NAME  = "all-distilroberta-v1"
+  }
+
+  secret_env_vars = {
+    CLOUD_ID = "elasticsearch/prototype/CLOUD_ID"
+    USERNAME = "elasticsearch/prototype/USERNAME"
+    PASSWORD = "elasticsearch/prototype/PASSWORD"
   }
 
   vpc_id          = local.vpc_id

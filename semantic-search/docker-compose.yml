@@ -18,7 +18,9 @@ services:
     command: python prismic.py
 
   api:
-    build: api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
     ports:
       - 5000:5000
     env_file: .env
@@ -26,9 +28,6 @@ services:
       - type: bind
         source: ./data
         target: /data
-      - type: bind
-        source: ./src
-        target: /code/app/src
       - type: bind
         source: ${HOME}/.aws
         target: /root/.aws
