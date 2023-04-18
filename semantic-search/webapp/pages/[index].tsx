@@ -134,7 +134,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     // encode the search terms
 
     const searchResponse = await fetch(
-      `http://api:5000/${query.index}?query=${query.query}&n=${
+      `${process.env.API_URL}/${query.index}?query=${query.query}&n=${
         query.n ? query.n : 10
       }`,
       {

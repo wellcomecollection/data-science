@@ -1,3 +1,4 @@
+import os
 from time import sleep
 
 from elasticsearch import Elasticsearch
@@ -20,10 +21,22 @@ def wait_for_client(es: Elasticsearch):
 
 
 def get_elastic_client() -> Elasticsearch:
-    secret_prefix = "elasticsearch/concepts-prototype/"
-    cloud_id = get_secret(secret_prefix + "CLOUD_ID")
-    es_password = get_secret(secret_prefix + "PASSWORD")
-    es_username = get_secret(secret_prefix + "USERNAME")
+    environment = os.environ.get("ENVIRONMENT", "local")
+
+    if environment == "aws":
+        cloud_id = os.environ["CLOUD_ID"]
+        es_username = os.environ["USERNAME"]
+        es_password = os.environ["PASSWORD"]
+
+    elif environment == "local":
+        secret_prefix = "elasticsearch/concepts-prototype/"
+        cloud_id = get_secret(secret_prefix + "CLOUD_ID")
+        es_password = get_secret(secret_prefix + "PASSWORD")
+        es_username = get_secret(secret_prefix + "USERNAME")
+
+    else:
+        raise ValueError(f"Unknown environment: {environment}")
+
     es = Elasticsearch(
         cloud_id=cloud_id,
         basic_auth=(es_username, es_password),

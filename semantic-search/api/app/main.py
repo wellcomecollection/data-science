@@ -41,7 +41,7 @@ allowed_indexes = Literal["works", "prismic"]
 
 class Document(BaseModel):
     format: allowed_formats
-    score: float
+    score: Optional[float]
     id: str
     title: str
     text: Optional[str]
