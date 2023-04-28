@@ -48,6 +48,11 @@
         You can access this API at URL <strong><a href="http://${domain_name}">http://${domain_name}</a></strong>.
       </p>
 
+      <p>
+
+        You can view application logs <strong><a href="https://logging.wellcomecollection.org/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(log),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:cb5ba262-ec15-46e3-a4c5-5668d65fe21f,key:ecs_cluster,negate:!f,params:(query:${cluster_name}),type:phrase),query:(match_phrase:(ecs_cluster:${cluster_name})))),index:cb5ba262-ec15-46e3-a4c5-5668d65fe21f,interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc)))">in the logging cluster</a></strong>.
+      </p>
+
       <h2>Deploying a new version of the API</h2>
 
       <ol>
