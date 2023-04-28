@@ -25,7 +25,7 @@ docker build -t semantic-search -f api/Dockerfile .
 If you're running on an M1 mac, you might need to run the following instead:
 
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64 -t semantic-search -f api/Dockerfile .
+docker buildx build --push --platform linux/amd64,linux/arm64 -t semantic-search -f api/Dockerfile .
 ```
 
 To log in to ECR, you might need to swap the suggested command with something like this:
