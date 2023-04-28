@@ -107,6 +107,15 @@
   --service ${service_name} \
   --cluster ${cluster_name} \
   --force-new-deployment</code></pre>
+
+          <details>
+            <summary>If the app starts but struggles to stay up</summary>
+            <p>You may see tasks start, the API serve a few requests, then get shut down by ECS. If you see the following error in the app logs:</p>
+
+            <pre><code>"GET / HTTP/1.1" 404 22 "-" "ELB-HealthChecker/2.0"</code></pre>
+
+            <p>then you app is getting shut down by the load balancer, because it thinks the app is unhealthy. You need to add an HTTP 200 response for the <code>/</code> endpoint in your app, then redeploy.</p>
+          </details>
       </ol>
     </main>
   </body>
