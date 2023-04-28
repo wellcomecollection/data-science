@@ -13,6 +13,7 @@
         margin-right: auto;
         background: #fff9e6;
         font-family: -apple-system, sans-serif;
+        line-height: 1.45em;
       }
 
       main {
@@ -21,12 +22,17 @@
         border-radius: 10px;
       }
 
+      main h1 {
+        margin-top: 1em;
+      }
+
       pre {
         background: #e8e8e8;
         overflow: scroll;
         padding: 10px;
         font-size: 1.15em;
         line-height: 1.4em;
+        border-radius: 3px;
       }
 
       details {
@@ -100,7 +106,7 @@
           <pre><code>AWS_PROFILE=data-dev aws ecs update-service \
   --service ${service_name} \
   --cluster ${cluster_name} \
-  --force-new-deployment
+  --force-new-deployment</code></pre>
       </ol>
     </main>
   </body>
