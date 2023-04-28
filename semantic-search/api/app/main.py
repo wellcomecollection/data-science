@@ -55,6 +55,11 @@ class Response(BaseModel):
     took: int
 
 
+@app.get("/")
+def health_check() -> dict:
+    return {"status": "healthy"}
+
+
 @app.get("/{index}")
 def get(
     index: allowed_indexes,
