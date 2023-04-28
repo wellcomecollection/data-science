@@ -13,6 +13,7 @@
         margin-right: auto;
         background: #fff9e6;
         font-family: -apple-system, sans-serif;
+        line-height: 1.45em;
       }
 
       main {
@@ -21,12 +22,17 @@
         border-radius: 10px;
       }
 
+      main h1 {
+        margin-top: 1em;
+      }
+
       pre {
         background: #e8e8e8;
         overflow: scroll;
         padding: 10px;
         font-size: 1.15em;
         line-height: 1.4em;
+        border-radius: 3px;
       }
 
       details {
@@ -46,6 +52,11 @@
 
       <p>
         You can access this API at URL <strong><a href="http://${domain_name}">http://${domain_name}</a></strong>.
+      </p>
+
+      <p>
+
+        You can view application logs <strong><a href="https://logging.wellcomecollection.org/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(log),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:cb5ba262-ec15-46e3-a4c5-5668d65fe21f,key:ecs_cluster,negate:!f,params:(query:${cluster_name}),type:phrase),query:(match_phrase:(ecs_cluster:${cluster_name})))),index:cb5ba262-ec15-46e3-a4c5-5668d65fe21f,interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc)))">in the logging cluster</a></strong>.
       </p>
 
       <h2>Deploying a new version of the API</h2>
@@ -95,7 +106,16 @@
           <pre><code>AWS_PROFILE=data-dev aws ecs update-service \
   --service ${service_name} \
   --cluster ${cluster_name} \
-  --force-new-deployment
+  --force-new-deployment</code></pre>
+
+          <details>
+            <summary>If the app starts but struggles to stay up</summary>
+            <p>You may see tasks start, the API serve a few requests, then get shut down by ECS. If you see the following error in the app logs:</p>
+
+            <pre><code>"GET / HTTP/1.1" 404 22 "-" "ELB-HealthChecker/2.0"</code></pre>
+
+            <p>then you app is getting shut down by the load balancer, because it thinks the app is unhealthy. You need to add an HTTP 200 response for the <code>/</code> endpoint in your app, then redeploy.</p>
+          </details>
       </ol>
     </main>
   </body>
