@@ -1,0 +1,8 @@
+boto3
+elasticsearch
+httpx
+loguru
+Pillow
+scikit-image
+scikit-learn
+tqdm

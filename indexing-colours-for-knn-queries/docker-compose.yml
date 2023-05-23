@@ -1,0 +1,12 @@
+services:
+  pipeline:
+    build: pipeline
+    image: pipeline
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+    command: python main.py
