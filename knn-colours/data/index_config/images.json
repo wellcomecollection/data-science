@@ -1,0 +1,176 @@
+{
+    "mappings": {
+        "properties": {
+            "thumbnail_url": {
+                "type": "keyword",
+                "index": false
+            },
+            "title": {
+                "type": "text",
+                "analyzer": "english"
+            },
+            "embedding": {
+                "type": "dense_vector",
+                "dims": 1000,
+                "index": true,
+                "similarity": "dot_product"
+            },
+            "colors": {
+                "properties": {
+                    "a": {
+                        "properties": {
+                            "rgb": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "lab": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "proportion": {
+                                "type": "float"
+                            },
+                            "hex": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "b": {
+                        "properties": {
+                            "rgb": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "lab": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "proportion": {
+                                "type": "float"
+                            },
+                            "hex": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "c": {
+                        "properties": {
+                            "rgb": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "lab": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "proportion": {
+                                "type": "float"
+                            },
+                            "hex": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "d": {
+                        "properties": {
+                            "rgb": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "lab": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "proportion": {
+                                "type": "float"
+                            },
+                            "hex": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "e": {
+                        "properties": {
+                            "rgb": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "lab": {
+                                "type": "dense_vector",
+                                "dims": 3,
+                                "index": true,
+                                "similarity": "l2_norm"
+                            },
+                            "proportion": {
+                                "type": "float"
+                            },
+                            "hex": {
+                                "type": "keyword"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "settings": {
+        "index": {
+            "analysis": {
+                "filter": {
+                    "word_delimiter": {
+                        "type": "word_delimiter_graph",
+                        "preserve_original": "true"
+                    },
+                    "asciifolding": {
+                        "type": "asciifolding"
+                    },
+                    "shingle": {
+                        "type": "shingle",
+                        "min_shingle_size": 2,
+                        "max_shingle_size": 3,
+                        "output_unigrams": true
+                    },
+                    "possessive_english": {
+                        "type": "stemmer",
+                        "language": "possessive_english"
+                    },
+                    "english_stemmer": {
+                        "type": "stemmer",
+                        "language": "english"
+                    }
+                },
+                "analyzer": {
+                    "english": {
+                        "tokenizer": "whitespace",
+                        "filter": [
+                            "possessive_english",
+                            "asciifolding",
+                            "word_delimiter",
+                            "lowercase",
+                            "english_stemmer",
+                            "shingle"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
