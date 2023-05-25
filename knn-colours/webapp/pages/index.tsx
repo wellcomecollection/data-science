@@ -1,34 +1,20 @@
 import { Client, estypes } from "@elastic/elasticsearch";
 import { GetServerSideProps, NextPage } from "next";
-import { useEffect, useState } from "react";
+import { hex_to_rgb, rgb_to_embedding } from "@/helpers/colours";
 
 import Head from "next/head";
 import Image from "next/image";
 import { Result } from "@/components/result";
 import { SearchTotalHits } from "@elastic/elasticsearch/lib/api/types";
 import { X as XIcon } from "react-feather";
-import { hex_to_rgb } from "@/helpers/colours";
-import { url } from "inspector";
-
-export type ResultColorType = {
-  lab: number[];
-  rgb: number[];
-  proportion: number;
-  hex: string;
-};
+import { useState } from "react";
 
 export type ResultType = {
-  id: string;
+  image_id: string;
   source_id: string;
   title: string;
   thumbnail_url: string;
-  colors: {
-    a: ResultColorType;
-    b: ResultColorType;
-    c: ResultColorType;
-    d: ResultColorType;
-    e: ResultColorType;
-  };
+  embedding: number[];
 };
 
 type Props = {
@@ -39,7 +25,7 @@ type Props = {
   took: number;
 };
 
-const index = `images-color-knn-${process.env.INDEX_DATE}`;
+const index = `images-color-embedding-${process.env.INDEX_DATE}`;
 
 const client = new Client({
   node: process.env.ES_PROTOTYPE_HOST as string,
@@ -148,7 +134,7 @@ const Search: NextPage<Props> = (props) => {
           <ul className="columns-3 space-y-6 lg:columns-4">
             {props.results &&
               props.results.map((result) => (
-                <li key={result.id} onClick={() => handleImageClick(result)}>
+                <li key={result.image_id} onClick={() => handleImageClick(result)}>
                   <Result result={result} />
                 </li>
               ))}
@@ -172,7 +158,7 @@ const Search: NextPage<Props> = (props) => {
                   <div className="w-100 lg:w-1/2">
                     <h2 className="text-lg font-medium">{queryImage.title}</h2>
                     <a
-                      href={`https://wellcomecollection.org/works/${queryImage.source_id}/images?id=${queryImage?.id}`}
+                      href={`https://wellcomecollection.org/works/${queryImage.source_id}/images?id=${queryImage.image_id}`}
                     >
                       <Image
                         src={queryImage.thumbnail_url}
@@ -183,59 +169,15 @@ const Search: NextPage<Props> = (props) => {
                     </a>
                   </div>
                   <div className="w-100  lg:float-right lg:w-1/2">
-                    <h3 className="text-lg font-medium">Palette</h3>
-                    <div className="flex h-12 flex-row flex-wrap space-x-2">
-                      <a
-                        href={`?color=${encodeURIComponent(
-                          queryImage.colors.a.hex
-                        )}&query=`}
-                        key={queryImage.colors.a.hex}
-                        className="w-12"
-                        style={{ backgroundColor: queryImage.colors.a.hex }}
-                      />
-
-                      <a
-                        href={`?color=${encodeURIComponent(
-                          queryImage.colors.b.hex
-                        )}&query=`}
-                        key={queryImage.colors.b.hex}
-                        className="w-12"
-                        style={{ backgroundColor: queryImage.colors.b.hex }}
-                      />
-                      <a
-                        href={`?color=${encodeURIComponent(
-                          queryImage.colors.c.hex
-                        )}&query=`}
-                        key={queryImage.colors.c.hex}
-                        className="w-12"
-                        style={{ backgroundColor: queryImage.colors.c.hex }}
-                      />
-                      <a
-                        href={`?color=${encodeURIComponent(
-                          queryImage.colors.d.hex
-                        )}&query=`}
-                        key={queryImage.colors.d.hex}
-                        className="w-12"
-                        style={{ backgroundColor: queryImage.colors.d.hex }}
-                      />
-                      <a
-                        href={`?color=${encodeURIComponent(
-                          queryImage.colors.e.hex
-                        )}&query=`}
-                        key={queryImage.colors.e.hex}
-                        className="w-12"
-                        style={{ backgroundColor: queryImage.colors.e.hex }}
-                      />
-                    </div>
                     <h3 className="text-lg font-medium">
                       Images with similar colours
                     </h3>
 
                     <div className="columns-3 space-y-6">
                       {similarImages.map((result) => (
-                        <div key={result.id}>
+                        <div key={result.image_id}>
                           <a
-                            href={`https://wellcomecollection.org/works/${result.source_id}/images?id=${result.id}`}
+                            href={`https://wellcomecollection.org/works/${result.source_id}/images?id=${result.image_id}`}
                           >
                             <Image
                               src={result.thumbnail_url}
@@ -276,49 +218,25 @@ export const getServerSideProps: GetServerSideProps = async ({
       },
     };
   }
-  let elasticsearchQuery: any = {};
+
+      const [r, g, b] = hex_to_rgb(color);
+      const embedding = rgb_to_embedding(r, g, b);
+  const elasticsearchQuery = {
+    knn:{
+      query_vector: embedding,
+      field: "embedding",
+      k: 1000,
+      num_candidates: 10000,
+    }
+  };
 
   if (searchTerms) {
-    elasticsearchQuery.query = {
-      match: {
-        title: searchTerms,
-      },
-    };
-  }
-  if (color) {
-    const rgb_vector = hex_to_rgb(color);
-    elasticsearchQuery.knn = [
-      {
-        field: "colors.a.rgb",
-        query_vector: rgb_vector,
-        k: 100,
-        num_candidates: 100,
-      },
-      {
-        field: "colors.b.rgb",
-        query_vector: rgb_vector,
-        k: 100,
-        num_candidates: 100,
-      },
-      {
-        field: "colors.c.rgb",
-        query_vector: rgb_vector,
-        k: 100,
-        num_candidates: 100,
-      },
-      {
-        field: "colors.d.rgb",
-        query_vector: rgb_vector,
-        k: 100,
-        num_candidates: 100,
-      },
-      {
-        field: "colors.e.rgb",
-        query_vector: rgb_vector,
-        k: 100,
-        num_candidates: 100,
-      },
-    ];
+    // @ts-ignore
+    elasticsearchQuery.knn.filter = {
+        match: {
+          title: searchTerms,
+        },
+      }
   }
 
   const searchResponse: estypes.SearchResponse<Document> = await client.search({

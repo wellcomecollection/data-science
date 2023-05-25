@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { ResultType } from "..";
 
-const index = `images-color-knn-${process.env.INDEX_DATE}`;
+const index = `images-color-embedding-${process.env.INDEX_DATE}`;
 
 const client = new Client({
   node: process.env.ES_PROTOTYPE_HOST as string,
@@ -22,47 +22,17 @@ export default async function handler(
   }
   try {
     const queryImage = req.body as ResultType;
-    const knnQueries = Object.values(queryImage.colors)
-      .map((color) => [
-        {
-          field: "colors.a.rgb",
-          query_vector: color.rgb,
-          k: 1000,
-          num_candidates: 10000,
-        },
-        {
-          field: "colors.b.rgb",
-          query_vector: color.rgb,
-          k: 1000,
-          num_candidates: 10000,
-        },
-        {
-          field: "colors.c.rgb",
-          query_vector: color.rgb,
-          k: 1000,
-          num_candidates: 10000,
-        },
-        {
-          field: "colors.d.rgb",
-          query_vector: color.rgb,
-          k: 1000,
-          num_candidates: 10000,
-        },
-        {
-          field: "colors.e.rgb",
-          query_vector: color.rgb,
-          k: 1000,
-          num_candidates: 10000,
-        },
-      ])
-      .flat();
-    console.log("knnQueries", knnQueries);
     const similarityResponse: estypes.SearchResponse<Document> =
       await client.search({
         index,
         body: {
-          // @ts-ignore
-          knn: knnQueries,
+          knn: {
+            field: "embedding",
+            // @ts-ignore
+            query_vector: queryImage.embedding,
+            k: 1000,
+            num_candidates: 10000,
+          },
         },
         size: 7,
       });

@@ -1,6 +1,12 @@
 {
     "mappings": {
         "properties": {
+            "source_id": {
+                "type": "keyword"
+            },
+            "image_id": {
+                "type": "keyword"
+            },
             "thumbnail_url": {
                 "type": "keyword",
                 "index": false
@@ -11,123 +17,9 @@
             },
             "embedding": {
                 "type": "dense_vector",
-                "dims": 1000,
+                "dims": 125,
                 "index": true,
-                "similarity": "dot_product"
-            },
-            "colors": {
-                "properties": {
-                    "a": {
-                        "properties": {
-                            "rgb": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "lab": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "proportion": {
-                                "type": "float"
-                            },
-                            "hex": {
-                                "type": "keyword"
-                            }
-                        }
-                    },
-                    "b": {
-                        "properties": {
-                            "rgb": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "lab": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "proportion": {
-                                "type": "float"
-                            },
-                            "hex": {
-                                "type": "keyword"
-                            }
-                        }
-                    },
-                    "c": {
-                        "properties": {
-                            "rgb": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "lab": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "proportion": {
-                                "type": "float"
-                            },
-                            "hex": {
-                                "type": "keyword"
-                            }
-                        }
-                    },
-                    "d": {
-                        "properties": {
-                            "rgb": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "lab": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "proportion": {
-                                "type": "float"
-                            },
-                            "hex": {
-                                "type": "keyword"
-                            }
-                        }
-                    },
-                    "e": {
-                        "properties": {
-                            "rgb": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "lab": {
-                                "type": "dense_vector",
-                                "dims": 3,
-                                "index": true,
-                                "similarity": "l2_norm"
-                            },
-                            "proportion": {
-                                "type": "float"
-                            },
-                            "hex": {
-                                "type": "keyword"
-                            }
-                        }
-                    }
-                }
+                "similarity": "cosine"
             }
         }
     },
