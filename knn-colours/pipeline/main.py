@@ -1,3 +1,4 @@
+import numpy as np
 import json
 from datetime import datetime
 from io import BytesIO
@@ -8,6 +9,7 @@ from skimage import color
 from sklearn.cluster import KMeans
 from src.elasticsearch import get_elastic_client
 from src.log import get_logger
+from src.embedder import ColorEmbedder
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -26,6 +28,7 @@ if es.indices.exists(index=index_name):
 log.info(f"Creating index {index_name}")
 es.indices.create(index=index_name, **index_config)
 
+color_embedder = ColorEmbedder()
 
 base_url = "https://api.wellcomecollection.org/catalogue/v2/images"
 page = 1
@@ -43,32 +46,49 @@ while page <= response["totalPages"]:
         iiif_url = image_data["thumbnail"]["url"]
         thumbnail_url = iiif_url.replace(
             "info.json",
-            "full/!200,200/0/default.jpg",
+            "full/!400,400/0/default.jpg",
         )
         thumbnail = httpx.get(thumbnail_url).content
-        rgb_image = Image.open(BytesIO(thumbnail))
-
-        # transform to lab space
+        rgb_image = (
+            Image.open(BytesIO(thumbnail))
+            .resize(
+                (50, 50),
+                # resample using nearest neighbour to preserve the original colours.
+                # using the default resample method (bicubic) will result in a
+                # blending of colours
+                resample=Image.NEAREST,
+            )
+            .convert("RGB")
+        )
 
         lab_image = color.rgb2lab(rgb_image)
-
-        # cluster pixels to get 5 dominant colours
-        pixels = lab_image.reshape((-1, 3))
+        pixels = lab_image.reshape(-1, 3)
         kmeans = KMeans(n_clusters=5, random_state=0, n_init="auto").fit(pixels)
-        dominant_colours = kmeans.cluster_centers_
+        dominant_colors = kmeans.cluster_centers_
+        colours = {}
+        for i, dominant_color in enumerate(dominant_colors):
+            rgb = color.lab2rgb([dominant_color])[0] * 255
+            hex_code = "#{:02x}{:02x}{:02x}".format(*np.round(rgb).astype(int))
+            character = chr(ord('a') + i)
 
-        # index them as little 3d lab arrays
+            colours[character] = {
+                "lab": dominant_color.tolist(),
+                "rgb": rgb.tolist(),
+                "hex": hex_code,
+                "proportion": len(kmeans.labels_[kmeans.labels_ == i])
+                / len(kmeans.labels_)   
+            }
+
+
         document = {
             "thumbnail_url": thumbnail_url,
+            "source_id": image_data["source"]["id"],
             "title": image_data["source"]["title"],
-            "colors": {
-                "a": dominant_colours[0].tolist(),
-                "b": dominant_colours[1].tolist(),
-                "c": dominant_colours[2].tolist(),
-                "d": dominant_colours[3].tolist(),
-                "e": dominant_colours[4].tolist(),
-            },
+            "colors": colours,
         }
+
+
+
         es.index(
             index=index_name,
             document=document,
@@ -78,7 +98,9 @@ while page <= response["totalPages"]:
 
     page += 1
     log.debug(f"Getting page {page} of {response['totalPages']}")
-    progress_bar.set_description(f"Getting page {page} of {response['totalPages']}")
+    progress_bar.set_description(
+        f"Getting page {page} of {response['totalPages']}"
+    )
     response = httpx.get(
         base_url, params={"pageSize": "100", "page": page}
     ).json()
