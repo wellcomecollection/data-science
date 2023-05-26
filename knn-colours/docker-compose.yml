@@ -2,6 +2,7 @@ services:
   pipeline:
     build: pipeline
     image: pipeline
+    env_file: webapp/.env
     volumes:
       - type: bind
         source: ./data

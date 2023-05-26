@@ -131,10 +131,13 @@ const Search: NextPage<Props> = (props) => {
         )}
 
         <div className="pt-4">
-          <ul className="columns-3 space-y-6 lg:columns-4">
+          <ul className="grid grid-flow-dense grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4	">
             {props.results &&
               props.results.map((result) => (
-                <li key={result.image_id} onClick={() => handleImageClick(result)}>
+                <li
+                  key={result.image_id}
+                  onClick={() => handleImageClick(result)}
+                >
                   <Result result={result} />
                 </li>
               ))}
@@ -203,7 +206,7 @@ const Search: NextPage<Props> = (props) => {
 export const getServerSideProps: GetServerSideProps = async ({
   query: queryParams,
 }) => {
-  const n = 25;
+  const n = 24;
   const searchTerms = queryParams.query as string;
   const color = queryParams.color as string;
 
@@ -219,24 +222,24 @@ export const getServerSideProps: GetServerSideProps = async ({
     };
   }
 
-      const [r, g, b] = hex_to_rgb(color);
-      const embedding = rgb_to_embedding(r, g, b);
+  const [r, g, b] = hex_to_rgb(color);
+  const embedding = rgb_to_embedding(r, g, b);
   const elasticsearchQuery = {
-    knn:{
+    knn: {
       query_vector: embedding,
       field: "embedding",
       k: 1000,
       num_candidates: 10000,
-    }
+    },
   };
 
   if (searchTerms) {
     // @ts-ignore
     elasticsearchQuery.knn.filter = {
-        match: {
-          title: searchTerms,
-        },
-      }
+      match: {
+        title: searchTerms,
+      },
+    };
   }
 
   const searchResponse: estypes.SearchResponse<Document> = await client.search({

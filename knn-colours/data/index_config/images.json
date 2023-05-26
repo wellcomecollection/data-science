@@ -17,9 +17,9 @@
             },
             "embedding": {
                 "type": "dense_vector",
-                "dims": 125,
+                "dims": "{{EMBEDDING_DIMENSIONALITY}}",
                 "index": true,
-                "similarity": "cosine"
+                "similarity": "dot_product"
             }
         }
     },
