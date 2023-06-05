@@ -1,0 +1,54 @@
+services:
+  pipeline:
+    build: pipeline
+    image: pipeline
+    env_file: webapp/.env
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+    command: python main.py
+  
+  search:
+    build: pipeline
+    image: pipeline
+    env_file: webapp/.env
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+    command: python search.py
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - 5000:5000
+    env_file: ./webapp/.env
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ${HOME}/.aws
+        target: /root/.aws
+        read_only: true
+    networks:
+      - default
+
+  webapp:
+    build: webapp
+    depends_on: 
+      - api
+    ports:
+      - 3000:3000
+    env_file: webapp/.env
+    networks:
+      - default
