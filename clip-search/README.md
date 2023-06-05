@@ -1,6 +1,6 @@
 # CLIP search
 
-Visual clip search for images using OpenAI's [CLIP model](https://openai.com/research/clip).
+Visual semantic search using OpenAI's [CLIP model](https://openai.com/research/clip).
 
 ## Running locally
 

@@ -22,7 +22,6 @@ model, preprocessor = clip.load(
 )
 
 
-
 app = FastAPI()
 
 default_includes = ["source_id", "image_id", "thumbnail_url", "title"]
@@ -43,6 +42,7 @@ class Response(BaseModel):
     total: int
     took: int
 
+
 @app.get("/")
 def health_check() -> dict:
     return {"status": "healthy"}
@@ -61,7 +61,6 @@ def get(
         return _get_all(includes=includes)
     else:
         return _get_nearest(query=query, n=n, includes=includes)
-
 
 
 @app.get("/images/{id}")
@@ -90,7 +89,7 @@ def embed(query: str) -> dict:
     return {"embedding": embedding, "model": model_name}
 
 
-def _get_embedding(search_terms:str) -> list[float]:
+def _get_embedding(search_terms: str) -> list[float]:
     with torch.no_grad():
         tokens = clip.tokenize([search_terms]).to(device)
         text_embedding = model.encode_text(tokens).squeeze(0)
@@ -140,4 +139,3 @@ def _get_all(includes) -> Response:
         "total": response["hits"]["total"]["value"],
         "took": response["took"],
     }
-
