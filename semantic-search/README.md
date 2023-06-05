@@ -19,7 +19,7 @@ The API is deployed on AWS ECS, using the terraform in the `terraform` directory
 To build the image, run the following from the project root:
 
 ```bash
-docker build -t semantic-search -f api/Dockerfile .
+docker build --push -t semantic-search -f api/Dockerfile .
 ```
 
 If you're running on an M1 mac, you might need to run the following instead:
