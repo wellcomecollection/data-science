@@ -1,0 +1,7 @@
+boto3==1.24.92
+elasticsearch==8.8.0
+fastapi[all]
+loguru==0.6.0
+pydantic
+uvicorn
+git+https://github.com/openai/CLIP.git

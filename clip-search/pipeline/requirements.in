@@ -1,0 +1,9 @@
+boto3
+elasticsearch
+ftfy
+git+https://github.com/openai/CLIP.git
+httpx
+loguru
+Pillow
+regex
+tqdm
