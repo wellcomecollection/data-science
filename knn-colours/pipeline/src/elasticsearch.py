@@ -7,6 +7,7 @@ from .secrets import get_secret
 
 log = get_logger()
 
+
 def get_catalogue_elastic_client(pipeline_date) -> Elasticsearch:
     secret_prefix = f"elasticsearch/pipeline_storage_{pipeline_date}/"
     es_password = get_secret(secret_prefix + "es_password")
@@ -18,9 +19,11 @@ def get_catalogue_elastic_client(pipeline_date) -> Elasticsearch:
     es = Elasticsearch(
         f"{protocol}://{public_host}:{port}",
         basic_auth=(es_username, es_password),
+        timeout=30
     )
     wait_for_client(es)
     return es
+
 
 def get_prototype_elastic_client() -> Elasticsearch:
     secret_prefix = "elasticsearch/concepts-prototype/"
@@ -30,6 +33,7 @@ def get_prototype_elastic_client() -> Elasticsearch:
     es = Elasticsearch(
         cloud_id=cloud_id,
         basic_auth=(es_username, es_password),
+        timeout=30
     )
     wait_for_client(es)
     return es
@@ -43,4 +47,3 @@ def wait_for_client(es: Elasticsearch):
         except Exception:
             log.info("Waiting for elasticsearch to start...")
             sleep(3)
-
