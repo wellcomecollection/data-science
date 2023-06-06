@@ -1,7 +1,7 @@
 import { Client, estypes } from '@elastic/elasticsearch'
 
 import { SearchTotalHits } from '@elastic/elasticsearch/lib/api/types'
-import blankQuery from '../../data/queries/search-as-you-type.json'
+import blankQuery from '../queries/search-as-you-type.json'
 
 export type Document = {
   type: string
