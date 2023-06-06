@@ -13,9 +13,9 @@ import { Tab, tabs } from "@/types/tab";
 import Head from "next/head";
 import { SearchTotalHits } from "@elastic/elasticsearch/lib/api/types";
 import { X as XIcon } from "react-feather";
-import articlesQuery from "../../data/queries/articles.json";
-import eventsQuery from "../../data/queries/events.json";
-import exhibitionsQuery from "../../data/queries/exhibitions.json";
+import articlesQuery from "../queries/articles.json";
+import eventsQuery from "../queries/events.json";
+import exhibitionsQuery from "../queries/exhibitions.json";
 import { useState } from "react";
 
 type Result = ArticleResultType | ExhibitionResultType | EventResultType;
