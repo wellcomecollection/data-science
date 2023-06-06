@@ -6,5 +6,6 @@ const nextConfig = {
 module.exports = nextConfig && {
   images: {
     domains: ["iiif.wellcomecollection.org"],
+    unoptimized: true
   },
 };
