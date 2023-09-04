@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 weco-datascience==0.1.10
+=======
+weco-datascience==0.1.9
+>>>>>>> 88f657839a773655fdbbf693ada16fce92388f87
 elasticsearch==8.4.0
 httpx==0.20.0
