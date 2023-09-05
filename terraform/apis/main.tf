@@ -38,7 +38,7 @@ module "palette_similarity" {
 module "feature_similarity" {
   source          = "./modules/service/api"
   namespace       = "feature-similarity"
-  container_image = "wellcome/feature_similarity:latest"
+  container_image = "${aws_ecr_repository.feature_similarity.repository_url}:latest"
 
   namespace_id = aws_service_discovery_private_dns_namespace.namespace.id
 
