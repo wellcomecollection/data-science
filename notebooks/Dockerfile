@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook:python-3.8.8
+FROM jupyter/scipy-notebook:python-3.11.5
 
 RUN pip install --upgrade pip pip-tools 
 COPY requirements.* .
