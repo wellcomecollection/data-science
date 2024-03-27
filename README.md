@@ -3,6 +3,8 @@
 This repo contains the data science work being carried out on Wellcome
 Collection.
 
+test
+
 The majority of this work is experimental (ie not in production). This repo also holds the `weco-datascience` package
 
 ## weco-datascience
