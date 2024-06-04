@@ -3,7 +3,7 @@ import json
 import shutil
 from pathlib import Path
 
-from piffle.iiif import IIIFImageClient
+from piffle.image import IIIFImageClient
 import httpx
 from tqdm import tqdm
 
