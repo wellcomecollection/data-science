@@ -2,7 +2,7 @@ from io import BytesIO
 from urllib.parse import unquote_plus, urlparse
 
 from aiofile import AIOFile
-from piffle.iiif import IIIFImageClient, ParseError
+from piffle.image import IIIFImageClient, ParseError
 from PIL import Image, UnidentifiedImageError
 
 from .http import fetch_url_bytes
