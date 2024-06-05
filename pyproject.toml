@@ -6,7 +6,6 @@ build-backend = "flit_core.buildapi"
 module = "weco_datascience"
 dist-name = "weco-datascience"
 author = "Harrison Pim"
-author-email = "h.pim@wellcome.ac.uk"
 home-page = "https://github.com/wellcomecollection/data-science"
 description-file = "weco_datascience/README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
