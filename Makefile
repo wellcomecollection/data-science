@@ -16,6 +16,8 @@ test:
 	python -m pytest ./weco_datascience/test
 
 build: clean lint test
+    python --version
+    pip freeze
 	flit build
 
 
