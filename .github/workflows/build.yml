@@ -1,13 +1,14 @@
 # When a new release is created in the data-science repo, the weco-datascience
 # package is built and released with flit, using the same tag.
 
-name: Publish to pypi with flit
+name: Build weco_datascience
 
 on:
   pull_request:
     paths:
       - weco_datascience/**
       - pyproject.toml
+      - Makefile
 
 jobs:
   deploy:
