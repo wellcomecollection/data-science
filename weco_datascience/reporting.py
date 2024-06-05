@@ -64,7 +64,11 @@ def query_es(config, index, query):
 
 
 def get_data_in_date_range(
-    config, index, start_date="now-1d", end_date="now", timestamp_field="@timestamp"
+    config,
+    index,
+    start_date="now-1d",
+    end_date="now",
+    timestamp_field="@timestamp",
 ):
     """
     Fetch data within a specified date/time range
@@ -135,15 +139,13 @@ def get_es_config():
     )
 
     config = {
-        "host": get_secret_string(
-            session, secret_id="reporting/es_host"
-        ),
+        "host": get_secret_string(session, secret_id="reporting/es_host"),
         "username": get_secret_string(
             session, secret_id="reporting/read_only/es_username"
         ),
         "password": get_secret_string(
             session, secret_id="reporting/read_only/es_password"
-        )
+        ),
     }
     return config
 
