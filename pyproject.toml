@@ -12,7 +12,7 @@ description-file = "weco_datascience/README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
 requires-python = ">=3.6"
 requires = [
-    "aiofile>=3.1.0",
+    "aiofile>=3.8.8",
     "aiohttp[speedups]>=3.6.2",
     "async-timeout>=3.0.1",
     "boto3>=1.12.14",
