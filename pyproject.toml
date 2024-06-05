@@ -9,10 +9,10 @@ author = "Harrison Pim"
 home-page = "https://github.com/wellcomecollection/data-science"
 description-file = "weco_datascience/README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
-requires-python = ">=3.8"
+requires-python = ">=3.8,<3.11"
 requires = [
     "aiofile>=3.8.8",
-    "aiohttp[speedups]>=3.6.2",
+    "aiohttp[speedups]>=3.9.5",
     "async-timeout>=3.0.1",
     "boto3>=1.12.14",
     "Pillow>=10.3.0",
